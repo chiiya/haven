@@ -22,6 +22,7 @@
     "build": "bili"
   },
   "devDependencies": {
+    "@types/js-cookie": "^2.2.2",
     "@types/node": "^12.6.9",
     "bili": "^4.8.1",
     "rollup-plugin-typescript2": "^0.22.1",
@@ -29,5 +30,8 @@
     "tslint": "^5.18.0",
     "tslint-config-airbnb": "^5.11.1",
     "typescript": "^3.5.3"
+  },
+  "dependencies": {
+    "js-cookie": "^2.2.0"
   }
 }
