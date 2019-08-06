@@ -1,4 +1,5 @@
 import CookieManager from './cookie-manager';
+import { CookieConsentOptions } from '../types';
 
 export default class CookiePreferences {
   /**
@@ -17,8 +18,8 @@ export default class CookiePreferences {
   /**
    * Fetch dom elements.
    */
-  constructor() {
-    this.cookieManager = new CookieManager();
+  constructor(options: CookieConsentOptions = {}) {
+    this.cookieManager = new CookieManager(options);
     this.checkboxAnalytics = <HTMLInputElement>document.getElementById('cookie-preferences__analytics');
     this.checkboxMarketing = <HTMLInputElement>document.getElementById('cookie-preferences__marketing');
   }

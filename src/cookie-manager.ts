@@ -1,8 +1,5 @@
 import Cookies, { CookieAttributes } from 'js-cookie';
-
-export interface CookieManagerOptions {
-  prefix?: string;
-}
+import { CookieConsentOptions } from '../types';
 
 export default class CookieManager {
   /**
@@ -14,7 +11,7 @@ export default class CookieManager {
    * Create CookieManager instance.
    * @param prefix
    */
-  constructor({ prefix }: CookieManagerOptions = {}) {
+  constructor({ prefix }: CookieConsentOptions = {}) {
     this.prefix = prefix || 'ap';
   }
 

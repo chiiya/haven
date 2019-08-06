@@ -1,4 +1,5 @@
 import CookieManager from './cookie-manager';
+import { CookieConsentOptions } from '../types';
 
 export default class CookieNotification {
   /**
@@ -21,8 +22,8 @@ export default class CookieNotification {
   /**
    * Fetch dom elements.
    */
-  constructor() {
-    this.cookieManager = new CookieManager();
+  constructor(options: CookieConsentOptions = {}) {
+    this.cookieManager = new CookieManager(options);
     this.cookieNotification = document.getElementById('cookie-notification');
     this.cookiesAccept = document.getElementById('cookie-notification__accept');
     this.cookiesDecline = document.getElementById('cookie-notification__decline');
