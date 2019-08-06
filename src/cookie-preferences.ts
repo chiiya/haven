@@ -14,6 +14,10 @@ export default class CookiePreferences {
    * Checkbox for accepting marketing cookies.
    */
   protected checkboxMarketing: HTMLInputElement | null = null;
+  /**
+   * Button for saving preferences.
+   */
+  protected saveButton: HTMLButtonElement | null = null;
 
   /**
    * Fetch dom elements.
@@ -35,15 +39,19 @@ export default class CookiePreferences {
     if (this.checkboxAnalytics !== null) {
       this.checkboxAnalytics.checked = this.cookieManager.hasAnalyticsCookie();
     }
-    // Set event listeners
-    if (this.checkboxMarketing !== null) {
-      this.checkboxMarketing.addEventListener('change', (event) => {
-        this.cookieManager.setMarketingCookie(this.checkboxMarketing!.checked);
-      })
-    }
-    if (this.checkboxAnalytics !== null) {
-      this.checkboxAnalytics.addEventListener('change', (event) => {
-        this.cookieManager.setAnalyticsCookie(this.checkboxAnalytics!.checked);
+    if (this.saveButton !== null) {
+      this.saveButton.addEventListener('click', () => {
+        this.cookieManager.setFunctionalCookie(true);
+        if (this.checkboxMarketing && this.checkboxMarketing.checked) {
+          this.cookieManager.setMarketingCookie(true);
+        } else {
+          this.cookieManager.setMarketingCookie(false);
+        }
+        if (this.checkboxAnalytics && this.checkboxAnalytics.checked) {
+          this.cookieManager.setAnalyticsCookie(true);
+        } else {
+          this.cookieManager.setMarketingCookie(false);
+        }
       })
     }
   }

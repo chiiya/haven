@@ -4,6 +4,7 @@ export default class CookiePreferences {
     protected cookieManager: CookieManager;
     protected checkboxAnalytics: HTMLInputElement | null;
     protected checkboxMarketing: HTMLInputElement | null;
+    protected saveButton: HTMLButtonElement | null;
     constructor(options?: CookieConsentOptions);
     init(): void;
 }

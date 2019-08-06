@@ -145,6 +145,7 @@ var CookiePreferences = function () {
 
     this.checkboxAnalytics = null;
     this.checkboxMarketing = null;
+    this.saveButton = null;
     this.cookieManager = new CookieManager(options);
     this.checkboxAnalytics = document.getElementById('cookie-preferences__analytics');
     this.checkboxMarketing = document.getElementById('cookie-preferences__marketing');
@@ -161,15 +162,21 @@ var CookiePreferences = function () {
       this.checkboxAnalytics.checked = this.cookieManager.hasAnalyticsCookie();
     }
 
-    if (this.checkboxMarketing !== null) {
-      this.checkboxMarketing.addEventListener('change', function (event) {
-        _this.cookieManager.setMarketingCookie(_this.checkboxMarketing.checked);
-      });
-    }
+    if (this.saveButton !== null) {
+      this.saveButton.addEventListener('click', function () {
+        _this.cookieManager.setFunctionalCookie(true);
 
-    if (this.checkboxAnalytics !== null) {
-      this.checkboxAnalytics.addEventListener('change', function (event) {
-        _this.cookieManager.setAnalyticsCookie(_this.checkboxAnalytics.checked);
+        if (_this.checkboxMarketing && _this.checkboxMarketing.checked) {
+          _this.cookieManager.setMarketingCookie(true);
+        } else {
+          _this.cookieManager.setMarketingCookie(false);
+        }
+
+        if (_this.checkboxAnalytics && _this.checkboxAnalytics.checked) {
+          _this.cookieManager.setAnalyticsCookie(true);
+        } else {
+          _this.cookieManager.setMarketingCookie(false);
+        }
       });
     }
   };
