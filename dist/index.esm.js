@@ -102,7 +102,9 @@ var CookieNotification = function () {
     }
 
     if (this.cookiesAccept !== null) {
-      this.cookiesAccept.addEventListener('click', function () {
+      this.cookiesAccept.addEventListener('click', function (event) {
+        event.preventDefault();
+
         _this.cookieManager.acceptAll();
 
         _this.hideCookieNotification();
@@ -110,7 +112,9 @@ var CookieNotification = function () {
     }
 
     if (this.cookiesDecline !== null) {
-      this.cookiesDecline.addEventListener('click', function () {
+      this.cookiesDecline.addEventListener('click', function (event) {
+        event.preventDefault();
+
         _this.cookieManager.setFunctionalCookie(true);
 
         _this.hideCookieNotification();

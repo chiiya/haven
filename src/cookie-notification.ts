@@ -37,13 +37,15 @@ export default class CookieNotification {
       this.showCookieNotification();
     }
     if (this.cookiesAccept !== null) {
-      this.cookiesAccept.addEventListener('click', () => {
+      this.cookiesAccept.addEventListener('click', (event) => {
+        event.preventDefault();
         this.cookieManager.acceptAll();
         this.hideCookieNotification();
       })
     }
     if (this.cookiesDecline !== null) {
-      this.cookiesDecline.addEventListener('click', () => {
+      this.cookiesDecline.addEventListener('click', (event) => {
+        event.preventDefault();
         // Only set the functional cookie.
         this.cookieManager.setFunctionalCookie(true);
         this.hideCookieNotification();
