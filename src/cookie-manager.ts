@@ -85,4 +85,13 @@ export default class CookieManager {
   public hasMarketingCookie(): boolean {
     return CookieManager.cookieExists(`${this.prefix}-marketing`);
   }
+
+  /**
+   * Accept all cookies.
+   */
+  public acceptAll(): void {
+    this.setFunctionalCookie(true);
+    this.setAnalyticsCookie(true);
+    this.setMarketingCookie(true);
+  }
 }
