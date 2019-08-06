@@ -5,9 +5,4 @@ import CookieConsent from './cookie-consent';
 
 export { CookieManager, CookieNotification, CookiePreferences, CookieConsent };
 
-const init = () => {
-  const consent = new CookieConsent();
-  consent.init();
-};
-
-export default init;
+export default new CookieConsent();

@@ -1,8 +1,6 @@
 *-debug.log
 *-error.log
 /.nyc_output
-/dist
-/lib
 package-lock.json
 /yarn.lock
 /tmp
@@ -15,5 +13,5 @@ exports/
 node_modules
 lerna-debug.log
 .rpt2_cache
-packages/*/dist
 /docs
+.rpt2_cache
