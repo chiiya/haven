@@ -155,6 +155,7 @@ var CookiePreferences = function () {
     this.cookieManager = new CookieManager(options);
     this.checkboxAnalytics = document.getElementById('cookie-preferences__analytics');
     this.checkboxMarketing = document.getElementById('cookie-preferences__marketing');
+    this.saveButton = document.getElementById('cookie-preferences__save');
   }
 
   CookiePreferences.prototype.init = function () {

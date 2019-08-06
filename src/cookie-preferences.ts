@@ -26,6 +26,7 @@ export default class CookiePreferences {
     this.cookieManager = new CookieManager(options);
     this.checkboxAnalytics = <HTMLInputElement>document.getElementById('cookie-preferences__analytics');
     this.checkboxMarketing = <HTMLInputElement>document.getElementById('cookie-preferences__marketing');
+    this.saveButton = <HTMLButtonElement>document.getElementById('cookie-preferences__save');
   }
 
   /**
