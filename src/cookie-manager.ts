@@ -1,5 +1,9 @@
 import Cookies, { CookieAttributes } from 'js-cookie';
 
+export interface CookieManagerOptions {
+  prefix?: string;
+}
+
 export default class CookieManager {
   /**
    * Cookie Prefix
@@ -7,12 +11,11 @@ export default class CookieManager {
   protected prefix = 'ap';
 
   /**
-   * Set the cookie prefix.
+   * Create CookieManager instance.
    * @param prefix
    */
-  public setPrefix(prefix: string): this {
-    this.prefix = prefix;
-    return this;
+  constructor({ prefix }: CookieManagerOptions = {}) {
+    this.prefix = prefix || 'ap';
   }
 
   /**
@@ -34,6 +37,14 @@ export default class CookieManager {
   }
 
   /**
+   * Remove cookie by name.
+   * @param name
+   */
+  public static removeCookie(name: string): void {
+    Cookies.remove(name);
+  }
+
+  /**
    * Check whether cookie exists.
    * @param name
    */
@@ -46,7 +57,11 @@ export default class CookieManager {
    * @param enabled
    */
   public setFunctionalCookie(enabled: boolean): void {
-    Cookies.set(`${this.prefix}-functional`, enabled.toString(), { expires: 365 });
+    if (enabled) {
+      CookieManager.setCookie(`${this.prefix}-functional`, enabled.toString(), { expires: 365 });
+    } else {
+      CookieManager.removeCookie(`${this.prefix}-functional`);
+    }
   }
 
   /**
@@ -61,7 +76,11 @@ export default class CookieManager {
    * @param enabled
    */
   public setAnalyticsCookie(enabled: boolean): void {
-    Cookies.set(`${this.prefix}-analytics`, enabled.toString(), { expires: 365 });
+    if (enabled) {
+      CookieManager.setCookie(`${this.prefix}-analytics`, enabled.toString(), { expires: 365 });
+    } else {
+      CookieManager.removeCookie(`${this.prefix}-analytics`);
+    }
   }
 
   /**
@@ -76,7 +95,11 @@ export default class CookieManager {
    * @param enabled
    */
   public setMarketingCookie(enabled: boolean): void {
-    Cookies.set(`${this.prefix}-marketing`, enabled.toString(), { expires: 365 });
+    if (enabled) {
+      CookieManager.setCookie(`${this.prefix}-marketing`, enabled.toString(), { expires: 365 });
+    } else {
+      CookieManager.removeCookie(`${this.prefix}-marketing`);
+    }
   }
 
   /**
