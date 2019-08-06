@@ -7,4 +7,6 @@ export default class CookiePreferences {
     protected saveButton: HTMLButtonElement | null;
     constructor(options?: CookieConsentOptions);
     init(): void;
+    protected enableButton(): void;
+    protected disableButton(): void;
 }

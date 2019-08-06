@@ -165,6 +165,8 @@ var CookiePreferences = function () {
 
     if (this.saveButton !== null) {
       this.saveButton.addEventListener('click', function () {
+        _this.disableButton();
+
         _this.cookieManager.setFunctionalCookie(true);
 
         if (_this.checkboxMarketing && _this.checkboxMarketing.checked) {
@@ -180,6 +182,28 @@ var CookiePreferences = function () {
         }
       });
     }
+
+    if (this.checkboxAnalytics !== null) {
+      this.checkboxAnalytics.addEventListener('change', function () {
+        _this.enableButton();
+      });
+    }
+
+    if (this.checkboxMarketing !== null) {
+      this.checkboxMarketing.addEventListener('change', function () {
+        _this.enableButton();
+      });
+    }
+  };
+
+  CookiePreferences.prototype.enableButton = function () {
+    this.saveButton.disabled = false;
+    this.saveButton.innerText = 'Änderungen speichern';
+  };
+
+  CookiePreferences.prototype.disableButton = function () {
+    this.saveButton.disabled = true;
+    this.saveButton.innerText = 'Gespeichert';
   };
 
   return CookiePreferences;

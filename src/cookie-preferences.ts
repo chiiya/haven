@@ -42,6 +42,7 @@ export default class CookiePreferences {
     }
     if (this.saveButton !== null) {
       this.saveButton.addEventListener('click', () => {
+        this.disableButton();
         this.cookieManager.setFunctionalCookie(true);
         if (this.checkboxMarketing && this.checkboxMarketing.checked) {
           this.cookieManager.setMarketingCookie(true);
@@ -55,5 +56,31 @@ export default class CookiePreferences {
         }
       })
     }
+    if (this.checkboxAnalytics !== null) {
+      this.checkboxAnalytics.addEventListener('change', () => {
+        this.enableButton();
+      })
+    }
+    if (this.checkboxMarketing !== null) {
+      this.checkboxMarketing.addEventListener('change', () => {
+        this.enableButton();
+      })
+    }
+  }
+
+  /**
+   * Enable the submit button.
+   */
+  protected enableButton(): void {
+    this.saveButton!.disabled = false;
+    this.saveButton!.innerText = 'Änderungen speichern';
+  }
+
+  /**
+   * Disable the submit button.
+   */
+  protected disableButton(): void {
+    this.saveButton!.disabled = true;
+    this.saveButton!.innerText = 'Gespeichert';
   }
 }
