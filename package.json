@@ -1,0 +1,33 @@
+{
+  "name": "cookie-consent-manager",
+  "version": "1.0.0",
+  "private": true,
+  "author": "Elisha Witte <elishawitte@gmail.com>",
+  "license": "MIT",
+  "description": "Package for managing cookies and the cookie notification",
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "typings": "dist/index.d.ts",
+  "directories": {
+    "dist": "dist"
+  },
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.intranet.doccheck.ag/elishawitte/aral-cookie-manager.git"
+  },
+  "scripts": {
+    "build": "bili"
+  },
+  "devDependencies": {
+    "@types/node": "^12.6.9",
+    "bili": "^4.8.1",
+    "rollup-plugin-typescript2": "^0.22.1",
+    "ts-node": "^8.3.0",
+    "tslint": "^5.18.0",
+    "tslint-config-airbnb": "^5.11.1",
+    "typescript": "^3.5.3"
+  }
+}
