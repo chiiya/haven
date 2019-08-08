@@ -18,6 +18,14 @@ export default class CookiePreferences {
    * Button for saving preferences.
    */
   protected saveButton: HTMLButtonElement | null = null;
+  /**
+   * Initial save button text (e.g. `Save preferences`)
+   */
+  protected saveButtonInitialText: string = '';
+  /**
+   * Saved button text (e.g. `Saved`)
+   */
+  protected saveButtonSavedText: string = '';
 
   /**
    * Fetch dom elements.
@@ -35,24 +43,26 @@ export default class CookiePreferences {
   public init(): void {
     // Set initial checked states
     if (this.checkboxMarketing !== null) {
-      this.checkboxMarketing.checked = this.cookieManager.hasMarketingCookie();
+      this.checkboxMarketing.checked = this.cookieManager.hasMarketingEnabled();
     }
     if (this.checkboxAnalytics !== null) {
-      this.checkboxAnalytics.checked = this.cookieManager.hasAnalyticsCookie();
+      this.checkboxAnalytics.checked = this.cookieManager.hasAnalyticsEnabled();
     }
     if (this.saveButton !== null) {
+      this.saveButtonInitialText = this.saveButton.innerText;
+      this.saveButtonSavedText = this.saveButton.dataset.saved || 'Saved';
       this.saveButton.addEventListener('click', () => {
         this.disableButton();
-        this.cookieManager.setFunctionalCookie(true);
+        this.cookieManager.enableFunctionalCookie();
         if (this.checkboxMarketing && this.checkboxMarketing.checked) {
-          this.cookieManager.setMarketingCookie(true);
+          this.cookieManager.enableMarketingCookie();
         } else {
-          this.cookieManager.setMarketingCookie(false);
+          this.cookieManager.disableMarketingCookie();
         }
         if (this.checkboxAnalytics && this.checkboxAnalytics.checked) {
-          this.cookieManager.setAnalyticsCookie(true);
+          this.cookieManager.enableAnalyticsCookie();
         } else {
-          this.cookieManager.setMarketingCookie(false);
+          this.cookieManager.disableAnalyticsCookie();
         }
       })
     }
@@ -73,7 +83,7 @@ export default class CookiePreferences {
    */
   protected enableButton(): void {
     this.saveButton!.disabled = false;
-    this.saveButton!.innerText = 'Änderungen speichern';
+    this.saveButton!.innerText = this.saveButtonInitialText;
   }
 
   /**
@@ -81,6 +91,6 @@ export default class CookiePreferences {
    */
   protected disableButton(): void {
     this.saveButton!.disabled = true;
-    this.saveButton!.innerText = 'Gespeichert';
+    this.saveButton!.innerText = this.saveButtonSavedText;
   }
 }

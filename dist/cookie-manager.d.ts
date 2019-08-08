@@ -1,17 +1,22 @@
 import { CookieAttributes } from 'js-cookie';
-import { CookieConsentOptions } from '../types';
+import { ConsentType, CookieConsentOptions } from '../types';
 export default class CookieManager {
+    protected type: ConsentType;
     protected prefix: string;
-    constructor({ prefix }?: CookieConsentOptions);
+    protected gaId: string | undefined;
+    constructor({ prefix, gaId, type }?: CookieConsentOptions);
     static getCookie(name: string): string | undefined;
-    static setCookie(name: string, value: string, options: CookieAttributes): void;
+    static setCookie(name: string, value: string, options?: CookieAttributes): void;
     static removeCookie(name: string): void;
     static cookieExists(name: string): boolean;
-    setFunctionalCookie(enabled: boolean): void;
+    enableFunctionalCookie(): void;
+    disableFunctionalCookie(): void;
     hasFunctionalCookie(): boolean;
-    setAnalyticsCookie(enabled: boolean): void;
-    hasAnalyticsCookie(): boolean;
-    setMarketingCookie(enabled: boolean): void;
-    hasMarketingCookie(): boolean;
+    enableAnalyticsCookie(): void;
+    disableAnalyticsCookie(): void;
+    hasAnalyticsEnabled(): boolean;
+    enableMarketingCookie(): void;
+    disableMarketingCookie(): void;
+    hasMarketingEnabled(): boolean;
     acceptAll(): void;
 }

@@ -47,7 +47,7 @@ export default class CookieNotification {
       this.cookiesDecline.addEventListener('click', (event) => {
         event.preventDefault();
         // Only set the functional cookie.
-        this.cookieManager.setFunctionalCookie(true);
+        this.cookieManager.enableFunctionalCookie();
         this.hideCookieNotification();
       })
     }
