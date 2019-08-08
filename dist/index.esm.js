@@ -251,36 +251,23 @@ var CookieConsent = function () {
       options = {};
     }
 
-    this.cookieManager = new CookieManager(options);
     this.cookieNotification = new CookieNotification(options);
     this.cookiePreferences = new CookiePreferences(options);
   }
 
   CookieConsent.prototype.init = function () {
-    var gtm = dataLayer;
-
-    if (gtm !== undefined) {
-      if (this.cookieManager.hasMarketingCookie()) {
-        gtm.push({
-          event: 'cookie-consent.marketing'
-        });
-      }
-
-      if (this.cookieManager.hasAnalyticsCookie()) {
-        gtm.push({
-          event: 'cookie-consent.analytics'
-        });
-      }
-    }
-
     this.cookieNotification.init();
     this.cookiePreferences.init();
+  };
+
+  CookieConsent.create = function (options) {
+    var consent = new CookieConsent(options);
+    consent.init();
+    return consent;
   };
 
   return CookieConsent;
 }();
 
-var index = new CookieConsent();
-
-export default index;
+export default CookieConsent;
 export { CookieConsent, CookieManager, CookieNotification, CookiePreferences };

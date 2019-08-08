@@ -5,4 +5,4 @@ import CookieConsent from './cookie-consent';
 
 export { CookieManager, CookieNotification, CookiePreferences, CookieConsent };
 
-export default new CookieConsent();
+export default CookieConsent;
