@@ -16,7 +16,7 @@ export default class CookieConsent {
     this.cookiePreferences.init();
   }
 
-  static create(options: CookieConsentOptions): CookieConsent {
+  static create(options: CookieConsentOptions = {}): CookieConsent {
     const consent = new CookieConsent(options);
     consent.init();
     return consent;

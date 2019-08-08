@@ -6,5 +6,5 @@ export default class CookieConsent {
     protected cookiePreferences: CookiePreferences;
     constructor(options?: CookieConsentOptions);
     init(): void;
-    static create(options: CookieConsentOptions): CookieConsent;
+    static create(options?: CookieConsentOptions): CookieConsent;
 }

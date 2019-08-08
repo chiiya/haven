@@ -261,6 +261,10 @@ var CookieConsent = function () {
   };
 
   CookieConsent.create = function (options) {
+    if (options === void 0) {
+      options = {};
+    }
+
     var consent = new CookieConsent(options);
     consent.init();
     return consent;
