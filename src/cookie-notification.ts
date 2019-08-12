@@ -24,15 +24,16 @@ export default class CookieNotification {
    */
   constructor(options: CookieConsentOptions = {}) {
     this.cookieManager = new CookieManager(options);
-    this.cookieNotification = document.getElementById('cookie-notification');
-    this.cookiesAccept = document.getElementById('cookie-notification__accept');
-    this.cookiesDecline = document.getElementById('cookie-notification__decline');
   }
 
   /**
    * Initialize cookie notification event listeners.
    */
   public init(): void {
+    this.cookieNotification = document.getElementById('cookie-notification');
+    this.cookiesAccept = document.getElementById('cookie-notification__accept');
+    this.cookiesDecline = document.getElementById('cookie-notification__decline');
+
     if (this.cookieNotification !== null && !this.cookieManager.hasFunctionalCookie()) {
       this.showCookieNotification();
     }

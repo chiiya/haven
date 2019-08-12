@@ -1,5 +1,6 @@
 export interface CookieConsentOptions {
   prefix?: string;
+  gtmId?: string;
   gaId?: string;
   type?: ConsentType;
 }
