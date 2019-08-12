@@ -175,7 +175,6 @@ var ServiceLoader = function () {
     });
     var firstScript = document.getElementsByTagName('script')[0];
     var script = document.createElement('script');
-    script.async = true;
     script.src = "https://www.googletagmanager.com/gtm.js?id=" + this.services.gtm.id;
     firstScript.parentNode.insertBefore(script, firstScript);
   };

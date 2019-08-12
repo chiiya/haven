@@ -51,7 +51,6 @@ export default class ServiceLoader {
     });
     const firstScript = document.getElementsByTagName('script')[0];
     const script = document.createElement('script');
-    script.async = true;
     script.src = `https://www.googletagmanager.com/gtm.js?id=${this.services.gtm!.id}`;
     firstScript.parentNode!.insertBefore(script, firstScript);
   }
