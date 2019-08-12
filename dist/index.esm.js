@@ -121,13 +121,14 @@ var CookieNotification = function () {
     this.cookiesAccept = null;
     this.cookiesDecline = null;
     this.cookieManager = new CookieManager(options);
-    this.cookieNotification = document.getElementById('cookie-notification');
-    this.cookiesAccept = document.getElementById('cookie-notification__accept');
-    this.cookiesDecline = document.getElementById('cookie-notification__decline');
   }
 
   CookieNotification.prototype.init = function () {
     var _this = this;
+
+    this.cookieNotification = document.getElementById('cookie-notification');
+    this.cookiesAccept = document.getElementById('cookie-notification__accept');
+    this.cookiesDecline = document.getElementById('cookie-notification__decline');
 
     if (this.cookieNotification !== null && !this.cookieManager.hasFunctionalCookie()) {
       this.showCookieNotification();
@@ -181,20 +182,27 @@ var CookiePreferences = function () {
     this.saveButtonInitialText = '';
     this.saveButtonSavedText = '';
     this.cookieManager = new CookieManager(options);
-    this.checkboxAnalytics = document.getElementById('cookie-preferences__analytics');
-    this.checkboxMarketing = document.getElementById('cookie-preferences__marketing');
-    this.saveButton = document.getElementById('cookie-preferences__save');
   }
 
   CookiePreferences.prototype.init = function () {
     var _this = this;
 
+    this.checkboxAnalytics = document.getElementById('cookie-preferences__analytics');
+    this.checkboxMarketing = document.getElementById('cookie-preferences__marketing');
+    this.saveButton = document.getElementById('cookie-preferences__save');
+
     if (this.checkboxMarketing !== null) {
       this.checkboxMarketing.checked = this.cookieManager.hasMarketingEnabled();
+      this.checkboxAnalytics.addEventListener('change', function () {
+        _this.enableButton();
+      });
     }
 
     if (this.checkboxAnalytics !== null) {
       this.checkboxAnalytics.checked = this.cookieManager.hasAnalyticsEnabled();
+      this.checkboxMarketing.addEventListener('change', function () {
+        _this.enableButton();
+      });
     }
 
     if (this.saveButton !== null) {
@@ -216,18 +224,6 @@ var CookiePreferences = function () {
         } else {
           _this.cookieManager.disableAnalyticsCookie();
         }
-      });
-    }
-
-    if (this.checkboxAnalytics !== null) {
-      this.checkboxAnalytics.addEventListener('change', function () {
-        _this.enableButton();
-      });
-    }
-
-    if (this.checkboxMarketing !== null) {
-      this.checkboxMarketing.addEventListener('change', function () {
-        _this.enableButton();
       });
     }
   };
@@ -253,11 +249,22 @@ var CookieConsent = function () {
 
     this.cookieNotification = new CookieNotification(options);
     this.cookiePreferences = new CookiePreferences(options);
+    this.cookieManager = new CookieManager(options);
+    this.options = options;
   }
 
   CookieConsent.prototype.init = function () {
-    this.cookieNotification.init();
-    this.cookiePreferences.init();
+    var _this = this;
+
+    if (this.cookieManager.hasAnalyticsEnabled()) {
+      this.loadGtm();
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      _this.cookieNotification.init();
+
+      _this.cookiePreferences.init();
+    });
   };
 
   CookieConsent.create = function (options) {
@@ -268,6 +275,19 @@ var CookieConsent = function () {
     var consent = new CookieConsent(options);
     consent.init();
     return consent;
+  };
+
+  CookieConsent.prototype.loadGtm = function () {
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      'gtm.start': new Date().getTime(),
+      'event': 'gtm.js'
+    });
+    var firstScript = document.getElementsByTagName('script')[0];
+    var script = document.createElement('script');
+    script.async = true;
+    script.src = "https://www.googletagmanager.com/gtm.js?id=" + this.options.gtmId;
+    firstScript.parentNode.insertBefore(script, firstScript);
   };
 
   return CookieConsent;
