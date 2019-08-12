@@ -1,5 +1,5 @@
 import Cookies, { CookieAttributes } from 'js-cookie';
-import { ConsentType, CookieConsentOptions } from '../types';
+import { ConsentCallbacks, ConsentType, CookieConsentOptions } from '../types';
 
 export default class CookieManager {
   /**
@@ -13,20 +13,20 @@ export default class CookieManager {
   protected prefix = 'ap';
 
   /**
-   * Google Analytics ID.
+   * User defined callbacks to execute on status updates
    */
-  protected gaId: string | undefined;
+  protected callbacks: ConsentCallbacks | undefined;
 
   /**
    * Create CookieManager instance.
    * @param prefix
-   * @param gaId
    * @param type
+   * @param callbacks
    */
-  constructor({ prefix, gaId, type }: CookieConsentOptions = {}) {
+  constructor({ prefix, type, callbacks }: CookieConsentOptions = {}) {
     this.type = type || 'opt-in';
     this.prefix = prefix || 'ap';
-    this.gaId = gaId;
+    this.callbacks = callbacks;
   }
 
   /**
@@ -68,6 +68,9 @@ export default class CookieManager {
    */
   public enableFunctionalCookie(): void {
     CookieManager.setCookie(`${this.prefix}-functional`, 'true', { expires: 365 });
+    if (this.callbacks && this.callbacks.onFunctionalEnabled) {
+      this.callbacks.onFunctionalEnabled();
+    }
   }
 
   /**
@@ -89,8 +92,8 @@ export default class CookieManager {
    */
   public enableAnalyticsCookie(): void {
     CookieManager.setCookie(`${this.prefix}-analytics`, 'true', { expires: 365 });
-    if (this.gaId !== undefined) {
-      CookieManager.removeCookie(`ga-disable-${this.gaId}`);
+    if (this.callbacks && this.callbacks.onAnalyticsEnabled) {
+      this.callbacks.onAnalyticsEnabled();
     }
   }
 
@@ -99,8 +102,8 @@ export default class CookieManager {
    */
   public disableAnalyticsCookie(): void {
     CookieManager.setCookie(`${this.prefix}-analytics`, 'false', { expires: 365 });
-    if (this.gaId !== undefined) {
-      CookieManager.setCookie(`ga-disable-${this.gaId}`, 'true', { expires: 365 });
+    if (this.callbacks && this.callbacks.onAnalyticsDisabled) {
+      this.callbacks.onAnalyticsDisabled();
     }
   }
 
@@ -122,6 +125,9 @@ export default class CookieManager {
    */
   public enableMarketingCookie(): void {
     CookieManager.setCookie(`${this.prefix}-marketing`, 'true', { expires: 365 });
+    if (this.callbacks && this.callbacks.onMarketingEnabled) {
+      this.callbacks.onMarketingEnabled();
+    }
   }
 
   /**
@@ -129,6 +135,9 @@ export default class CookieManager {
    */
   public disableMarketingCookie(): void {
     CookieManager.setCookie(`${this.prefix}-marketing`, 'false', { expires: 365 });
+    if (this.callbacks && this.callbacks.onMarketingDisabled) {
+      this.callbacks.onMarketingDisabled();
+    }
   }
 
   /**
@@ -151,5 +160,8 @@ export default class CookieManager {
     this.enableFunctionalCookie();
     this.enableAnalyticsCookie();
     this.enableMarketingCookie();
+    if (this.callbacks && this.callbacks.onAcceptAll) {
+      this.callbacks.onAcceptAll();
+    }
   }
 }

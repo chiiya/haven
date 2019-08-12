@@ -1,6 +1,7 @@
 import CookieNotification from './cookie-notification';
 import CookiePreferences from './cookie-preferences';
 import CookieManager from './cookie-manager';
+import ServiceLoader from './service-loader';
 import { CookieConsentOptions } from '../types';
 
 declare global {
@@ -12,17 +13,19 @@ export default class CookieConsent {
   protected cookieNotification: CookieNotification;
   protected cookiePreferences: CookiePreferences;
   protected cookieManager: CookieManager;
+  protected serviceLoader: ServiceLoader;
   
   constructor(options: CookieConsentOptions = {}) {
     this.cookieNotification = new CookieNotification(options);
     this.cookiePreferences = new CookiePreferences(options);
     this.cookieManager = new CookieManager(options);
+    this.serviceLoader = new ServiceLoader(options);
     this.options = options;
   }
 
   public init(): void {
     if (this.cookieManager.hasAnalyticsEnabled()) {
-      this.loadGtm();
+      this.serviceLoader.loadAnalyticsServices();
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -35,19 +38,5 @@ export default class CookieConsent {
     const consent = new CookieConsent(options);
     consent.init();
     return consent;
-  }
-
-  protected loadGtm()
-  {
-    window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({
-      'gtm.start': new Date().getTime(),
-      'event': 'gtm.js'
-    });
-    const firstScript = document.getElementsByTagName('script')[0];
-    const script = document.createElement('script');
-    script.async = true;
-    script.src = `https://www.googletagmanager.com/gtm.js?id=${this.options.gtmId}`;
-    firstScript.parentNode!.insertBefore(script, firstScript);
   }
 }

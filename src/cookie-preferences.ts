@@ -1,11 +1,16 @@
 import CookieManager from './cookie-manager';
 import { CookieConsentOptions } from '../types';
+import ServiceLoader from './service-loader';
 
 export default class CookiePreferences {
   /**
    * Cookie manager instance.
    */
   protected cookieManager: CookieManager;
+  /**
+   * Service loader instance.
+   */
+  protected serviceLoader: ServiceLoader;
   /**
    * Checkbox for accepting analytics cookies.
    */
@@ -32,6 +37,7 @@ export default class CookiePreferences {
    */
   constructor(options: CookieConsentOptions = {}) {
     this.cookieManager = new CookieManager(options);
+    this.serviceLoader = new ServiceLoader(options);
   }
 
   /**
@@ -71,6 +77,11 @@ export default class CookiePreferences {
           this.cookieManager.enableAnalyticsCookie();
         } else {
           this.cookieManager.disableAnalyticsCookie();
+        }
+        if (this.cookieManager.hasAnalyticsEnabled()) {
+          this.serviceLoader.loadAnalyticsServices();
+        } else {
+          this.serviceLoader.destroyAnalyticsServices();
         }
       })
     }

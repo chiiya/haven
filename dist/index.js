@@ -15,13 +15,13 @@ var CookieManager = function () {
   function CookieManager(_a) {
     var _b = _a === void 0 ? {} : _a,
         prefix = _b.prefix,
-        gaId = _b.gaId,
-        type = _b.type;
+        type = _b.type,
+        callbacks = _b.callbacks;
 
     this.prefix = 'ap';
     this.type = type || 'opt-in';
     this.prefix = prefix || 'ap';
-    this.gaId = gaId;
+    this.callbacks = callbacks;
   }
 
   CookieManager.getCookie = function (name) {
@@ -44,6 +44,10 @@ var CookieManager = function () {
     CookieManager.setCookie(this.prefix + "-functional", 'true', {
       expires: 365
     });
+
+    if (this.callbacks && this.callbacks.onFunctionalEnabled) {
+      this.callbacks.onFunctionalEnabled();
+    }
   };
 
   CookieManager.prototype.disableFunctionalCookie = function () {
@@ -59,8 +63,8 @@ var CookieManager = function () {
       expires: 365
     });
 
-    if (this.gaId !== undefined) {
-      CookieManager.removeCookie("ga-disable-" + this.gaId);
+    if (this.callbacks && this.callbacks.onAnalyticsEnabled) {
+      this.callbacks.onAnalyticsEnabled();
     }
   };
 
@@ -69,10 +73,8 @@ var CookieManager = function () {
       expires: 365
     });
 
-    if (this.gaId !== undefined) {
-      CookieManager.setCookie("ga-disable-" + this.gaId, 'true', {
-        expires: 365
-      });
+    if (this.callbacks && this.callbacks.onAnalyticsDisabled) {
+      this.callbacks.onAnalyticsDisabled();
     }
   };
 
@@ -90,12 +92,20 @@ var CookieManager = function () {
     CookieManager.setCookie(this.prefix + "-marketing", 'true', {
       expires: 365
     });
+
+    if (this.callbacks && this.callbacks.onMarketingEnabled) {
+      this.callbacks.onMarketingEnabled();
+    }
   };
 
   CookieManager.prototype.disableMarketingCookie = function () {
     CookieManager.setCookie(this.prefix + "-marketing", 'false', {
       expires: 365
     });
+
+    if (this.callbacks && this.callbacks.onMarketingDisabled) {
+      this.callbacks.onMarketingDisabled();
+    }
   };
 
   CookieManager.prototype.hasMarketingEnabled = function () {
@@ -112,9 +122,91 @@ var CookieManager = function () {
     this.enableFunctionalCookie();
     this.enableAnalyticsCookie();
     this.enableMarketingCookie();
+
+    if (this.callbacks && this.callbacks.onAcceptAll) {
+      this.callbacks.onAcceptAll();
+    }
   };
 
   return CookieManager;
+}();
+
+var ServiceLoader = function () {
+  function ServiceLoader(options) {
+    if (options === void 0) {
+      options = {};
+    }
+
+    this.cookieManager = new CookieManager(options);
+    this.services = options.services || {};
+  }
+
+  ServiceLoader.prototype.loadAnalyticsServices = function () {
+    if (this.services.gtm && this.services.gtm.id) {
+      this.loadGtm();
+    }
+  };
+
+  ServiceLoader.prototype.destroyAnalyticsServices = function () {
+    if (this.services.gtm && this.services.gtm.id) {
+      this.destroyGtm();
+    }
+
+    if (this.services.aam) {
+      this.destroyAam();
+    }
+
+    if (this.services.navitas) {
+      this.destroyNavitas();
+    }
+
+    window.location.reload();
+  };
+
+  ServiceLoader.prototype.loadGtm = function () {
+    if (this.hasLoadedGtm()) {
+      return;
+    }
+
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      'gtm.start': new Date().getTime(),
+      'event': 'gtm.js'
+    });
+    var firstScript = document.getElementsByTagName('script')[0];
+    var script = document.createElement('script');
+    script.async = true;
+    script.src = "https://www.googletagmanager.com/gtm.js?id=" + this.services.gtm.id;
+    firstScript.parentNode.insertBefore(script, firstScript);
+  };
+
+  ServiceLoader.prototype.destroyGtm = function () {
+    CookieManager.removeCookie('_ga');
+    CookieManager.removeCookie('_gid');
+
+    if (this.services.ga && this.services.ga.id) {
+      CookieManager.removeCookie("_gat_gtag_" + this.services.ga.id);
+    }
+  };
+
+  ServiceLoader.prototype.destroyAam = function () {
+    CookieManager.removeCookie('aam_uuid');
+  };
+
+  ServiceLoader.prototype.destroyNavitas = function () {
+    CookieManager.removeCookie('AAMC_navitas_0');
+    CookieManager.removeCookie('DST');
+    CookieManager.removeCookie('demdex');
+    CookieManager.removeCookie('dextp');
+    CookieManager.removeCookie('navitas');
+  };
+
+  ServiceLoader.prototype.hasLoadedGtm = function () {
+    var src = "https://www.googletagmanager.com/gtm.js?id=" + this.services.gtm.id;
+    return document.querySelector("script[src=\"" + src + "\"") !== null;
+  };
+
+  return ServiceLoader;
 }();
 
 var CookieNotification = function () {
@@ -127,6 +219,7 @@ var CookieNotification = function () {
     this.cookiesAccept = null;
     this.cookiesDecline = null;
     this.cookieManager = new CookieManager(options);
+    this.serviceLoader = new ServiceLoader(options);
   }
 
   CookieNotification.prototype.init = function () {
@@ -147,6 +240,8 @@ var CookieNotification = function () {
         _this.cookieManager.acceptAll();
 
         _this.hideCookieNotification();
+
+        _this.serviceLoader.loadAnalyticsServices();
       });
     }
 
@@ -157,6 +252,8 @@ var CookieNotification = function () {
         _this.cookieManager.enableFunctionalCookie();
 
         _this.hideCookieNotification();
+
+        _this.serviceLoader.destroyAnalyticsServices();
       });
     }
   };
@@ -188,6 +285,7 @@ var CookiePreferences = function () {
     this.saveButtonInitialText = '';
     this.saveButtonSavedText = '';
     this.cookieManager = new CookieManager(options);
+    this.serviceLoader = new ServiceLoader(options);
   }
 
   CookiePreferences.prototype.init = function () {
@@ -230,6 +328,12 @@ var CookiePreferences = function () {
         } else {
           _this.cookieManager.disableAnalyticsCookie();
         }
+
+        if (_this.cookieManager.hasAnalyticsEnabled()) {
+          _this.serviceLoader.loadAnalyticsServices();
+        } else {
+          _this.serviceLoader.destroyAnalyticsServices();
+        }
       });
     }
   };
@@ -256,6 +360,7 @@ var CookieConsent = function () {
     this.cookieNotification = new CookieNotification(options);
     this.cookiePreferences = new CookiePreferences(options);
     this.cookieManager = new CookieManager(options);
+    this.serviceLoader = new ServiceLoader(options);
     this.options = options;
   }
 
@@ -263,7 +368,7 @@ var CookieConsent = function () {
     var _this = this;
 
     if (this.cookieManager.hasAnalyticsEnabled()) {
-      this.loadGtm();
+      this.serviceLoader.loadAnalyticsServices();
     }
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -281,19 +386,6 @@ var CookieConsent = function () {
     var consent = new CookieConsent(options);
     consent.init();
     return consent;
-  };
-
-  CookieConsent.prototype.loadGtm = function () {
-    window.dataLayer = window.dataLayer || [];
-    window.dataLayer.push({
-      'gtm.start': new Date().getTime(),
-      'event': 'gtm.js'
-    });
-    var firstScript = document.getElementsByTagName('script')[0];
-    var script = document.createElement('script');
-    script.async = true;
-    script.src = "https://www.googletagmanager.com/gtm.js?id=" + this.options.gtmId;
-    firstScript.parentNode.insertBefore(script, firstScript);
   };
 
   return CookieConsent;

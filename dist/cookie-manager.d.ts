@@ -1,10 +1,10 @@
 import { CookieAttributes } from 'js-cookie';
-import { ConsentType, CookieConsentOptions } from '../types';
+import { ConsentCallbacks, ConsentType, CookieConsentOptions } from '../types';
 export default class CookieManager {
     protected type: ConsentType;
     protected prefix: string;
-    protected gaId: string | undefined;
-    constructor({ prefix, gaId, type }?: CookieConsentOptions);
+    protected callbacks: ConsentCallbacks | undefined;
+    constructor({ prefix, type, callbacks }?: CookieConsentOptions);
     static getCookie(name: string): string | undefined;
     static setCookie(name: string, value: string, options?: CookieAttributes): void;
     static removeCookie(name: string): void;
