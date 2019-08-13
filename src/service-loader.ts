@@ -3,10 +3,12 @@ import CookieManager from './cookie-manager';
 
 export default class ServiceLoader {
   protected cookieManager: CookieManager;
+  protected options: CookieConsentOptions;
   protected services: CookieConsentServices;
 
   constructor(options: CookieConsentOptions = {}) {
     this.cookieManager = new CookieManager(options);
+    this.options = options;
     this.services = options.services || {};
   }
 
@@ -16,6 +18,9 @@ export default class ServiceLoader {
   public loadAnalyticsServices(): void {
     if (this.services.gtm && this.services.gtm.id) {
       this.loadGtm();
+    }
+    if (this.options.callbacks && this.options.callbacks.onServicesLoaded) {
+      this.options.callbacks.onServicesLoaded();
     }
   }
 
@@ -41,6 +46,7 @@ export default class ServiceLoader {
   protected loadGtm(): void {
     // Don't load GTM twice.
     if (this.hasLoadedGtm()) {
+      console.log('GTM already loaded');
       return;
     }
 
@@ -53,6 +59,7 @@ export default class ServiceLoader {
     const script = document.createElement('script');
     script.src = `https://www.googletagmanager.com/gtm.js?id=${this.services.gtm!.id}`;
     firstScript.parentNode!.insertBefore(script, firstScript);
+    console.log('Inserted GTM!');
   }
 
   /**

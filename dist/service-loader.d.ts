@@ -2,6 +2,7 @@ import { CookieConsentOptions, CookieConsentServices } from '../types';
 import CookieManager from './cookie-manager';
 export default class ServiceLoader {
     protected cookieManager: CookieManager;
+    protected options: CookieConsentOptions;
     protected services: CookieConsentServices;
     constructor(options?: CookieConsentOptions);
     loadAnalyticsServices(): void;

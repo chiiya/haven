@@ -6,6 +6,7 @@ import { CookieConsentOptions } from '../types';
 declare global {
     interface Window {
         dataLayer: any;
+        ga: any;
     }
 }
 export default class CookieConsent {

@@ -23,6 +23,7 @@ export interface ConsentCallbacks {
   onAnalyticsDisabled?: () => void;
   onMarketingEnabled?: () => void;
   onMarketingDisabled?: () => void;
+  onServicesLoaded?: () => void;
 }
 
 export type ConsentType = 'opt-in' | 'opt-out';
