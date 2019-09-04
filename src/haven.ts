@@ -10,7 +10,7 @@ declare global {
   interface Window {
     dataLayer: any[];
     ga: any;
-    Haven: Haven;
+    Haven: typeof Haven;
   }
 }
 
@@ -39,7 +39,7 @@ export default class Haven {
     this.checkInitialState();
   }
 
-  checkInitialState(): void {
+  protected checkInitialState(): void {
     if (this.cookieManager.hasFunctionalCookie()) {
       EventBus.emit('functional-enabled');
     }
@@ -51,7 +51,7 @@ export default class Haven {
     }
   }
 
-  registerDefaultListeners(): void {
+  protected registerDefaultListeners(): void {
     // Inject analytics services once analytics cookies have been accepted
     EventBus.on('analytics-enabled', () => {
       if (this.options.injectServices) {
@@ -72,14 +72,13 @@ export default class Haven {
    * @param event
    * @param callback
    */
-  on(event: string, callback: Function): EventBusSubscription {
+  public static on(event: string, callback: Function): EventBusSubscription {
     return EventBus.on(event, callback);
   }
 
-  static create(options: CookieConsentOptions = {}): Haven {
+  public static create(options: CookieConsentOptions = {}): Haven {
     const haven = new Haven(options);
     haven.init();
-    window.Haven = haven;
     return haven;
   }
 }

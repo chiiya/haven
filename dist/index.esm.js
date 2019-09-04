@@ -383,6 +383,21 @@ var Haven = function () {
       _this.cookiePreferences.init();
     });
     this.registerDefaultListeners();
+    this.checkInitialState();
+  };
+
+  Haven.prototype.checkInitialState = function () {
+    if (this.cookieManager.hasFunctionalCookie()) {
+      EventBus$1.emit('functional-enabled');
+    }
+
+    if (this.cookieManager.hasAnalyticsEnabled()) {
+      EventBus$1.emit('analytics-enabled');
+    }
+
+    if (this.cookieManager.hasMarketingEnabled()) {
+      EventBus$1.emit('marketing-enabled');
+    }
   };
 
   Haven.prototype.registerDefaultListeners = function () {
@@ -400,7 +415,7 @@ var Haven = function () {
     });
   };
 
-  Haven.prototype.on = function (event, callback) {
+  Haven.on = function (event, callback) {
     return EventBus$1.on(event, callback);
   };
 
@@ -411,12 +426,13 @@ var Haven = function () {
 
     var haven = new Haven(options);
     haven.init();
-    window.Haven = haven;
     return haven;
   };
 
   return Haven;
 }();
+
+window.Haven = Haven;
 
 export default Haven;
 export { CookieManager, CookieNotification, CookiePreferences, Haven };

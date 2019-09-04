@@ -5,4 +5,6 @@ import Haven from './haven';
 
 export { CookieManager, CookieNotification, CookiePreferences, Haven };
 
+window.Haven = Haven;
+
 export default Haven;

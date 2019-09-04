@@ -8,7 +8,7 @@ declare global {
     interface Window {
         dataLayer: any[];
         ga: any;
-        Haven: Haven;
+        Haven: typeof Haven;
     }
 }
 export default class Haven {
@@ -19,7 +19,8 @@ export default class Haven {
     protected serviceLoader: ServiceLoader;
     constructor(options?: CookieConsentOptions);
     init(): void;
-    registerDefaultListeners(): void;
-    on(event: string, callback: Function): EventBusSubscription;
+    protected checkInitialState(): void;
+    protected registerDefaultListeners(): void;
+    static on(event: string, callback: Function): EventBusSubscription;
     static create(options?: CookieConsentOptions): Haven;
 }
