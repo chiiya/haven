@@ -10,7 +10,7 @@ declare global {
   interface Window {
     dataLayer: any[];
     ga: any;
-    Haven: Haven,
+    Haven: Haven;
   }
 }
 
@@ -36,6 +36,19 @@ export default class Haven {
       this.cookiePreferences.init();
     });
     this.registerDefaultListeners();
+    this.checkInitialState();
+  }
+
+  checkInitialState(): void {
+    if (this.cookieManager.hasFunctionalCookie()) {
+      EventBus.emit('functional-enabled');
+    }
+    if (this.cookieManager.hasAnalyticsEnabled()) {
+      EventBus.emit('analytics-enabled');
+    }
+    if (this.cookieManager.hasMarketingEnabled()) {
+      EventBus.emit('marketing-enabled');
+    }
   }
 
   registerDefaultListeners(): void {
