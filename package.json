@@ -1,11 +1,11 @@
 {
-  "name": "cookie-consent-manager",
+  "name": "haven",
   "version": "1.0.0",
   "private": true,
   "author": "Elisha Witte <elishawitte@gmail.com>",
   "license": "MIT",
   "description": "Package for managing cookies and the cookie notification",
-  "main": "dist/index.js",
+  "main": "dist/index.umd.min.js",
   "module": "dist/index.esm.js",
   "typings": "dist/index.d.ts",
   "directories": {
@@ -19,12 +19,16 @@
     "url": "git+https://gitlab.intranet.doccheck.ag/elishawitte/aral-cookie-manager.git"
   },
   "scripts": {
-    "build": "bili"
+    "build": "npm-run-all build:umd build:esm",
+    "build:umd": "cross-env ESM=false bili",
+    "build:esm": "cross-env ESM=true bili"
   },
   "devDependencies": {
     "@types/js-cookie": "^2.2.2",
     "@types/node": "^12.6.9",
     "bili": "^4.8.1",
+    "cross-env": "^5.2.1",
+    "npm-run-all": "^4.1.5",
     "rollup-plugin-typescript2": "^0.22.1",
     "ts-node": "^8.3.0",
     "tslint": "^5.18.0",

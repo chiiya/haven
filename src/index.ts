@@ -1,8 +1,8 @@
 import CookieManager from './cookie-manager';
 import CookieNotification from './cookie-notification';
 import CookiePreferences from './cookie-preferences';
-import CookieConsent from './cookie-consent';
+import Haven from './haven';
 
-export { CookieManager, CookieNotification, CookiePreferences, CookieConsent };
+export { CookieManager, CookieNotification, CookiePreferences, Haven };
 
-export default CookieConsent;
+export default Haven;

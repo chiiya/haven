@@ -1,16 +1,11 @@
 import CookieManager from './cookie-manager';
-import { CookieConsentOptions } from '../types';
-import ServiceLoader from './service-loader';
+import { Configuration } from '../types';
 
 export default class CookieNotification {
   /**
    * Cookie manager instance.
    */
   protected cookieManager: CookieManager;
-  /**
-   * Service loader instance.
-   */
-  protected serviceLoader: ServiceLoader;
   /**
    * Wrapper element for the cookie notification.
    */
@@ -25,11 +20,10 @@ export default class CookieNotification {
   protected cookiesDecline: HTMLElement | null = null;
 
   /**
-   * Fetch dom elements.
+   * Fetch DOM elements.
    */
-  constructor(options: CookieConsentOptions = {}) {
+  constructor(options: Configuration) {
     this.cookieManager = new CookieManager(options);
-    this.serviceLoader = new ServiceLoader(options);
   }
 
   /**
@@ -48,7 +42,6 @@ export default class CookieNotification {
         event.preventDefault();
         this.cookieManager.acceptAll();
         this.hideCookieNotification();
-        this.serviceLoader.loadAnalyticsServices();
       })
     }
     if (this.cookiesDecline !== null) {
@@ -57,7 +50,6 @@ export default class CookieNotification {
         // Only set the functional cookie.
         this.cookieManager.enableFunctionalCookie();
         this.hideCookieNotification();
-        this.serviceLoader.destroyAnalyticsServices();
       })
     }
   }

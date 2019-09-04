@@ -1,8 +1,20 @@
 export interface CookieConsentOptions {
   prefix?: string;
   type?: ConsentType;
+  injectServices?: boolean;
   services?: CookieConsentServices;
-  callbacks?: ConsentCallbacks;
+}
+
+export interface CookieManagerOptions {
+  type?: ConsentType;
+  prefix?: string;
+}
+
+export interface Configuration {
+  prefix?: string;
+  type: ConsentType;
+  injectServices: boolean;
+  services?: CookieConsentServices;
 }
 
 export interface CookieConsentServices {
@@ -14,16 +26,6 @@ export interface CookieConsentServices {
 
 export interface ServiceOptions {
   id: string;
-}
-
-export interface ConsentCallbacks {
-  onAcceptAll?: () => void;
-  onFunctionalEnabled?: () => void;
-  onAnalyticsEnabled?: () => void;
-  onAnalyticsDisabled?: () => void;
-  onMarketingEnabled?: () => void;
-  onMarketingDisabled?: () => void;
-  onServicesLoaded?: () => void;
 }
 
 export type ConsentType = 'opt-in' | 'opt-out';

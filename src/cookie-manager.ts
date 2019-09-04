@@ -1,32 +1,26 @@
 import Cookies, { CookieAttributes } from 'js-cookie';
-import { ConsentCallbacks, ConsentType, CookieConsentOptions } from '../types';
+import { ConsentType, CookieManagerOptions } from '../types';
+import EventBus from './event-bus';
 
 export default class CookieManager {
   /**
-   * Consent-Type: Opt-In / Opt-Out.
+   * Consent type: opt-in / opt-out.
    */
   protected type: ConsentType;
 
   /**
-   * Cookie Prefix
+   * Optional cookie prefix
    */
-  protected prefix = 'ap';
-
-  /**
-   * User defined callbacks to execute on status updates
-   */
-  protected callbacks: ConsentCallbacks | undefined;
+  protected prefix: string | undefined;
 
   /**
    * Create CookieManager instance.
    * @param prefix
    * @param type
-   * @param callbacks
    */
-  constructor({ prefix, type, callbacks }: CookieConsentOptions = {}) {
+  constructor({ prefix, type }: CookieManagerOptions = {}) {
     this.type = type || 'opt-in';
-    this.prefix = prefix || 'ap';
-    this.callbacks = callbacks;
+    this.prefix = prefix;
   }
 
   /**
@@ -67,51 +61,45 @@ export default class CookieManager {
    * Enable the functional cookie.
    */
   public enableFunctionalCookie(): void {
-    CookieManager.setCookie(`${this.prefix}-functional`, 'true', { expires: 365 });
-    if (this.callbacks && this.callbacks.onFunctionalEnabled) {
-      this.callbacks.onFunctionalEnabled();
-    }
+    CookieManager.setCookie(this.getPrefixedCookieName('functional'), 'true', { expires: 365 });
+    EventBus.emit('functional-enabled');
   }
 
   /**
    * Disable (remove) functional cookie, resulting in new cookie consent request.
    */
   public disableFunctionalCookie(): void {
-    CookieManager.removeCookie(`${this.prefix}-functional`);
+    CookieManager.removeCookie(this.getPrefixedCookieName('functional'));
   }
 
   /**
    * Check whether the functional cookie has been set.
    */
   public hasFunctionalCookie(): boolean {
-    return CookieManager.cookieExists(`${this.prefix}-functional`);
+    return CookieManager.cookieExists(this.getPrefixedCookieName('functional'));
   }
 
   /**
    * Enable analytics cookie.
    */
   public enableAnalyticsCookie(): void {
-    CookieManager.setCookie(`${this.prefix}-analytics`, 'true', { expires: 365 });
-    if (this.callbacks && this.callbacks.onAnalyticsEnabled) {
-      this.callbacks.onAnalyticsEnabled();
-    }
+    CookieManager.setCookie(this.getPrefixedCookieName('analytics'), 'true', { expires: 365 });
+    EventBus.emit('analytics-enabled');
   }
 
   /**
    * Disable analytics cookie.
    */
   public disableAnalyticsCookie(): void {
-    CookieManager.setCookie(`${this.prefix}-analytics`, 'false', { expires: 365 });
-    if (this.callbacks && this.callbacks.onAnalyticsDisabled) {
-      this.callbacks.onAnalyticsDisabled();
-    }
+    CookieManager.setCookie(this.getPrefixedCookieName('analytics'), 'false', { expires: 365 });
+    EventBus.emit('analytics-disabled');
   }
 
   /**
    * Check whether analytics cookies should be enabled.
    */
   public hasAnalyticsEnabled(): boolean {
-    const cookie = CookieManager.getCookie(`${this.prefix}-analytics`);
+    const cookie = CookieManager.getCookie(this.getPrefixedCookieName('analytics'));
 
     if (this.type === 'opt-in') {
       return cookie === 'true';
@@ -124,27 +112,23 @@ export default class CookieManager {
    * Enable the marketing cookie.
    */
   public enableMarketingCookie(): void {
-    CookieManager.setCookie(`${this.prefix}-marketing`, 'true', { expires: 365 });
-    if (this.callbacks && this.callbacks.onMarketingEnabled) {
-      this.callbacks.onMarketingEnabled();
-    }
+    CookieManager.setCookie(this.getPrefixedCookieName('marketing'), 'true', { expires: 365 });
+    EventBus.emit('marketing-enabled');
   }
 
   /**
    * Disable the marketing cookie.
    */
   public disableMarketingCookie(): void {
-    CookieManager.setCookie(`${this.prefix}-marketing`, 'false', { expires: 365 });
-    if (this.callbacks && this.callbacks.onMarketingDisabled) {
-      this.callbacks.onMarketingDisabled();
-    }
+    CookieManager.setCookie(this.getPrefixedCookieName('marketing'), 'false', { expires: 365 });
+    EventBus.emit('marketing-enabled');
   }
 
   /**
    * Check whether marketing cookies should be enabled.
    */
   public hasMarketingEnabled(): boolean {
-    const cookie = CookieManager.getCookie(`${this.prefix}-marketing`);
+    const cookie = CookieManager.getCookie(this.getPrefixedCookieName('marketing'));
 
     if (this.type === 'opt-in') {
       return cookie === 'true';
@@ -160,8 +144,17 @@ export default class CookieManager {
     this.enableFunctionalCookie();
     this.enableAnalyticsCookie();
     this.enableMarketingCookie();
-    if (this.callbacks && this.callbacks.onAcceptAll) {
-      this.callbacks.onAcceptAll();
+  }
+
+  /**
+   * Get prefixed cookie name, if a prefix has been set by the user.
+   * @param name
+   */
+  protected getPrefixedCookieName(name: string): string {
+    if (this.prefix !== undefined) {
+      return `${this.prefix}-${name}`;
     }
+
+    return name;
   }
 }
