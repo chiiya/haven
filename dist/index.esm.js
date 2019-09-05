@@ -419,11 +419,15 @@ var Haven = function () {
     var _this = this;
 
     EventBus$1.on('analytics-enabled', function () {
+      console.log('Injecting services...');
+
       if (_this.options.injectServices) {
         _this.serviceLoader.loadAnalyticsServices();
       }
     });
     EventBus$1.on('analytics-disabled', function () {
+      console.log('Destroying services...');
+
       _this.consentRevoke.destroyAnalyticsServices();
     });
   };
