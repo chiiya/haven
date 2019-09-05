@@ -18,7 +18,6 @@ class EventBus {
    */
   on(event: string, callback: Function): EventBusSubscription {
     const id = Symbol('id');
-    console.log(id);
     if (this.subscriptions[event] === undefined) {
       this.subscriptions[event] = {};
     }

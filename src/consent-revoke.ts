@@ -21,6 +21,7 @@ export default class ConsentRevoke {
     if (this.services.navitas) {
       this.destroyNavitas();
     }
+    console.log('Reloading page');
     window.location.reload();
   }
   /**

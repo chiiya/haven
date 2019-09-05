@@ -14,7 +14,6 @@ var EventBus = function () {
     var _this = this;
 
     var id = Symbol('id');
-    console.log(id);
 
     if (this.subscriptions[event] === undefined) {
       this.subscriptions[event] = {};
@@ -343,6 +342,7 @@ var ConsentRevoke = function () {
       this.destroyNavitas();
     }
 
+    console.log('Reloading page');
     window.location.reload();
   };
 
