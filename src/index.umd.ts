@@ -1,10 +1,8 @@
 import CookieManager from './cookie-manager';
 import CookieNotification from './cookie-notification';
 import CookiePreferences from './cookie-preferences';
-import Haven from './haven';
+import CookieConsent from './cookie-consent';
 
-export { CookieManager, CookieNotification, CookiePreferences, Haven };
+var Haven = CookieConsent;
 
-window.Haven = Haven;
-
-export default Haven;
+export { CookieManager, CookieNotification, CookiePreferences, CookieConsent };

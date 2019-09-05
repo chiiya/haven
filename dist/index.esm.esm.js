@@ -124,7 +124,7 @@ var CookieManager = function () {
     CookieManager.setCookie(this.getPrefixedCookieName('marketing'), 'false', {
       expires: 365
     });
-    EventBus$1.emit('marketing-enabled');
+    EventBus$1.emit('marketing-disabled');
   };
 
   CookieManager.prototype.hasMarketingEnabled = function () {
@@ -377,8 +377,8 @@ var ConsentRevoke = function () {
   return ConsentRevoke;
 }();
 
-var Haven = function () {
-  function Haven(options) {
+var CookieConsent = function () {
+  function CookieConsent(options) {
     if (options === void 0) {
       options = {};
     }
@@ -392,7 +392,7 @@ var Haven = function () {
     this.options = config;
   }
 
-  Haven.prototype.init = function () {
+  CookieConsent.prototype.init = function () {
     var _this = this;
 
     document.addEventListener('DOMContentLoaded', function () {
@@ -404,7 +404,7 @@ var Haven = function () {
     this.checkInitialState();
   };
 
-  Haven.prototype.checkInitialState = function () {
+  CookieConsent.prototype.checkInitialState = function () {
     if (this.cookieManager.hasFunctionalCookie()) {
       EventBus$1.emit('functional-enabled');
     }
@@ -418,7 +418,7 @@ var Haven = function () {
     }
   };
 
-  Haven.prototype.registerDefaultListeners = function () {
+  CookieConsent.prototype.registerDefaultListeners = function () {
     var _this = this;
 
     EventBus$1.on('analytics-enabled', function () {
@@ -435,24 +435,22 @@ var Haven = function () {
     });
   };
 
-  Haven.on = function (event, callback) {
+  CookieConsent.on = function (event, callback) {
     return EventBus$1.on(event, callback);
   };
 
-  Haven.create = function (options) {
+  CookieConsent.create = function (options) {
     if (options === void 0) {
       options = {};
     }
 
-    var haven = new Haven(options);
+    var haven = new CookieConsent(options);
     haven.init();
     return haven;
   };
 
-  return Haven;
+  return CookieConsent;
 }();
 
-window.Haven = Haven;
-
-export default Haven;
-export { CookieManager, CookieNotification, CookiePreferences, Haven };
+export default CookieConsent;
+export { CookieManager, CookieNotification, CookiePreferences, CookieConsent as Haven };

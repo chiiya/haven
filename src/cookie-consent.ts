@@ -11,11 +11,10 @@ declare global {
   interface Window {
     dataLayer: any[];
     ga: any;
-    Haven: typeof Haven;
   }
 }
 
-export default class Haven {
+export default class CookieConsent {
   protected options: Configuration;
   protected cookieNotification: CookieNotification;
   protected cookiePreferences: CookiePreferences;
@@ -82,8 +81,8 @@ export default class Haven {
     return EventBus.on(event, callback);
   }
 
-  public static create(options: CookieConsentOptions = {}): Haven {
-    const haven = new Haven(options);
+  public static create(options: CookieConsentOptions = {}): CookieConsent {
+    const haven = new CookieConsent(options);
     haven.init();
     return haven;
   }

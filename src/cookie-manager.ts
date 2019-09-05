@@ -121,7 +121,7 @@ export default class CookieManager {
    */
   public disableMarketingCookie(): void {
     CookieManager.setCookie(this.getPrefixedCookieName('marketing'), 'false', { expires: 365 });
-    EventBus.emit('marketing-enabled');
+    EventBus.emit('marketing-disabled');
   }
 
   /**
