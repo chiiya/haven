@@ -14,6 +14,7 @@ var EventBus = function () {
     var _this = this;
 
     var id = Symbol('id');
+    console.log(id);
 
     if (this.subscriptions[event] === undefined) {
       this.subscriptions[event] = {};
@@ -28,12 +29,15 @@ var EventBus = function () {
   };
 
   EventBus.prototype.emit = function (event, payload) {
+    console.log(event);
+
     if (this.subscriptions[event] === undefined) {
       return;
     }
 
     for (var _i = 0, _a = Object.getOwnPropertySymbols(this.subscriptions[event]); _i < _a.length; _i++) {
       var id = _a[_i];
+      console.log('Found', id);
       this.subscriptions[event][id](payload);
     }
   };
@@ -273,8 +277,6 @@ var CookiePreferences = function () {
 
 var ServiceLoader = function () {
   function ServiceLoader(options) {
-    this.cookieManager = new CookieManager(options);
-    this.options = options;
     this.services = options.services || {};
   }
 
@@ -284,22 +286,6 @@ var ServiceLoader = function () {
     }
 
     EventBus$1.emit('services-loaded');
-  };
-
-  ServiceLoader.prototype.destroyAnalyticsServices = function () {
-    if (this.services.gtm && this.services.gtm.id) {
-      this.destroyGtm();
-    }
-
-    if (this.services.aam) {
-      this.destroyAam();
-    }
-
-    if (this.services.navitas) {
-      this.destroyNavitas();
-    }
-
-    window.location.reload();
   };
 
   ServiceLoader.prototype.loadGtm = function () {
@@ -316,27 +302,6 @@ var ServiceLoader = function () {
     var script = document.createElement('script');
     script.src = "https://www.googletagmanager.com/gtm.js?id=" + this.services.gtm.id;
     firstScript.parentNode.insertBefore(script, firstScript);
-  };
-
-  ServiceLoader.prototype.destroyGtm = function () {
-    CookieManager.removeCookie('_ga');
-    CookieManager.removeCookie('_gid');
-
-    if (this.services.ga && this.services.ga.id) {
-      CookieManager.removeCookie("_gat_gtag_" + this.services.ga.id);
-    }
-  };
-
-  ServiceLoader.prototype.destroyAam = function () {
-    CookieManager.removeCookie('aam_uuid');
-  };
-
-  ServiceLoader.prototype.destroyNavitas = function () {
-    CookieManager.removeCookie('AAMC_navitas_0');
-    CookieManager.removeCookie('DST');
-    CookieManager.removeCookie('demdex');
-    CookieManager.removeCookie('dextp');
-    CookieManager.removeCookie('navitas');
   };
 
   ServiceLoader.prototype.hasLoadedGtm = function () {
@@ -360,6 +325,55 @@ var ConfigurationResolver = function () {
   return ConfigurationResolver;
 }();
 
+var ConsentRevoke = function () {
+  function ConsentRevoke(options) {
+    this.services = options.services || {};
+  }
+
+  ConsentRevoke.prototype.destroyAnalyticsServices = function () {
+    if (this.services.gtm && this.services.gtm.id) {
+      this.destroyGtm();
+    }
+
+    if (this.services.aam) {
+      this.destroyAam();
+    }
+
+    if (this.services.navitas) {
+      this.destroyNavitas();
+    }
+
+    window.location.reload();
+  };
+
+  ConsentRevoke.prototype.destroyGtm = function () {
+    CookieManager.removeCookie('_ga');
+    CookieManager.removeCookie('_gid');
+    CookieManager.removeCookie('_gat');
+
+    if (this.services.ga && this.services.ga.id) {
+      CookieManager.removeCookie("_dc_gtm_" + this.services.ga.id);
+      CookieManager.removeCookie("_gac_" + this.services.ga.id);
+      CookieManager.removeCookie("_gat_gtag_" + this.services.ga.id);
+      CookieManager.removeCookie("_gat_" + this.services.ga.id);
+    }
+  };
+
+  ConsentRevoke.prototype.destroyAam = function () {
+    CookieManager.removeCookie('aam_uuid');
+  };
+
+  ConsentRevoke.prototype.destroyNavitas = function () {
+    CookieManager.removeCookie('AAMC_navitas_0');
+    CookieManager.removeCookie('DST');
+    CookieManager.removeCookie('demdex');
+    CookieManager.removeCookie('dextp');
+    CookieManager.removeCookie('navitas');
+  };
+
+  return ConsentRevoke;
+}();
+
 var Haven = function () {
   function Haven(options) {
     if (options === void 0) {
@@ -371,6 +385,7 @@ var Haven = function () {
     this.cookiePreferences = new CookiePreferences(config);
     this.cookieManager = new CookieManager(config);
     this.serviceLoader = new ServiceLoader(config);
+    this.consentRevoke = new ConsentRevoke(config);
     this.options = config;
   }
 
@@ -409,9 +424,7 @@ var Haven = function () {
       }
     });
     EventBus$1.on('analytics-disabled', function () {
-      if (_this.options.injectServices) {
-        _this.serviceLoader.destroyAnalyticsServices();
-      }
+      _this.consentRevoke.destroyAnalyticsServices();
     });
   };
 

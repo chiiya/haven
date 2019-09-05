@@ -18,6 +18,7 @@ class EventBus {
    */
   on(event: string, callback: Function): EventBusSubscription {
     const id = Symbol('id');
+    console.log(id);
     if (this.subscriptions[event] === undefined) {
       this.subscriptions[event] = {};
     }
@@ -37,11 +38,13 @@ class EventBus {
    * @param payload
    */
   emit(event: string, payload?: any): void {
+    console.log(event);
     if (this.subscriptions[event] === undefined) {
       return;
     }
 
     for (const id of Object.getOwnPropertySymbols(this.subscriptions[event])) {
+      console.log('Found', id);
       this.subscriptions[event][id](payload);
     }
   }
