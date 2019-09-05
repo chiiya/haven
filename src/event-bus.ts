@@ -12,10 +12,6 @@ class EventBus {
   private subscriptions: EventBusSubscriptions = {};
   private counter: number = 0;
 
-  constructor() {
-    console.log('New EventBUS!');
-  }
-
   /**
    * Register a new callback
    * @param event
@@ -42,13 +38,11 @@ class EventBus {
    * @param payload
    */
   emit(event: string, payload?: any): void {
-    console.log(event);
     if (this.subscriptions[event] === undefined) {
       return;
     }
 
     for (const id of Object.keys(this.subscriptions[event])) {
-      console.log('Found', id);
       this.subscriptions[event][id](payload);
     }
   }

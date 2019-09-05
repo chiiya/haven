@@ -61,14 +61,12 @@ export default class CookieConsent {
   protected registerDefaultListeners(): void {
     // Inject analytics services once analytics cookies have been accepted
     EventBus.on('analytics-enabled', () => {
-      console.log('Injecting services...');
       if (this.options.injectServices) {
         this.serviceLoader.loadAnalyticsServices();
       }
     });
     // Remove analytics cookies when analytics cookie consent is revoked
     EventBus.on('analytics-disabled', () => {
-      console.log('Destroying services...');
       this.consentRevoke.destroyAnalyticsServices();
     });
   }

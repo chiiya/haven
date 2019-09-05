@@ -1,5 +1,5 @@
 export interface CookieConsentOptions {
-  domain: string;
+  domain?: string;
   prefix?: string;
   type?: ConsentType;
   injectServices?: boolean;
@@ -13,7 +13,7 @@ export interface CookieManagerOptions {
 
 export interface Configuration {
   prefix?: string;
-  domain: string;
+  domain?: string;
   type: ConsentType;
   injectServices: boolean;
   services?: CookieConsentServices;

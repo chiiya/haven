@@ -1,7 +1,7 @@
 import { Configuration, CookieConsentServices } from '../types';
 export default class ConsentRevoke {
     protected services: CookieConsentServices;
-    protected domain: string;
+    protected domain: string | undefined;
     constructor(options: Configuration);
     destroyAnalyticsServices(): void;
     protected destroyGtm(): void;

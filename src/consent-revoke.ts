@@ -3,7 +3,7 @@ import { Configuration, CookieConsentServices } from '../types';
 
 export default class ConsentRevoke {
   protected services: CookieConsentServices;
-  protected domain: string;
+  protected domain: string | undefined;
 
   constructor(options: Configuration) {
     this.services = options.services || {};
@@ -14,7 +14,6 @@ export default class ConsentRevoke {
    * Destroy all registered services after opt-out / consent revoke.
    */
   public destroyAnalyticsServices(): void {
-    console.log(this.services);
     if (this.services.gtm && this.services.gtm.id) {
       this.destroyGtm();
     }
@@ -24,21 +23,28 @@ export default class ConsentRevoke {
     if (this.services.navitas) {
       this.destroyNavitas();
     }
-    console.log('Reloading page');
-    // window.location.reload();
+    window.location.reload();
   }
   /**
    * Remove all cookies possibly set by GTM.
    */
   protected destroyGtm(): void {
-    CookieManager.removeCookie('_ga', { domain: this.domain });
-    CookieManager.removeCookie('_gid', { domain: this.domain });
-    CookieManager.removeCookie('_gat', { domain: this.domain });
+    const simpleCookies = ['_ga', '_gid', '_gat'];
+    for (const cookie of simpleCookies) {
+      if (this.domain) {
+        CookieManager.removeCookie(cookie, { domain: this.domain });
+      }
+      CookieManager.removeCookie(cookie);
+    }
+
     if (this.services.ga && this.services.ga.id) {
-      CookieManager.removeCookie(`_dc_gtm_${this.services.ga.id}`, { domain: this.domain });
-      CookieManager.removeCookie(`_gac_${this.services.ga.id}`, { domain: this.domain });
-      CookieManager.removeCookie(`_gat_gtag_${this.services.ga.id}`, { domain: this.domain });
-      CookieManager.removeCookie(`_gat_${this.services.ga.id}`, { domain: this.domain });
+      const compositeCookies = ['_dc_gtm_', '_gac_', '_gat_gtag_', '_gat_'];
+      for (const cookie of compositeCookies) {
+        if (this.domain) {
+          CookieManager.removeCookie(`${cookie}${this.services.ga.id}`, { domain: this.domain });
+        }
+        CookieManager.removeCookie(`${cookie}${this.services.ga.id}`);
+      }
     }
   }
 

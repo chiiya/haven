@@ -9,7 +9,6 @@ var EventBus = function () {
   function EventBus() {
     this.subscriptions = {};
     this.counter = 0;
-    console.log('New EventBUS!');
   }
 
   EventBus.prototype.on = function (event, callback) {
@@ -30,15 +29,12 @@ var EventBus = function () {
   };
 
   EventBus.prototype.emit = function (event, payload) {
-    console.log(event);
-
     if (this.subscriptions[event] === undefined) {
       return;
     }
 
     for (var _i = 0, _a = Object.keys(this.subscriptions[event]); _i < _a.length; _i++) {
       var id = _a[_i];
-      console.log('Found', id);
       this.subscriptions[event][id](payload);
     }
   };
@@ -317,7 +313,11 @@ var ConfigurationResolver = function () {
   function ConfigurationResolver() {}
 
   ConfigurationResolver.resolve = function (options) {
-    if (!options.domain.startsWith('.')) {
+    if (options.domain === undefined) {
+      options.domain = this.getDomain();
+    }
+
+    if (options.domain && !options.domain.startsWith('.')) {
       options.domain = "." + options.domain;
     }
 
@@ -325,6 +325,21 @@ var ConfigurationResolver = function () {
       type: 'opt-in',
       injectServices: true
     }, options);
+  };
+
+  ConfigurationResolver.getDomain = function () {
+    var host = window.location.hostname;
+    var simple = host.match(/(?:[A-Za-z0-9-]+\.)*([A-Za-z0-9-]+\.co.uk|\.com.br|\.co.jp|\.com.au)\b/);
+
+    if (simple !== null) {
+      return simple[1];
+    }
+
+    var matches = host.match(/(?:[A-Za-z0-9-]+\.)*([A-Za-z0-9-]+\.(?:[A-za-z]{2}|[A-Za-z]{3,}))\b/);
+
+    if (matches !== null) {
+      return matches[1];
+    }
   };
 
   return ConfigurationResolver;
@@ -337,8 +352,6 @@ var ConsentRevoke = function () {
   }
 
   ConsentRevoke.prototype.destroyAnalyticsServices = function () {
-    console.log(this.services);
-
     if (this.services.gtm && this.services.gtm.id) {
       this.destroyGtm();
     }
@@ -351,33 +364,38 @@ var ConsentRevoke = function () {
       this.destroyNavitas();
     }
 
-    console.log('Reloading page');
+    window.location.reload();
   };
 
   ConsentRevoke.prototype.destroyGtm = function () {
-    CookieManager.removeCookie('_ga', {
-      domain: this.domain
-    });
-    CookieManager.removeCookie('_gid', {
-      domain: this.domain
-    });
-    CookieManager.removeCookie('_gat', {
-      domain: this.domain
-    });
+    var simpleCookies = ['_ga', '_gid', '_gat'];
+
+    for (var _i = 0, simpleCookies_1 = simpleCookies; _i < simpleCookies_1.length; _i++) {
+      var cookie = simpleCookies_1[_i];
+
+      if (this.domain) {
+        CookieManager.removeCookie(cookie, {
+          domain: this.domain
+        });
+      }
+
+      CookieManager.removeCookie(cookie);
+    }
 
     if (this.services.ga && this.services.ga.id) {
-      CookieManager.removeCookie("_dc_gtm_" + this.services.ga.id, {
-        domain: this.domain
-      });
-      CookieManager.removeCookie("_gac_" + this.services.ga.id, {
-        domain: this.domain
-      });
-      CookieManager.removeCookie("_gat_gtag_" + this.services.ga.id, {
-        domain: this.domain
-      });
-      CookieManager.removeCookie("_gat_" + this.services.ga.id, {
-        domain: this.domain
-      });
+      var compositeCookies = ['_dc_gtm_', '_gac_', '_gat_gtag_', '_gat_'];
+
+      for (var _a = 0, compositeCookies_1 = compositeCookies; _a < compositeCookies_1.length; _a++) {
+        var cookie = compositeCookies_1[_a];
+
+        if (this.domain) {
+          CookieManager.removeCookie("" + cookie + this.services.ga.id, {
+            domain: this.domain
+          });
+        }
+
+        CookieManager.removeCookie("" + cookie + this.services.ga.id);
+      }
     }
   };
 
@@ -437,15 +455,11 @@ var CookieConsent = function () {
     var _this = this;
 
     EventBus$1.on('analytics-enabled', function () {
-      console.log('Injecting services...');
-
       if (_this.options.injectServices) {
         _this.serviceLoader.loadAnalyticsServices();
       }
     });
     EventBus$1.on('analytics-disabled', function () {
-      console.log('Destroying services...');
-
       _this.consentRevoke.destroyAnalyticsServices();
     });
   };
