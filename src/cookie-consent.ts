@@ -9,6 +9,11 @@ import ConsentRevoke from './consent-revoke';
 
 declare global {
   const Haven: typeof CookieConsent;
+  interface Window {
+    dataLayer: any[];
+    ga: any;
+    Haven: typeof CookieConsent
+  }
 }
 
 export default class CookieConsent {
