@@ -6,10 +6,7 @@ import { Configuration, CookieConsentOptions } from '../types';
 import { EventBusSubscription } from './event-bus';
 import ConsentRevoke from './consent-revoke';
 declare global {
-    interface Window {
-        dataLayer: any[];
-        ga: any;
-    }
+    const Haven: typeof CookieConsent;
 }
 export default class CookieConsent {
     protected options: Configuration;

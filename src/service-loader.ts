@@ -1,6 +1,8 @@
 import { Configuration, CookieConsentServices } from '../types';
-import CookieManager from './cookie-manager';
+import { Window } from '../types/interfaces';
 import EventBus from './event-bus';
+
+declare const window: Window;
 
 export default class ServiceLoader {
   protected services: CookieConsentServices;

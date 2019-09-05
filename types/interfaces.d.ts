@@ -1,3 +1,4 @@
-import CookieConsent from '../src/cookie-consent';
-
-declare var Haven: typeof CookieConsent;
+export interface Window {
+  dataLayer: any[];
+  ga: any;
+}
