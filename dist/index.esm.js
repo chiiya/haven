@@ -8,12 +8,13 @@ import Cookies from 'js-cookie';
 var EventBus = function () {
   function EventBus() {
     this.subscriptions = {};
+    this.counter = 0;
   }
 
   EventBus.prototype.on = function (event, callback) {
     var _this = this;
 
-    var id = Symbol('id');
+    var id = this.counter++;
 
     if (this.subscriptions[event] === undefined) {
       this.subscriptions[event] = {};
@@ -34,7 +35,7 @@ var EventBus = function () {
       return;
     }
 
-    for (var _i = 0, _a = Object.getOwnPropertySymbols(this.subscriptions[event]); _i < _a.length; _i++) {
+    for (var _i = 0, _a = Object.keys(this.subscriptions[event]); _i < _a.length; _i++) {
       var id = _a[_i];
       console.log('Found', id);
       this.subscriptions[event][id](payload);

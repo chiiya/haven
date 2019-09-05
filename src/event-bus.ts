@@ -10,6 +10,7 @@ export interface EventBusSubscription {
 
 class EventBus {
   private subscriptions: EventBusSubscriptions = {};
+  private counter: number = 0;
 
   /**
    * Register a new callback
@@ -17,7 +18,7 @@ class EventBus {
    * @param callback
    */
   on(event: string, callback: Function): EventBusSubscription {
-    const id = Symbol('id');
+    const id = this.counter++;
     if (this.subscriptions[event] === undefined) {
       this.subscriptions[event] = {};
     }
@@ -42,7 +43,7 @@ class EventBus {
       return;
     }
 
-    for (const id of Object.getOwnPropertySymbols(this.subscriptions[event])) {
+    for (const id of Object.keys(this.subscriptions[event])) {
       console.log('Found', id);
       this.subscriptions[event][id](payload);
     }
