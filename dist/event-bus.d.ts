@@ -4,6 +4,7 @@ export interface EventBusSubscription {
 declare class EventBus {
     private subscriptions;
     private counter;
+    constructor();
     on(event: string, callback: Function): EventBusSubscription;
     emit(event: string, payload?: any): void;
 }

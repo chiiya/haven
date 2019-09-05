@@ -12,6 +12,10 @@ class EventBus {
   private subscriptions: EventBusSubscriptions = {};
   private counter: number = 0;
 
+  constructor() {
+    console.log('New EventBUS!');
+  }
+
   /**
    * Register a new callback
    * @param event

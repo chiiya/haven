@@ -9,6 +9,7 @@ var EventBus = function () {
   function EventBus() {
     this.subscriptions = {};
     this.counter = 0;
+    console.log('New EventBUS!');
   }
 
   EventBus.prototype.on = function (event, callback) {
