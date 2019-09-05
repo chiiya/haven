@@ -330,6 +330,8 @@ var ConsentRevoke = function () {
   }
 
   ConsentRevoke.prototype.destroyAnalyticsServices = function () {
+    console.log(this.services);
+
     if (this.services.gtm && this.services.gtm.id) {
       this.destroyGtm();
     }
@@ -343,7 +345,6 @@ var ConsentRevoke = function () {
     }
 
     console.log('Reloading page');
-    window.location.reload();
   };
 
   ConsentRevoke.prototype.destroyGtm = function () {

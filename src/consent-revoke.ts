@@ -12,6 +12,7 @@ export default class ConsentRevoke {
    * Destroy all registered services after opt-out / consent revoke.
    */
   public destroyAnalyticsServices(): void {
+    console.log(this.services);
     if (this.services.gtm && this.services.gtm.id) {
       this.destroyGtm();
     }
@@ -22,7 +23,7 @@ export default class ConsentRevoke {
       this.destroyNavitas();
     }
     console.log('Reloading page');
-    window.location.reload();
+    // window.location.reload();
   }
   /**
    * Remove all cookies possibly set by GTM.
