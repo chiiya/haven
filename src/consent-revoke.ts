@@ -3,9 +3,11 @@ import { Configuration, CookieConsentServices } from '../types';
 
 export default class ConsentRevoke {
   protected services: CookieConsentServices;
+  protected domain: string;
 
   constructor(options: Configuration) {
     this.services = options.services || {};
+    this.domain = options.domain;
   }
 
   /**
@@ -29,14 +31,14 @@ export default class ConsentRevoke {
    * Remove all cookies possibly set by GTM.
    */
   protected destroyGtm(): void {
-    CookieManager.removeCookie('_ga');
-    CookieManager.removeCookie('_gid');
-    CookieManager.removeCookie('_gat');
+    CookieManager.removeCookie('_ga', { domain: this.domain });
+    CookieManager.removeCookie('_gid', { domain: this.domain });
+    CookieManager.removeCookie('_gat', { domain: this.domain });
     if (this.services.ga && this.services.ga.id) {
-      CookieManager.removeCookie(`_dc_gtm_${this.services.ga.id}`);
-      CookieManager.removeCookie(`_gac_${this.services.ga.id}`);
-      CookieManager.removeCookie(`_gat_gtag_${this.services.ga.id}`);
-      CookieManager.removeCookie(`_gat_${this.services.ga.id}`);
+      CookieManager.removeCookie(`_dc_gtm_${this.services.ga.id}`, { domain: this.domain });
+      CookieManager.removeCookie(`_gac_${this.services.ga.id}`, { domain: this.domain });
+      CookieManager.removeCookie(`_gat_gtag_${this.services.ga.id}`, { domain: this.domain });
+      CookieManager.removeCookie(`_gat_${this.services.ga.id}`, { domain: this.domain });
     }
   }
 

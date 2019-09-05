@@ -6,6 +6,9 @@ export default class ConfigurationResolver {
    * @param options
    */
   public static resolve(options: CookieConsentOptions): Configuration {
+    if (!options.domain.startsWith('.')) {
+      options.domain = `.${options.domain}`;
+    }
     return Object.assign({
       type: 'opt-in',
       injectServices: true,

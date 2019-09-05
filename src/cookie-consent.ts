@@ -27,7 +27,7 @@ export default class CookieConsent {
    */
   protected consentRevoke: ConsentRevoke;
 
-  constructor(options: CookieConsentOptions = {}) {
+  constructor(options: CookieConsentOptions) {
     const config = ConfigurationResolver.resolve(options);
     this.cookieNotification = new CookieNotification(config);
     this.cookiePreferences = new CookiePreferences(config);
@@ -83,7 +83,7 @@ export default class CookieConsent {
     return EventBus.on(event, callback);
   }
 
-  public static create(options: CookieConsentOptions = {}): CookieConsent {
+  public static create(options: CookieConsentOptions): CookieConsent {
     const haven = new CookieConsent(options);
     haven.init();
     return haven;

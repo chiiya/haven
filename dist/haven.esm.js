@@ -66,8 +66,8 @@ var CookieManager = function () {
     Cookies.set(name, value, options || {});
   };
 
-  CookieManager.removeCookie = function (name) {
-    Cookies.remove(name);
+  CookieManager.removeCookie = function (name, options) {
+    Cookies.remove(name, options);
   };
 
   CookieManager.cookieExists = function (name) {
@@ -317,6 +317,10 @@ var ConfigurationResolver = function () {
   function ConfigurationResolver() {}
 
   ConfigurationResolver.resolve = function (options) {
+    if (!options.domain.startsWith('.')) {
+      options.domain = "." + options.domain;
+    }
+
     return Object.assign({
       type: 'opt-in',
       injectServices: true
@@ -329,6 +333,7 @@ var ConfigurationResolver = function () {
 var ConsentRevoke = function () {
   function ConsentRevoke(options) {
     this.services = options.services || {};
+    this.domain = options.domain;
   }
 
   ConsentRevoke.prototype.destroyAnalyticsServices = function () {
@@ -350,15 +355,29 @@ var ConsentRevoke = function () {
   };
 
   ConsentRevoke.prototype.destroyGtm = function () {
-    CookieManager.removeCookie('_ga');
-    CookieManager.removeCookie('_gid');
-    CookieManager.removeCookie('_gat');
+    CookieManager.removeCookie('_ga', {
+      domain: this.domain
+    });
+    CookieManager.removeCookie('_gid', {
+      domain: this.domain
+    });
+    CookieManager.removeCookie('_gat', {
+      domain: this.domain
+    });
 
     if (this.services.ga && this.services.ga.id) {
-      CookieManager.removeCookie("_dc_gtm_" + this.services.ga.id);
-      CookieManager.removeCookie("_gac_" + this.services.ga.id);
-      CookieManager.removeCookie("_gat_gtag_" + this.services.ga.id);
-      CookieManager.removeCookie("_gat_" + this.services.ga.id);
+      CookieManager.removeCookie("_dc_gtm_" + this.services.ga.id, {
+        domain: this.domain
+      });
+      CookieManager.removeCookie("_gac_" + this.services.ga.id, {
+        domain: this.domain
+      });
+      CookieManager.removeCookie("_gat_gtag_" + this.services.ga.id, {
+        domain: this.domain
+      });
+      CookieManager.removeCookie("_gat_" + this.services.ga.id, {
+        domain: this.domain
+      });
     }
   };
 
@@ -379,10 +398,6 @@ var ConsentRevoke = function () {
 
 var CookieConsent = function () {
   function CookieConsent(options) {
-    if (options === void 0) {
-      options = {};
-    }
-
     var config = ConfigurationResolver.resolve(options);
     this.cookieNotification = new CookieNotification(config);
     this.cookiePreferences = new CookiePreferences(config);
@@ -440,10 +455,6 @@ var CookieConsent = function () {
   };
 
   CookieConsent.create = function (options) {
-    if (options === void 0) {
-      options = {};
-    }
-
     var haven = new CookieConsent(options);
     haven.init();
     return haven;

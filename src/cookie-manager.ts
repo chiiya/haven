@@ -44,9 +44,10 @@ export default class CookieManager {
   /**
    * Remove cookie by name.
    * @param name
+   * @param options
    */
-  public static removeCookie(name: string): void {
-    Cookies.remove(name);
+  public static removeCookie(name: string, options?: CookieAttributes): void {
+    Cookies.remove(name, options);
   }
 
   /**

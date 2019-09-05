@@ -20,10 +20,10 @@ export default class CookieConsent {
     protected cookieManager: CookieManager;
     protected serviceLoader: ServiceLoader;
     protected consentRevoke: ConsentRevoke;
-    constructor(options?: CookieConsentOptions);
+    constructor(options: CookieConsentOptions);
     init(): void;
     protected checkInitialState(): void;
     protected registerDefaultListeners(): void;
     static on(event: string, callback: Function): EventBusSubscription;
-    static create(options?: CookieConsentOptions): CookieConsent;
+    static create(options: CookieConsentOptions): CookieConsent;
 }
