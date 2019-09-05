@@ -1,5 +1,6 @@
 import CookieManager from './cookie-manager';
 import { Configuration } from '../types';
+import ConsentRevoke from './consent-revoke';
 
 export default class CookiePreferences {
   /**

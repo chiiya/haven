@@ -5,6 +5,7 @@ import ServiceLoader from './service-loader';
 import { Configuration, CookieConsentOptions } from '../types';
 import ConfigurationResolver from './configuration-resolver';
 import EventBus, { EventBusSubscription } from './event-bus';
+import ConsentRevoke from './consent-revoke';
 
 declare global {
   interface Window {
@@ -20,6 +21,10 @@ export default class Haven {
   protected cookiePreferences: CookiePreferences;
   protected cookieManager: CookieManager;
   protected serviceLoader: ServiceLoader;
+  /**
+   * Cookie consent revoke instance.
+   */
+  protected consentRevoke: ConsentRevoke;
 
   constructor(options: CookieConsentOptions = {}) {
     const config = ConfigurationResolver.resolve(options);
@@ -27,6 +32,7 @@ export default class Haven {
     this.cookiePreferences = new CookiePreferences(config);
     this.cookieManager = new CookieManager(config);
     this.serviceLoader = new ServiceLoader(config);
+    this.consentRevoke = new ConsentRevoke(config);
     this.options = config;
   }
 
@@ -58,11 +64,9 @@ export default class Haven {
         this.serviceLoader.loadAnalyticsServices();
       }
     });
-    // Destroy injected analytics services when analytics cookie consent is revoked
+    // Remove analytics cookies when analytics cookie consent is revoked
     EventBus.on('analytics-disabled', () => {
-      if (this.options.injectServices) {
-        this.serviceLoader.destroyAnalyticsServices();
-      }
+      this.consentRevoke.destroyAnalyticsServices();
     });
   }
 
