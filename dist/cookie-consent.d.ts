@@ -5,6 +5,7 @@ import ServiceLoader from './service-loader';
 import { Configuration, CookieConsentOptions } from '../types';
 import { EventBusSubscription } from './event-bus';
 import ConsentRevoke from './consent-revoke';
+import { CookieAttributes } from 'js-cookie';
 declare global {
     const Haven: typeof CookieConsent;
     interface Window {
@@ -24,6 +25,8 @@ export default class CookieConsent {
     init(): void;
     protected checkInitialState(): void;
     protected registerDefaultListeners(): void;
+    getOptions(): Configuration;
     static on(event: string, callback: Function): EventBusSubscription;
     static create(options: CookieConsentOptions): CookieConsent;
+    static removeCookies(cookies: string[], options?: CookieAttributes): void;
 }

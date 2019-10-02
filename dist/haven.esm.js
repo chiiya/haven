@@ -464,6 +464,10 @@ var CookieConsent = function () {
     });
   };
 
+  CookieConsent.prototype.getOptions = function () {
+    return this.options;
+  };
+
   CookieConsent.on = function (event, callback) {
     return EventBus$1.on(event, callback);
   };
@@ -472,6 +476,13 @@ var CookieConsent = function () {
     var haven = new CookieConsent(options);
     haven.init();
     return haven;
+  };
+
+  CookieConsent.removeCookies = function (cookies, options) {
+    for (var _i = 0, cookies_1 = cookies; _i < cookies_1.length; _i++) {
+      var cookie = cookies_1[_i];
+      CookieManager.removeCookie(cookie, options);
+    }
   };
 
   return CookieConsent;

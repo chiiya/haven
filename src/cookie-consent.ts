@@ -6,6 +6,7 @@ import { Configuration, CookieConsentOptions } from '../types';
 import ConfigurationResolver from './configuration-resolver';
 import EventBus, { EventBusSubscription } from './event-bus';
 import ConsentRevoke from './consent-revoke';
+import { CookieAttributes } from 'js-cookie';
 
 declare global {
   const Haven: typeof CookieConsent;
@@ -90,4 +91,11 @@ export default class CookieConsent {
     haven.init();
     return haven;
   }
+
+  public static removeCookies(cookies: string[], options?: CookieAttributes) {
+    for (const cookie of cookies) {
+      CookieManager.removeCookie(cookie, options);
+    }
+  }
 }
+
