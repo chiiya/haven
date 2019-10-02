@@ -71,6 +71,10 @@ export default class CookieConsent {
     });
   }
 
+  public getOptions(): Configuration {
+    return this.options;
+  }
+
   /**
    * Proxy event bus subscription method to the event bus singleton so that users can call this method
    * anywhere in their application.
