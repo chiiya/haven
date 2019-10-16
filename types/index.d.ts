@@ -3,6 +3,7 @@ export interface CookieConsentOptions {
   prefix?: string;
   type?: ConsentType;
   injectServices?: boolean;
+  injectBothGtmAndGa?: boolean;
   services?: CookieConsentServices;
 }
 
@@ -16,6 +17,7 @@ export interface Configuration {
   domain?: string;
   type: ConsentType;
   injectServices: boolean;
+  injectBothGtmAndGa: boolean;
   services?: CookieConsentServices;
 }
 

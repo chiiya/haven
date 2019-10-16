@@ -4,5 +4,7 @@ export default class ServiceLoader {
     constructor(options: Configuration);
     loadAnalyticsServices(): void;
     protected loadGtm(): void;
+    protected loadGa(): void;
     protected hasLoadedGtm(): boolean;
+    protected hasLoadedGa(): boolean;
 }

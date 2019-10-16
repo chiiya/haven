@@ -15,6 +15,7 @@ export default class ConfigurationResolver {
     return Object.assign({
       type: 'opt-in',
       injectServices: true,
+      injectBothGtmAndGa: false,
     }, options)
   }
 

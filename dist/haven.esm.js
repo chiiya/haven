@@ -280,6 +280,8 @@ var ServiceLoader = function () {
   ServiceLoader.prototype.loadAnalyticsServices = function () {
     if (this.services.gtm && this.services.gtm.id) {
       this.loadGtm();
+    } else if (this.services.ga && this.services.ga.id) {
+      this.loadGa();
     }
 
     EventBus$1.emit('services-loaded');
@@ -301,8 +303,31 @@ var ServiceLoader = function () {
     firstScript.parentNode.insertBefore(script, firstScript);
   };
 
+  ServiceLoader.prototype.loadGa = function () {
+    if (this.hasLoadedGa()) {
+      return;
+    }
+
+    window.ga = window.ga || function () {
+      (window.ga.q = window.ga.q || []).push(arguments);
+    };
+
+    window.ga.l = +new Date();
+    var firstScript = document.getElementsByTagName('script')[0];
+    var script = document.createElement('script');
+    script.src = 'https://www.google-analytics.com/analytics.js';
+    firstScript.parentNode.insertBefore(script, firstScript);
+    window.ga('create', this.services.ga.id, 'auto');
+    window.ga('send', 'pageview');
+  };
+
   ServiceLoader.prototype.hasLoadedGtm = function () {
     var src = "https://www.googletagmanager.com/gtm.js?id=" + this.services.gtm.id;
+    return document.querySelector("script[src=\"" + src + "\"") !== null;
+  };
+
+  ServiceLoader.prototype.hasLoadedGa = function () {
+    var src = 'https://www.google-analytics.com/analytics.js';
     return document.querySelector("script[src=\"" + src + "\"") !== null;
   };
 
@@ -323,7 +348,8 @@ var ConfigurationResolver = function () {
 
     return Object.assign({
       type: 'opt-in',
-      injectServices: true
+      injectServices: true,
+      injectBothGtmAndGa: false
     }, options);
   };
 
