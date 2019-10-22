@@ -1,23 +1,47 @@
-import { Configuration, CookieConsentServices } from '../types';
+import { Configuration, CookieConsentServices, InjectableService } from '../types';
 import EventBus from './event-bus';
 
 export default class ServiceLoader {
+  protected inject: InjectableService[];
   protected services: CookieConsentServices;
 
   constructor(options: Configuration) {
     this.services = options.services || {};
+    this.inject = options.inject;
   }
 
   /**
-   * Load all registered services.
+   * Inject all registered services.
    */
-  public loadAnalyticsServices(): void {
-    if (this.services.gtm && this.services.gtm.id) {
-      this.loadGtm();
-    } else if (this.services.ga && this.services.ga.id) {
-      this.loadGa();
+  public injectServices(): void {
+    for (const service of this.inject) {
+      if (!this.checkForPrerequisite(service)) {
+        console.error(`Missing configuration for ${service} service. Could not inject service.`);
+        return;
+      }
+      switch (service) {
+        case 'google-analytics':
+          this.loadGa();
+          break;
+        case 'google-tag-manager':
+          this.loadGtm();
+          break;
+      }
     }
     EventBus.emit('services-loaded');
+  }
+
+  /**
+   * Check whether the configuration for a given service can be resolved.
+   * @param service
+   */
+  protected checkForPrerequisite(service: InjectableService): boolean {
+    switch (service) {
+      case 'google-analytics':
+        return (this.services.ga != undefined && this.services.ga.id != undefined);
+      case 'google-tag-manager':
+        return (this.services.gtm != undefined && this.services.gtm.id != undefined);
+    }
   }
 
   /**

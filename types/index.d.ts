@@ -2,8 +2,7 @@ export interface CookieConsentOptions {
   domain?: string;
   prefix?: string;
   type?: ConsentType;
-  injectServices?: boolean;
-  injectBothGtmAndGa?: boolean;
+  inject?: InjectableService[];
   services?: CookieConsentServices;
 }
 
@@ -14,10 +13,9 @@ export interface CookieManagerOptions {
 
 export interface Configuration {
   prefix?: string;
-  domain?: string;
+  domain: string;
   type: ConsentType;
-  injectServices: boolean;
-  injectBothGtmAndGa: boolean;
+  inject: InjectableService[];
   services?: CookieConsentServices;
 }
 
@@ -33,3 +31,4 @@ export interface ServiceOptions {
 }
 
 export type ConsentType = 'opt-in' | 'opt-out';
+export type InjectableService = 'google-tag-manager' | 'google-analytics';

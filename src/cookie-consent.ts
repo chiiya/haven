@@ -23,9 +23,6 @@ export default class CookieConsent {
   protected cookiePreferences: CookiePreferences;
   protected cookieManager: CookieManager;
   protected serviceLoader: ServiceLoader;
-  /**
-   * Cookie consent revoke instance.
-   */
   protected consentRevoke: ConsentRevoke;
 
   constructor(options: CookieConsentOptions) {
@@ -62,8 +59,8 @@ export default class CookieConsent {
   protected registerDefaultListeners(): void {
     // Inject analytics services once analytics cookies have been accepted
     EventBus.on('analytics-enabled', () => {
-      if (this.options.injectServices) {
-        this.serviceLoader.loadAnalyticsServices();
+      if (this.options.inject.length) {
+        this.serviceLoader.injectServices();
       }
     });
     // Remove analytics cookies when analytics cookie consent is revoked

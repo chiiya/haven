@@ -275,16 +275,40 @@ var CookiePreferences = function () {
 var ServiceLoader = function () {
   function ServiceLoader(options) {
     this.services = options.services || {};
+    this.inject = options.inject;
   }
 
-  ServiceLoader.prototype.loadAnalyticsServices = function () {
-    if (this.services.gtm && this.services.gtm.id) {
-      this.loadGtm();
-    } else if (this.services.ga && this.services.ga.id) {
-      this.loadGa();
+  ServiceLoader.prototype.injectServices = function () {
+    for (var _i = 0, _a = this.inject; _i < _a.length; _i++) {
+      var service = _a[_i];
+
+      if (!this.checkForPrerequisite(service)) {
+        console.error("Missing configuration for " + service + " service. Could not inject service.");
+        return;
+      }
+
+      switch (service) {
+        case 'google-analytics':
+          this.loadGa();
+          break;
+
+        case 'google-tag-manager':
+          this.loadGtm();
+          break;
+      }
     }
 
     EventBus$1.emit('services-loaded');
+  };
+
+  ServiceLoader.prototype.checkForPrerequisite = function (service) {
+    switch (service) {
+      case 'google-analytics':
+        return this.services.ga != undefined && this.services.ga.id != undefined;
+
+      case 'google-tag-manager':
+        return this.services.gtm != undefined && this.services.gtm.id != undefined;
+    }
   };
 
   ServiceLoader.prototype.loadGtm = function () {
@@ -338,18 +362,14 @@ var ConfigurationResolver = function () {
   function ConfigurationResolver() {}
 
   ConfigurationResolver.resolve = function (options) {
-    if (options.domain === undefined) {
-      options.domain = this.getDomain();
-    }
-
     if (options.domain && !options.domain.startsWith('.')) {
       options.domain = "." + options.domain;
     }
 
     return Object.assign({
+      domain: this.getDomain(),
       type: 'opt-in',
-      injectServices: true,
-      injectBothGtmAndGa: false
+      inject: []
     }, options);
   };
 
@@ -366,6 +386,8 @@ var ConfigurationResolver = function () {
     if (matches !== null) {
       return matches[1];
     }
+
+    return host;
   };
 
   return ConfigurationResolver;
@@ -481,8 +503,8 @@ var CookieConsent = function () {
     var _this = this;
 
     EventBus$1.on('analytics-enabled', function () {
-      if (_this.options.injectServices) {
-        _this.serviceLoader.loadAnalyticsServices();
+      if (_this.options.inject.length) {
+        _this.serviceLoader.injectServices();
       }
     });
     EventBus$1.on('analytics-disabled', function () {
