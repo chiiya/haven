@@ -59,7 +59,7 @@ export default class CookieNotification {
    */
   public showCookieNotification(): void {
     if (this.cookieNotification !== null) {
-      this.cookieNotification.style.display = 'block';
+      this.cookieNotification.style.display = this.cookieNotification.dataset.display || 'block';
     }
   }
 

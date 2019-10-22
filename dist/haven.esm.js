@@ -192,7 +192,7 @@ var CookieNotification = function () {
 
   CookieNotification.prototype.showCookieNotification = function () {
     if (this.cookieNotification !== null) {
-      this.cookieNotification.style.display = 'block';
+      this.cookieNotification.style.display = this.cookieNotification.dataset.display || 'block';
     }
   };
 
