@@ -6,11 +6,15 @@ export default class ConfigurationResolver {
    * @param options
    */
   public static resolve(options: CookieConsentOptions): Configuration {
-    if (options.domain && !options.domain.startsWith('.')) {
-      options.domain = `.${options.domain}`;
+    if (options.domains && Array.isArray(options.domains) === false) {
+      options.domains = <string[]>[options.domains];
     }
+    if (options.domains && Array.isArray(options.domains)) {
+      options.domains = options.domains.map(domain => domain.startsWith('.') ? domain : `.${domain}`);
+    }
+
     return Object.assign({
-      domain: this.getDomain(),
+      domains: this.getDomains(),
       type: 'opt-in',
       inject: [],
     }, options)
@@ -20,16 +24,18 @@ export default class ConfigurationResolver {
    * Resolve the base domain (without subdomains). This solution will only work for ~80-90% of use cases,
    * in other cases the users will have to manually specify the domain.
    */
-  protected static getDomain(): string {
+  protected static getDomains(): string[] {
+    const domains = [];
     const host = window.location.hostname;
     const simple = host.match(/(?:[A-Za-z0-9-]+\.)*([A-Za-z0-9-]+\.co.uk|\.com.br|\.co.jp|\.com.au)\b/);
     if (simple !== null) {
-      return simple[1];
+      domains.push(simple[1]);
     }
     const matches = host.match(/(?:[A-Za-z0-9-]+\.)*([A-Za-z0-9-]+\.(?:[A-za-z]{2}|[A-Za-z]{3,}))\b/);
     if (matches !== null) {
-      return matches[1];
+      domains.push(matches[1]);
     }
-    return host;
+    domains.push(host);
+    return domains;
   }
 }

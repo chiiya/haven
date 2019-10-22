@@ -362,32 +362,40 @@ var ConfigurationResolver = function () {
   function ConfigurationResolver() {}
 
   ConfigurationResolver.resolve = function (options) {
-    if (options.domain && !options.domain.startsWith('.')) {
-      options.domain = "." + options.domain;
+    if (options.domains && Array.isArray(options.domains) === false) {
+      options.domains = [options.domains];
+    }
+
+    if (options.domains && Array.isArray(options.domains)) {
+      options.domains = options.domains.map(function (domain) {
+        return domain.startsWith('.') ? domain : "." + domain;
+      });
     }
 
     return Object.assign({
-      domain: this.getDomain(),
+      domains: this.getDomains(),
       type: 'opt-in',
       inject: []
     }, options);
   };
 
-  ConfigurationResolver.getDomain = function () {
+  ConfigurationResolver.getDomains = function () {
+    var domains = [];
     var host = window.location.hostname;
     var simple = host.match(/(?:[A-Za-z0-9-]+\.)*([A-Za-z0-9-]+\.co.uk|\.com.br|\.co.jp|\.com.au)\b/);
 
     if (simple !== null) {
-      return simple[1];
+      domains.push(simple[1]);
     }
 
     var matches = host.match(/(?:[A-Za-z0-9-]+\.)*([A-Za-z0-9-]+\.(?:[A-za-z]{2}|[A-Za-z]{3,}))\b/);
 
     if (matches !== null) {
-      return matches[1];
+      domains.push(matches[1]);
     }
 
-    return host;
+    domains.push(host);
+    return domains;
   };
 
   return ConfigurationResolver;
@@ -396,7 +404,7 @@ var ConfigurationResolver = function () {
 var ConsentRevoke = function () {
   function ConsentRevoke(options) {
     this.services = options.services || {};
-    this.domain = options.domain;
+    this.domains = options.domains;
   }
 
   ConsentRevoke.prototype.destroyAnalyticsServices = function () {
@@ -421,9 +429,10 @@ var ConsentRevoke = function () {
     for (var _i = 0, simpleCookies_1 = simpleCookies; _i < simpleCookies_1.length; _i++) {
       var cookie = simpleCookies_1[_i];
 
-      if (this.domain) {
+      for (var _a = 0, _b = this.domains; _a < _b.length; _a++) {
+        var domain = _b[_a];
         CookieManager.removeCookie(cookie, {
-          domain: this.domain
+          domain: domain
         });
       }
 
@@ -433,12 +442,13 @@ var ConsentRevoke = function () {
     if (this.services.ga && this.services.ga.id) {
       var compositeCookies = ['_dc_gtm_', '_gac_', '_gat_gtag_', '_gat_'];
 
-      for (var _a = 0, compositeCookies_1 = compositeCookies; _a < compositeCookies_1.length; _a++) {
-        var cookie = compositeCookies_1[_a];
+      for (var _c = 0, compositeCookies_1 = compositeCookies; _c < compositeCookies_1.length; _c++) {
+        var cookie = compositeCookies_1[_c];
 
-        if (this.domain) {
+        for (var _d = 0, _e = this.domains; _d < _e.length; _d++) {
+          var domain = _e[_d];
           CookieManager.removeCookie("" + cookie + this.services.ga.id, {
-            domain: this.domain
+            domain: domain
           });
         }
 

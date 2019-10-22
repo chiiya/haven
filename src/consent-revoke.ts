@@ -3,11 +3,11 @@ import { Configuration, CookieConsentServices } from '../types';
 
 export default class ConsentRevoke {
   protected services: CookieConsentServices;
-  protected domain: string | undefined;
+  protected domains: string[];
 
   constructor(options: Configuration) {
     this.services = options.services || {};
-    this.domain = options.domain;
+    this.domains = options.domains;
   }
 
   /**
@@ -31,8 +31,8 @@ export default class ConsentRevoke {
   protected destroyGtm(): void {
     const simpleCookies = ['_ga', '_gid', '_gat'];
     for (const cookie of simpleCookies) {
-      if (this.domain) {
-        CookieManager.removeCookie(cookie, { domain: this.domain });
+      for (const domain of this.domains) {
+        CookieManager.removeCookie(cookie, { domain });
       }
       CookieManager.removeCookie(cookie);
     }
@@ -40,8 +40,8 @@ export default class ConsentRevoke {
     if (this.services.ga && this.services.ga.id) {
       const compositeCookies = ['_dc_gtm_', '_gac_', '_gat_gtag_', '_gat_'];
       for (const cookie of compositeCookies) {
-        if (this.domain) {
-          CookieManager.removeCookie(`${cookie}${this.services.ga.id}`, { domain: this.domain });
+        for (const domain of this.domains) {
+          CookieManager.removeCookie(`${cookie}${this.services.ga.id}`, { domain });
         }
         CookieManager.removeCookie(`${cookie}${this.services.ga.id}`);
       }
