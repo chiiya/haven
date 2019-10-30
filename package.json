@@ -4,7 +4,7 @@
   "private": true,
   "author": "Elisha Witte <elishawitte@gmail.com>",
   "license": "MIT",
-  "description": "Package for managing cookies and the cookie notification",
+  "description": "GDPR-ready cookie consent manager with type definitions and zero dependencies",
   "main": "dist/haven.umd.min.js",
   "module": "dist/haven.esm.js",
   "typings": "dist/index.esm.d.ts",
@@ -16,7 +16,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://gitlab.intranet.doccheck.ag/elishawitte/aral-cookie-manager.git"
+    "url": "git+https://github.com/chiiya/haven"
   },
   "scripts": {
     "build": "npm-run-all build:umd build:esm",
@@ -34,8 +34,5 @@
     "tslint": "^5.18.0",
     "tslint-config-airbnb": "^5.11.1",
     "typescript": "^3.5.3"
-  },
-  "dependencies": {
-    "js-cookie": "^2.2.0"
   }
 }
