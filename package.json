@@ -24,7 +24,6 @@
     "build:esm": "cross-env ESM=true bili"
   },
   "devDependencies": {
-    "@types/js-cookie": "^2.2.2",
     "@types/node": "^12.6.9",
     "bili": "^4.8.1",
     "cross-env": "^5.2.1",
