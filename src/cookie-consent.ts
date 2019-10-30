@@ -13,6 +13,8 @@ declare global {
   interface Window {
     dataLayer: any[];
     ga: any;
+    fbq: Function;
+    _fbq: Function;
     Haven: typeof CookieConsent
   }
 }

@@ -4,65 +4,62 @@ import { Configuration, CookieConsentServices } from '../types';
 export default class ConsentRevoke {
   protected services: CookieConsentServices;
   protected domains: string[];
+  protected cookies: string[];
 
   constructor(options: Configuration) {
     this.services = options.services || {};
     this.domains = options.domains;
+    this.cookies = options.cookies || [];
   }
 
   /**
-   * Destroy all registered services after opt-out / consent revoke.
+   * Remove all cookies set by tracking services after opt-out / consent revoke.
    */
-  public destroyAnalyticsServices(): void {
-    if (this.services.gtm && this.services.gtm.id) {
-      this.destroyGtm();
+  public removeCookies(): void {
+    if (this.services.ga) {
+      this.removeGoogleAnalyticsCookies();
     }
-    if (this.services.aam) {
-      this.destroyAam();
-    }
-    if (this.services.navitas) {
-      this.destroyNavitas();
-    }
+    // Remove user specified cookies across all domains as well.
+    this.removeSimpleCookies(this.cookies);
     window.location.reload();
   }
+
   /**
-   * Remove all cookies possibly set by GTM.
+   * Remove all cookies set by google analytics.
    */
-  protected destroyGtm(): void {
-    const simpleCookies = ['_ga', '_gid', '_gat'];
-    for (const cookie of simpleCookies) {
+  protected removeGoogleAnalyticsCookies(): void {
+    const simple = ['_ga', '_gid', '_gat', 'AMP_TOKEN'];
+    const composite = ['_dc_gtm_', '_gac_', '_gat_gtag_', '_gat_'];
+    this.removeSimpleCookies(simple);
+    if (this.services.ga && this.services.ga.id) {
+      this.removeCompositeCookies(composite, this.services.ga.id);
+    }
+  }
+
+  /**
+   * Remove simple cookies across all possible domains.
+   * @param cookies
+   */
+  protected removeSimpleCookies(cookies: string[]): void {
+    for (const cookie of cookies) {
       for (const domain of this.domains) {
         CookieManager.removeCookie(cookie, { domain });
       }
       CookieManager.removeCookie(cookie);
     }
+  }
 
-    if (this.services.ga && this.services.ga.id) {
-      const compositeCookies = ['_dc_gtm_', '_gac_', '_gat_gtag_', '_gat_'];
-      for (const cookie of compositeCookies) {
-        for (const domain of this.domains) {
-          CookieManager.removeCookie(`${cookie}${this.services.ga.id}`, { domain });
-        }
-        CookieManager.removeCookie(`${cookie}${this.services.ga.id}`);
+  /**
+   * Remove composite cookies (prefix + unique id) across all possible domains.
+   * @param cookies
+   * @param id
+   */
+  protected removeCompositeCookies(cookies: string[], id: string): void {
+    for (const cookie of cookies) {
+      for (const domain of this.domains) {
+        CookieManager.removeCookie(`${cookie}${id}`, { domain });
       }
+      CookieManager.removeCookie(`${cookie}${id}`);
     }
-  }
-
-  /**
-   * Remove all cookies set by Adobe Audience Manager.
-   */
-  protected destroyAam(): void {
-    CookieManager.removeCookie('aam_uuid');
-  }
-
-  /**
-   * Remove all cookies set by Navitas.
-   */
-  protected destroyNavitas(): void {
-    CookieManager.removeCookie('AAMC_navitas_0');
-    CookieManager.removeCookie('DST');
-    CookieManager.removeCookie('demdex');
-    CookieManager.removeCookie('dextp');
-    CookieManager.removeCookie('navitas');
   }
 }

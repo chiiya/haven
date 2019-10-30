@@ -1,23 +1,13 @@
-import Cookies, { CookieAttributes } from 'js-cookie';
-import { ConsentType, CookieManagerOptions } from '../types';
+import { ConsentType, CookieManagerOptions, CookieAttributes } from '../types';
+import Cookies from './cookies';
 import EventBus from './event-bus';
 
 export default class CookieManager {
-  /**
-   * Consent type: opt-in / opt-out.
-   */
+  /** Consent type: opt-in / opt-out */
   protected type: ConsentType;
-
-  /**
-   * Optional cookie prefix
-   */
+  /** Consent cookie name prefix */
   protected prefix: string | undefined;
 
-  /**
-   * Create CookieManager instance.
-   * @param prefix
-   * @param type
-   */
   constructor({ prefix, type }: CookieManagerOptions = {}) {
     this.type = type || 'opt-in';
     this.prefix = prefix;
@@ -38,7 +28,7 @@ export default class CookieManager {
    * @param options
    */
   public static setCookie(name: string, value: string, options?: CookieAttributes): void {
-    Cookies.set(name, value, options || {});
+    Cookies.set(name, value, options);
   }
 
   /**

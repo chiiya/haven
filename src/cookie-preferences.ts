@@ -2,29 +2,17 @@ import CookieManager from './cookie-manager';
 import { Configuration } from '../types';
 
 export default class CookiePreferences {
-  /**
-   * Cookie manager instance.
-   */
+  /** Cookie manager instance */
   protected cookieManager: CookieManager;
-  /**
-   * Checkbox for accepting analytics cookies.
-   */
+  /** Checkbox for accepting analytics cookies */
   protected checkboxAnalytics: HTMLInputElement | null = null;
-  /**
-   * Checkbox for accepting marketing cookies.
-   */
+  /** Checkbox for accepting marketing cookies */
   protected checkboxMarketing: HTMLInputElement | null = null;
-  /**
-   * Button for saving preferences.
-   */
+  /** Button for saving preferences */
   protected saveButton: HTMLButtonElement | null = null;
-  /**
-   * Initial save button text (e.g. `Save preferences`)
-   */
+  /** Initial save button text (e.g. `Save preferences`) */
   protected saveButtonInitialText: string = '';
-  /**
-   * Saved button text (e.g. `Saved`)
-   */
+  /** Saved button text (e.g. `Saved`) */
   protected saveButtonSavedText: string = '';
 
   /**
@@ -38,20 +26,20 @@ export default class CookiePreferences {
    * Initialize cookie preferences initial states and event listeners.
    */
   public init(): void {
-    this.checkboxAnalytics = <HTMLInputElement>document.getElementById('cookie-preferences__analytics');
-    this.checkboxMarketing = <HTMLInputElement>document.getElementById('cookie-preferences__marketing');
-    this.saveButton = <HTMLButtonElement>document.getElementById('cookie-preferences__save');
+    this.checkboxAnalytics = <HTMLInputElement | null>document.getElementById('cookie-preferences__analytics');
+    this.checkboxMarketing = <HTMLInputElement | null>document.getElementById('cookie-preferences__marketing');
+    this.saveButton = <HTMLButtonElement | null>document.getElementById('cookie-preferences__save');
 
     // Set initial checked states
     if (this.checkboxMarketing !== null) {
       this.checkboxMarketing.checked = this.cookieManager.hasMarketingEnabled();
-      this.checkboxAnalytics.addEventListener('change', () => {
+      this.checkboxMarketing.addEventListener('change', () => {
         this.enableButton();
       });
     }
     if (this.checkboxAnalytics !== null) {
       this.checkboxAnalytics.checked = this.cookieManager.hasAnalyticsEnabled();
-      this.checkboxMarketing.addEventListener('change', () => {
+      this.checkboxAnalytics.addEventListener('change', () => {
         this.enableButton();
       });
     }
@@ -62,18 +50,32 @@ export default class CookiePreferences {
       this.saveButton.addEventListener('click', () => {
         this.disableButton();
         this.cookieManager.enableFunctionalCookie();
-        if (this.checkboxMarketing && this.checkboxMarketing.checked) {
+        if (this.hasCheckedMarketingCookies()) {
           this.cookieManager.enableMarketingCookie();
         } else {
           this.cookieManager.disableMarketingCookie();
         }
-        if (this.checkboxAnalytics && this.checkboxAnalytics.checked) {
+        if (this.hasCheckedAnalyticsCookies()) {
           this.cookieManager.enableAnalyticsCookie();
         } else {
           this.cookieManager.disableAnalyticsCookie();
         }
-      })
+      });
     }
+  }
+
+  /**
+   * Check whether the user has accepted marketing cookies.
+   */
+  protected hasCheckedMarketingCookies(): boolean {
+    return !!(this.checkboxMarketing && this.checkboxMarketing.checked);
+  }
+
+  /**
+   * Check whether the user has accepted analytics cookies.
+   */
+  protected hasCheckedAnalyticsCookies(): boolean {
+    return !!(this.checkboxAnalytics && this.checkboxAnalytics.checked);
   }
 
   /**

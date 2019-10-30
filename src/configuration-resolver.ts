@@ -14,10 +14,12 @@ export default class ConfigurationResolver {
     }
 
     return Object.assign({
+      prefix: 'cookies',
       domains: this.getDomains(),
       type: 'opt-in',
+      strategy: 'inject',
       inject: [],
-    }, options)
+    }, options);
   }
 
   /**
