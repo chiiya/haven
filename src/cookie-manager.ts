@@ -88,6 +88,20 @@ export default class CookieManager {
   }
 
   /**
+   * Check whether cookies for all purposes have been accepted.
+   * @param purposes
+   */
+  public static hasAllNecessaryCookiesEnabled(purposes: string[]): boolean {
+    for (const purpose of purposes) {
+      if (!this.hasCookiesEnabled(purpose)) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  /**
    * Accept all cookies.
    */
   public static enableAllCookies(): void {

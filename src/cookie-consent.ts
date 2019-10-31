@@ -1,7 +1,7 @@
 import Index from './notification/cookie-notification';
 import CookiePreferences from './cookie-preferences';
 import CookieManager from './cookie-manager';
-import ServiceLoader from './service-loader';
+import ServiceLoader from './services/service-loader';
 import { Configuration, CookieConsentOptions } from '../types';
 import ConfigurationResolver from './configuration-resolver';
 import EventBus, { EventBusSubscription } from './event-bus';

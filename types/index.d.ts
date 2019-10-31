@@ -27,13 +27,13 @@ export interface HavenNotificationStyles {
 
 export interface HavenService {
   name: string;
-  title: string;
-  description: string;
-  id: string;
-  inject: boolean | Function;
   purposes: string[];
-  required: boolean;
-  cookies: string[];
+  title?: string;
+  description?: string;
+  id?: string;
+  inject?: boolean | Function;
+  required?: boolean;
+  cookies?: string[];
 }
 
 export interface CookieAttributes {
