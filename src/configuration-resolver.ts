@@ -22,6 +22,8 @@ export default class ConfigurationResolver {
     }, options);
   }
 
+  public static resolve
+
   /**
    * Resolve the base domain (without subdomains). This solution will only work for ~80-90% of use cases,
    * in other cases the users will have to manually specify the domain.

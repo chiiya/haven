@@ -1,36 +1,39 @@
-export interface CookieConsentOptions {
-  prefix?: string;
-  domains?: string | string[];
-  cookies?: string[];
-  type?: ConsentType;
-  strategy?: TrackingStrategy;
-  inject?: InjectableService[];
-  services?: CookieConsentServices;
-}
+import { Translations } from './translations';
 
-export interface CookieManagerOptions {
-  type?: ConsentType;
-  prefix?: string;
-}
-
-export interface Configuration {
+export interface HavenOptions {
   prefix: string;
   domains: string[];
-  cookies?: string[];
+  cookies: string[];
+  lang: string;
   type: ConsentType;
-  strategy: TrackingStrategy;
-  inject: InjectableService[];
-  services?: CookieConsentServices;
+  services: HavenService[];
+  notification: HavenNotificationOptions;
+  translations: Translations;
 }
 
-export interface CookieConsentServices {
-  ga?: ServiceOptions;
-  gtm?: ServiceOptions;
-  facebook?: ServiceOptions;
+export interface HavenNotificationOptions {
+  position: 'top' | 'bottom';
+  policyUrl: string;
+  styles: HavenNotificationStyles;
 }
 
-export interface ServiceOptions {
+export interface HavenNotificationStyles {
+  background: string;
+  textColor: string;
+  buttonBackgroundColor: string;
+  buttonBackgroundColorHover: string;
+  buttonTextColor: string;
+}
+
+export interface HavenService {
+  name: string;
+  title: string;
+  description: string;
   id: string;
+  inject: boolean | Function;
+  purposes: string[];
+  required: boolean;
+  cookies: string[];
 }
 
 export interface CookieAttributes {
@@ -59,6 +62,4 @@ export interface CookieAttributes {
   secure?: boolean;
 }
 
-export type TrackingStrategy = 'inject' | 'google-tag-manager' | 'custom';
 export type ConsentType = 'opt-in' | 'opt-out';
-export type InjectableService = 'google-tag-manager' | 'google-analytics' | 'facebook-pixel';

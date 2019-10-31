@@ -4,6 +4,7 @@
     "removeComments": true,
     "outDir": "./dist",
     "esModuleInterop": true,
+    "resolveJsonModule": true,
     "isolatedModules": false,
     "allowSyntheticDefaultImports": true,
     "strict": true,

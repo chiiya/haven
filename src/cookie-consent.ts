@@ -1,4 +1,4 @@
-import CookieNotification from './cookie-notification';
+import Index from './notification/cookie-notification';
 import CookiePreferences from './cookie-preferences';
 import CookieManager from './cookie-manager';
 import ServiceLoader from './service-loader';
@@ -21,7 +21,7 @@ declare global {
 
 export default class CookieConsent {
   protected options: Configuration;
-  protected cookieNotification: CookieNotification;
+  protected cookieNotification: Index;
   protected cookiePreferences: CookiePreferences;
   protected cookieManager: CookieManager;
   protected serviceLoader: ServiceLoader;
@@ -29,7 +29,7 @@ export default class CookieConsent {
 
   constructor(options: CookieConsentOptions) {
     const config = ConfigurationResolver.resolve(options);
-    this.cookieNotification = new CookieNotification(config);
+    this.cookieNotification = new Index(config);
     this.cookiePreferences = new CookiePreferences(config);
     this.cookieManager = new CookieManager(config);
     this.serviceLoader = new ServiceLoader(config);

@@ -20,6 +20,7 @@ module.exports = {
         }
       }
     },
+    yaml: true,
   }
 };
 
