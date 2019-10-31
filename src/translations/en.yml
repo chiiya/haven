@@ -1,0 +1,30 @@
+notification:
+  message: This website uses cookies to ensure you get the best experience on our website.
+  policy: Learn more
+  accept: Allow cookies
+  decline: Decline
+preferences:
+  description: 'This website uses the following cookies:'
+  save: Save changes
+  saved: Saved
+purposes:
+  functional:
+    name: Functional
+    description: >
+      Functional cookies are absolutely necessary for core functions such as navigating the page or accessing
+      secure areas. The website cannot function properly without these cookies.
+  analytics:
+    name: Analytics
+    description: >
+      Analytics cookies serve to improve the performance and functionality of this website by collecting and reporting
+      information anonymously.
+  marketing:
+    name: Marketing
+    description: >
+      Marketing cookies are used to track visitors across websites. The intention is to display ads that are relevant
+      and engaging for the individual user and thereby more valuable for publishers and third party advertisers.
+  preferences:
+    name: Preferences
+    description: >
+      Preference cookies are used to remember settings and customizations that change the way the website behaves or
+      looks.
