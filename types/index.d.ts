@@ -7,6 +7,7 @@ export interface HavenOptions {
   lang: string;
   type: ConsentType;
   services: HavenService[];
+  purposes?: Purpose[];
   notification: HavenNotificationOptions;
   translations: Translations;
 }

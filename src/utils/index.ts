@@ -23,6 +23,9 @@ export const trans = (key: string) => {
  * Get all purposes used by services in the application.
  */
 export const getAllPurposes = (): Purpose[] => {
+  if (store.purposes) {
+    return store.purposes;
+  }
   const purposes = [];
   for (const service of store.services) {
     const servicePurposes = service.purposes || [];
