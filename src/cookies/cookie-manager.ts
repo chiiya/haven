@@ -1,8 +1,8 @@
-import { CookieAttributes } from '../types';
+import { CookieAttributes, Purpose } from '../../types';
 import Cookies from './cookies';
-import store from './store';
-import EventBus from './event-bus';
-import { getAllPurposes } from './utils';
+import store from '../store';
+import EventBus from '../store/event-bus';
+import { getAllPurposes } from '../utils';
 
 export default class CookieManager {
   /**
@@ -28,7 +28,7 @@ export default class CookieManager {
    * @param name
    * @param options
    */
-  public static removeCookie(name: string, options?: CookieAttributes): void {
+  public static removeCookie(name: string | RegExp, options?: CookieAttributes): void {
     Cookies.remove(name, options);
   }
 
@@ -59,7 +59,7 @@ export default class CookieManager {
    * Enable cookies for a given purpose (e.g. analytics).
    * @param purpose
    */
-  public static enableCookies(purpose: string): void {
+  public static enableCookies(purpose: Purpose): void {
     this.setCookie(`${store.prefix}-${purpose}`, 'true', { expires: 365 });
     EventBus.emit(`${purpose}-enabled`);
   }
@@ -68,7 +68,7 @@ export default class CookieManager {
    * Disable cookies for a given purpose (e.g. analytics).
    * @param purpose
    */
-  public static disableCookies(purpose: string): void {
+  public static disableCookies(purpose: Purpose): void {
     this.setCookie(`${store.prefix}-${purpose}`, 'false', { expires: 365 });
     EventBus.emit(`${purpose}-disabled`);
   }
@@ -77,7 +77,7 @@ export default class CookieManager {
    * Check whether cookies for a given purpose are enabled (e.g. analytics).
    * @param purpose
    */
-  public static hasCookiesEnabled(purpose: string): boolean {
+  public static hasCookiesEnabled(purpose: Purpose): boolean {
     const cookie = this.getCookie(`${store.prefix}-${purpose}`);
 
     if (store.type === 'opt-in') {
@@ -91,7 +91,7 @@ export default class CookieManager {
    * Check whether cookies for all purposes have been accepted.
    * @param purposes
    */
-  public static hasAllNecessaryCookiesEnabled(purposes: string[]): boolean {
+  public static hasAllNecessaryCookiesEnabled(purposes: Purpose[]): boolean {
     for (const purpose of purposes) {
       if (!this.hasCookiesEnabled(purpose)) {
         return false;

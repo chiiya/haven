@@ -2,9 +2,9 @@ import { injectFacebookPixel } from './facebook-pixel';
 import { injectGoogleAnalytics } from './google-analytics';
 import { injectGoogleTagManager } from './google-tag-manager';
 import store from '../store';
-import EventBus from '../event-bus';
-import { HavenService } from '../../types';
-import CookieManager from '../cookie-manager';
+import EventBus from '../store/event-bus';
+import { HavenService, Purpose } from '../../types';
+import CookieManager from '../cookies/cookie-manager';
 
 export default class ServiceLoader {
   /**
@@ -71,7 +71,7 @@ export default class ServiceLoader {
    */
   public static registerService(
     name: string,
-    purposes: string[],
+    purposes: Purpose[],
     inject: boolean | Function,
     options: Partial<HavenService> = {},
   ) {

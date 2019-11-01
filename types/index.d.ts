@@ -27,7 +27,7 @@ export interface HavenNotificationStyles {
 
 export interface HavenService {
   name: string;
-  purposes: string[];
+  purposes: Purpose[];
   title?: string;
   description?: string;
   id?: string;
@@ -63,3 +63,4 @@ export interface CookieAttributes {
 }
 
 export type ConsentType = 'opt-in' | 'opt-out';
+export type Purpose = 'functional' | 'analytics' | 'marketing' | 'preferences' | string;

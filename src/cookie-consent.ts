@@ -1,10 +1,10 @@
 import Index from './notification/cookie-notification';
 import CookiePreferences from './cookie-preferences';
-import CookieManager from './cookie-manager';
+import CookieManager from './cookies/cookie-manager';
 import ServiceLoader from './services/service-loader';
 import { Configuration, CookieConsentOptions } from '../types';
-import ConfigurationResolver from './configuration-resolver';
-import EventBus, { EventBusSubscription } from './event-bus';
+import ConfigurationResolver from './store/configuration-resolver';
+import EventBus, { EventBusSubscription } from './store/event-bus';
 import ConsentRevoke from './consent-revoke';
 import { CookieAttributes } from 'js-cookie';
 

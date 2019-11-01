@@ -1,28 +1,35 @@
-import { Configuration, CookieConsentOptions } from '../types';
+import { HavenOptions } from '../../types';
+import store from './index';
+import { mergeDeep } from '../utils';
 
 export default class ConfigurationResolver {
   /**
    * Resolve configuration using some default options.
    * @param options
    */
-  public static resolve(options: CookieConsentOptions): Configuration {
-    if (options.domains && Array.isArray(options.domains) === false) {
-      options.domains = <string[]>[options.domains];
-    }
+  public static resolve(options: Partial<HavenOptions>) {
     if (options.domains && Array.isArray(options.domains)) {
       options.domains = options.domains.map(domain => domain.startsWith('.') ? domain : `.${domain}`);
     }
 
-    return Object.assign({
-      prefix: 'cookies',
-      domains: this.getDomains(),
-      type: 'opt-in',
-      strategy: 'inject',
-      inject: [],
-    }, options);
+    this.resolveBaseConfiguration(options);
+    store.notification = mergeDeep(store.notification, options.notification);
+    store.translations = mergeDeep(store.translations, options.translations);
   }
 
-  public static resolve
+  /**
+   * Resolve the base configuration values.
+   * @param options
+   */
+  public static resolveBaseConfiguration(options: Partial<HavenOptions>) {
+    for (const item of ['prefix', 'cookies', 'lang', 'type', 'services'])  {
+      if (options[item] !== undefined) {
+        store[item] = options[item];
+      }
+    }
+    const domains = options.domains || [];
+    store.domains = domains.length > 0 ? domains : this.getDomains();
+  }
 
   /**
    * Resolve the base domain (without subdomains). This solution will only work for ~80-90% of use cases,

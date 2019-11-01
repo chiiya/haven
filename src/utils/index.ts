@@ -1,4 +1,5 @@
 import store from '../store';
+import { Purpose } from '../../types';
 
 /**
  * Get the localized string for a given key.
@@ -21,7 +22,7 @@ export const trans = (key: string) => {
 /**
  * Get all purposes used by services in the application.
  */
-export const getAllPurposes = (): string[] => {
+export const getAllPurposes = (): Purpose[] => {
   const purposes = [];
   for (const service of store.services) {
     const servicePurposes = service.purposes || [];
@@ -34,3 +35,34 @@ export const getAllPurposes = (): string[] => {
 
   return purposes;
 };
+
+/**
+ * Check whether a value is an object.
+ * @param item
+ */
+export function isObject(item: any) {
+  return (item && typeof item === 'object' && !Array.isArray(item));
+}
+
+/**
+ * Deep-merge two objects (immutable).
+ * @param target
+ * @param source
+ */
+export function mergeDeep(target: any, source: any) {
+  const output = Object.assign({}, target);
+  if (isObject(target) && isObject(source)) {
+    Object.keys(source).forEach((key) => {
+      if (isObject(source[key])) {
+        if (!(key in target)) {
+          Object.assign(output, { [key]: source[key] });
+        } else {
+          output[key] = mergeDeep(target[key], source[key]);
+        }
+      } else {
+        Object.assign(output, { [key]: source[key] });
+      }
+    });
+  }
+  return output;
+}

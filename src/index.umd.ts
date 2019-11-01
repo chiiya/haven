@@ -1,4 +1,4 @@
-import CookieManager from './cookie-manager';
+import CookieManager from './cookies/cookie-manager';
 import Index from './notification/cookie-notification';
 import CookiePreferences from './cookie-preferences';
 import CookieConsent from './cookie-consent';

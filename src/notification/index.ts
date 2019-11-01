@@ -1,4 +1,4 @@
-import CookieManager from '../cookie-manager';
+import CookieManager from '../cookies/cookie-manager';
 import DefaultNotification from './default-notification';
 
 export default class CookieNotification {

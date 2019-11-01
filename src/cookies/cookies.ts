@@ -1,4 +1,8 @@
-import { CookieAttributes } from '../types';
+import { CookieAttributes } from '../../types';
+
+export interface CookieJar {
+  [name: string]: string;
+}
 
 function decode(value: string) {
   return value.replace(/(%[\dA-F]{2})+/gi, decodeURIComponent);
@@ -62,13 +66,44 @@ export default class Cookies {
   }
 
   /**
+   * Get all cookies.
+   */
+  public static getAll(): CookieJar {
+    const cookies = document.cookie ? document.cookie.split('; ') : [];
+    const jar: CookieJar = {};
+    for (const cookie in cookies) {
+      const parts = cookie.split('=');
+      const name = decode(parts[0]);
+      let value = parts.slice(1).join('=');
+
+      if (value.charAt(0) === '"') {
+        value = value.slice(1, -1);
+      }
+      value = decode(value);
+
+      jar[name] = value;
+    }
+
+    return jar;
+  }
+
+  /**
    * Remove an existing cookie.
    * @param key
    * @param options
    */
-  public static remove(key: string, options?: CookieAttributes) {
+  public static remove(key: string | RegExp, options?: CookieAttributes) {
     const attributes = Object.assign(options, { expires: -1 });
-    this.set(key, '', attributes);
+    if (key instanceof RegExp) {
+      const cookies = Object.keys(this.getAll());
+      for (const cookie of cookies) {
+        if (key.test(cookie)) {
+          this.set(cookie, '', attributes);
+        }
+      }
+    } else {
+      this.set(key, '', attributes);
+    }
   }
 
   /**

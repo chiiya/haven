@@ -1,4 +1,4 @@
-import CookieManager from './cookie-manager';
+import CookieManager from './cookies/cookie-manager';
 import { Configuration } from '../types';
 
 export default class CookiePreferences {

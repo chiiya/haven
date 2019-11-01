@@ -1,5 +1,5 @@
-import { HavenOptions } from '../types';
-import translations from './translations';
+import { HavenOptions } from '../../types';
+import translations from '../translations';
 
 const store: HavenOptions = {
   prefix: 'cookies',
