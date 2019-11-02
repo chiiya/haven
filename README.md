@@ -4,8 +4,7 @@
 <br>
 
 # Overview
-Haven is a simple-to-use cookie consent manager that enables you to be GDPR and ePrivacy compliant with a few
-lines of code. Haven comes with the following features included out of the box:
+Haven is a simple-to-use cookie consent manager enabling GDPR and ePrivacy compliance with just a few lines of code. Haven comes with the following features included out of the box:
 - Cookie notification for opt-in and opt-out strategies.
 - Cookie preferences enabling users to revoke or change their consent at any time.
 - Automatic injection of services (google-analytics, google-tag-manager, facebook-pixel or any custom solution) at 
