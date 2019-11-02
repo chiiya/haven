@@ -10,6 +10,6 @@ lines of code. Haven comes with the following features included out of the box:
 - Cookie preferences enabling users to revoke or change their consent at any time.
 - Automatic injection of services (google-analytics, google-tag-manager, facebook-pixel or any custom solution) at 
 runtime, after the user has given their consent.
-- Easy cookie deletion of all tracking cookies after a user has revoked their consent.
+- Deletion of all tracking cookies after a user has revoked their consent.
 - Translation for multiple languages and easy customization.
 - Written in TS, and as such compatible with ES5, ES6+ and TS projects out of the box.
