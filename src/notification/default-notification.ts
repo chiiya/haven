@@ -46,6 +46,10 @@ const createStyles = (): string => {
       z-index: 9999;
     }
 
+    .hv-notification--hidden {
+      opacity: 0;
+    }
+
     .hv-notification--top {
       top: 0;
     }
@@ -55,7 +59,16 @@ const createStyles = (): string => {
     }
 
     .hv-notification__message {
-      margin-right: 16px;
+      margin: 0 16px 0 0;
+    }
+
+    .hv-notification__message a {
+      color: ${options.linkColor};
+      text-decoration: underline;
+    }
+
+    .hv-notification__message a:hover {
+      color: ${options.textColor};
     }
 
     .hv-notification-button {
@@ -64,6 +77,7 @@ const createStyles = (): string => {
       cursor: pointer;
       display: inline-flex;
       font-size: 14px;
+      font-weight: 500;
       justify-content: center;
       outline: 0;
       padding: 8px 32px;
@@ -72,6 +86,7 @@ const createStyles = (): string => {
 
     .hv-notification__decline {
       background: transparent;
+      color: ${options.textColor};
     }
 
     .hv-notification__decline:hover {
@@ -97,8 +112,8 @@ const createNotification = (): string => {
         ${trans('notification.message')} <a href="${options.policyUrl}" target="_blank">${trans('notification.policy')}</a>
     </p>
     <div class="hv-notification__actions">
-        <button id="cookie-notification__decline" class="hv-notification__decline">${trans('notification.decline')}</button>
-        <button id="cookie-notification__accept" class="hv-notification__accept">${trans('notification.accept')}</button>
+        <button id="cookie-notification__decline" class="hv-notification-button hv-notification__decline">${trans('notification.decline')}</button>
+        <button id="cookie-notification__accept" class="hv-notification-button hv-notification__accept">${trans('notification.accept')}</button>
     </div>
   </div>
   `;

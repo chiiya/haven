@@ -48,7 +48,7 @@ export default class Cookies {
    */
   public static get(key: string): string | undefined {
     const cookies = document.cookie ? document.cookie.split('; ') : [];
-    for (const cookie in cookies) {
+    for (const cookie of cookies) {
       const parts = cookie.split('=');
       const name = decode(parts[0]);
 
@@ -71,7 +71,7 @@ export default class Cookies {
   public static getAll(): CookieJar {
     const cookies = document.cookie ? document.cookie.split('; ') : [];
     const jar: CookieJar = {};
-    for (const cookie in cookies) {
+    for (const cookie of cookies) {
       const parts = cookie.split('=');
       const name = decode(parts[0]);
       let value = parts.slice(1).join('=');
@@ -92,7 +92,7 @@ export default class Cookies {
    * @param key
    * @param options
    */
-  public static remove(key: string | RegExp, options?: CookieAttributes) {
+  public static remove(key: string | RegExp, options: CookieAttributes = {}) {
     const attributes = Object.assign(options, { expires: -1 });
     if (key instanceof RegExp) {
       const cookies = Object.keys(this.getAll());

@@ -1,13 +1,19 @@
 import CookieManager from '../cookies/cookie-manager';
 import DefaultNotification from './default-notification';
+import store from '../store';
 
 export default class CookieNotification {
+  protected cookieManager: CookieManager;
   /** Wrapper element for the cookie notification */
   protected cookieNotification: HTMLElement | null = null;
   /** Button for accepting cookies */
   protected cookiesAccept: HTMLElement | null = null;
   /** Button for declining cookies */
   protected cookiesDecline: HTMLElement | null = null;
+
+  constructor() {
+    this.cookieManager = new CookieManager(store.prefix, store.type);
+  }
 
   /**
    * Initialize cookie notification and its event listeners.
@@ -27,7 +33,8 @@ export default class CookieNotification {
     this.cookiesDecline = document.getElementById('cookie-notification__decline');
 
     // Only show cookie notification when functional cookie has not been set yet
-    if (this.cookieNotification !== null && !CookieManager.hasFunctionalCookie()) {
+    if (this.cookieNotification !== null && !this.cookieManager.hasFunctionalCookie()) {
+      console.log('Shoudl show');
       this.showCookieNotification();
     }
 
@@ -35,7 +42,7 @@ export default class CookieNotification {
     if (this.cookiesAccept !== null) {
       this.cookiesAccept.addEventListener('click', (event) => {
         event.preventDefault();
-        CookieManager.enableAllCookies();
+        this.cookieManager.enableAllCookies();
         this.hideCookieNotification();
       });
     }
@@ -45,8 +52,8 @@ export default class CookieNotification {
       this.cookiesDecline.addEventListener('click', (event) => {
         event.preventDefault();
         // Only set the functional cookie.
-        CookieManager.disableAllCookies();
-        CookieManager.enableFunctionalCookie();
+        this.cookieManager.disableAllCookies();
+        this.cookieManager.enableFunctionalCookie();
         this.hideCookieNotification();
       });
     }
@@ -67,18 +74,7 @@ export default class CookieNotification {
    */
   public hideCookieNotification(): void {
     if (this.cookieNotification !== null) {
-      this.cookieNotification.addEventListener('transitionend', this.afterTransition);
-      this.cookieNotification.classList.add('hv-notification--hidden');
-    }
-  }
-
-  /**
-   * Hide cookie notification after fade-out transition has been completed.
-   */
-  protected afterTransition(): void {
-    if (this.cookieNotification !== null) {
       this.cookieNotification.style.display = 'none';
-      this.cookieNotification.removeEventListener('transitionend', this.afterTransition);
     }
   }
 }

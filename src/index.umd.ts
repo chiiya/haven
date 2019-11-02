@@ -1,8 +1,6 @@
 import CookieManager from './cookies/cookie-manager';
-import Index from './notification/cookie-notification';
-import CookiePreferences from './cookie-preferences';
-import CookieConsent from './cookie-consent';
+import Haven from './haven';
 
-window.Haven = CookieConsent;
+window.Haven = Haven;
 
-export { CookieManager, Index, CookiePreferences, CookieConsent };
+export { CookieManager, Haven };

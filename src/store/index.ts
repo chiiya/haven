@@ -4,7 +4,7 @@ import translations from '../translations';
 const store: HavenOptions = {
   prefix: 'cookies',
   domains: [],
-  cookies: [],
+  cookies: {},
   lang: 'en',
   type: 'opt-in',
   services: [],
@@ -12,11 +12,22 @@ const store: HavenOptions = {
     position: 'bottom',
     policyUrl: '/cookie-policy',
     styles: {
-      background: '#702459',
+      background: '#3C366B',
       textColor: '#FFF',
+      linkColor: '#F7FAFC',
       buttonBackgroundColor: '#F1D600',
       buttonBackgroundColorHover: '#F6E05E',
-      buttonTextColor: '#FFF',
+      buttonTextColor: '#1A202C',
+    },
+  },
+  preferences: {
+    styles: {
+      textColor: '#666666',
+      toggleBorder: '#666666',
+      toggleBackground: '#9FD6AE',
+      buttonColor: '#FFF',
+      buttonBackground: '#3273DC',
+      buttonBackgroundHover: '#2F6BCD',
     },
   },
   translations: translations,

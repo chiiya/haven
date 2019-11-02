@@ -7,10 +7,17 @@ import { HavenService, Purpose } from '../../types';
 import CookieManager from '../cookies/cookie-manager';
 
 export default class ServiceLoader {
+  protected cookieManager: CookieManager;
+
+  constructor() {
+    this.cookieManager = new CookieManager(store.prefix, store.type);
+  }
+
   /**
    * Inject all registered services.
    */
-  public static injectServices(): void {
+  public injectServices(): void {
+    console.log(store.services);
     for (const service of store.services) {
       this.injectService(service);
       EventBus.emit('service-loaded', service.name);
@@ -22,8 +29,8 @@ export default class ServiceLoader {
    * Inject a specific service, if all requirements are met (cookies accepted _or_ service is required).
    * @param service
    */
-  public static injectService(service: HavenService) {
-    if (service.required !== true && CookieManager.hasAllNecessaryCookiesEnabled(service.purposes)) {
+  public injectService(service: HavenService) {
+    if (service.required !== true && !this.cookieManager.hasAllNecessaryCookiesEnabled(service.purposes)) {
       return;
     }
 
@@ -49,7 +56,7 @@ export default class ServiceLoader {
    * Get the default injector if it exists.
    * @param name
    */
-  public static getDefaultInjector(name: string): Function | undefined {
+  public getDefaultInjector(name: string): Function | undefined {
     switch (name) {
       case 'google-analytics':
         return injectGoogleAnalytics;
@@ -69,7 +76,7 @@ export default class ServiceLoader {
    * @param inject
    * @param options
    */
-  public static registerService(
+  public registerService(
     name: string,
     purposes: Purpose[],
     inject: boolean | Function,

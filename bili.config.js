@@ -13,6 +13,9 @@ module.exports = {
     dir: 'dist',
   },
   plugins: {
+    yaml: {
+      include: 'src/**',
+    },
     typescript2: {
       tsconfigOverride: {
         compilerOptions: {
@@ -20,7 +23,6 @@ module.exports = {
         }
       }
     },
-    yaml: true,
   }
 };
 

@@ -3,12 +3,13 @@ import { Translations } from './translations';
 export interface HavenOptions {
   prefix: string;
   domains: string[];
-  cookies: string[];
+  cookies: HavenCustomCookies;
   lang: string;
   type: ConsentType;
   services: HavenService[];
   purposes?: Purpose[];
   notification: HavenNotificationOptions;
+  preferences: HavenPreferencesOptions;
   translations: Translations;
 }
 
@@ -18,9 +19,27 @@ export interface HavenNotificationOptions {
   styles: HavenNotificationStyles;
 }
 
+export interface HavenCustomCookies {
+  [purpose: string]: string[];
+}
+
+export interface HavenPreferencesOptions {
+  styles: HavenPreferencesStyles;
+}
+
+export interface HavenPreferencesStyles {
+  textColor: string;
+  toggleBackground: string;
+  toggleBorder: string;
+  buttonBackground: string;
+  buttonBackgroundHover: string;
+  buttonColor: string;
+}
+
 export interface HavenNotificationStyles {
   background: string;
   textColor: string;
+  linkColor: string;
   buttonBackgroundColor: string;
   buttonBackgroundColorHover: string;
   buttonTextColor: string;
