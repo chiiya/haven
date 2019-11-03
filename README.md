@@ -1,5 +1,5 @@
 <div align="center"><img src="https://i.postimg.cc/9Mfsfmf0/haven.png" alt="Haven"></div>
-<div align="center"><strong>GDPR-ready cookie consent manager with zero dependencies.</strong></div>
+<p align="center"><strong>GDPR-ready cookie consent manager with zero dependencies.</strong></p>
 <p align="center">
   <a href="https://codeclimate.com/github/chiiya/haven/maintainability"><img src="https://api.codeclimate.com/v1/badges/b3dfae642bc14fec2160/maintainability" /></a>
 </p>
