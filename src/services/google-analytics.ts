@@ -1,5 +1,7 @@
+import { hasLoadedScript } from '../utils';
+
 export const injectGoogleAnalytics = (id: string) => {
-  if (hasLoadedGoogleAnalytics()) {
+  if (hasLoadedScript('https://www.google-analytics.com/analytics.js')) {
     return;
   }
 
@@ -16,9 +18,4 @@ export const injectGoogleAnalytics = (id: string) => {
 
   window.ga('create', id, 'auto');
   window.ga('send', 'pageview');
-};
-
-export const hasLoadedGoogleAnalytics = () => {
-  const src = 'https://www.google-analytics.com/analytics.js';
-  return document.querySelector(`script[src="${src}"`) !== null;
 };

@@ -26,17 +26,8 @@ export const getAllPurposes = (): Purpose[] => {
   if (store.purposes) {
     return store.purposes;
   }
-  const purposes = [];
-  for (const service of store.services) {
-    const servicePurposes = service.purposes || [];
-    for (const purpose of servicePurposes) {
-      if (purposes.indexOf(purpose) === -1) {
-        purposes.push(purpose);
-      }
-    }
-  }
-
-  return purposes;
+  const purposes = store.services.map(service => service.purposes || []).flat();
+  return [...new Set([...purposes])];
 };
 
 /**
@@ -68,4 +59,12 @@ export function mergeDeep(target: any, source: any) {
     });
   }
   return output;
+}
+
+/**
+ * Check whether a script has been loaded already.
+ * @param src
+ */
+export function hasLoadedScript(src: string) {
+  return document.querySelector(`script[src="${src}"`) !== null;
 }

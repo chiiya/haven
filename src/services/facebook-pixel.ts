@@ -1,5 +1,7 @@
+import { hasLoadedScript } from '../utils';
+
 export const injectFacebookPixel = (id: string) => {
-  if (hasLoadedFacebookPixel()) {
+  if (hasLoadedScript('https://connect.facebook.net/en_US/fbevents.js')) {
     return;
   }
 
@@ -28,9 +30,4 @@ export const injectFacebookPixel = (id: string) => {
 
   window.fbq('init', id);
   window.fbq('track', 'PageView');
-};
-
-export const hasLoadedFacebookPixel = () => {
-  const src = 'https://connect.facebook.net/en_US/fbevents.js';
-  return document.querySelector(`script[src="${src}"`) !== null;
 };

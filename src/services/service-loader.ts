@@ -30,25 +30,43 @@ export default class ServiceLoader {
    * @param service
    */
   public injectService(service: HavenService) {
-    if (service.required !== true && !this.cookieManager.hasAllNecessaryCookiesEnabled(service.purposes)) {
+    if (!this.shouldBeInjected(service)) {
       return;
     }
 
+    const injector = this.getInjectorFunction(service);
+
+    if (injector !== undefined) {
+      if (service.id !== undefined) {
+        injector(service.id);
+      }
+
+      injector();
+    }
+  }
+
+  /**
+   * Check whether a service meets the requirements to be injected.
+   * @param service
+   */
+  protected shouldBeInjected(service: HavenService): boolean {
+    return service.required || this.cookieManager.hasAllNecessaryCookiesEnabled(service.purposes);
+  }
+
+  /**
+   * Get the injector function.
+   * @param service
+   */
+  protected getInjectorFunction(service: HavenService): Function | undefined {
     let injector: Function  | undefined;
     if (service.inject === true) {
       injector = this.getDefaultInjector(service.name);
       if (injector === undefined) {
-        console.error(`No default injector found for ${service.name}. Please specify your own inject implementation.`);
+        console.error(`No default injector found for ${service.name}. Please specify your own implementation.`);
         return;
       }
     } else if (service.inject) {
-      injector = service.inject;
-    }
-
-    if (injector !== undefined && service.id !== undefined) {
-      injector(service.id);
-    } else if (injector !== undefined) {
-      injector();
+      return service.inject;
     }
   }
 

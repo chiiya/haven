@@ -95,15 +95,23 @@ export default class Cookies {
   public static remove(key: string | RegExp, options: CookieAttributes = {}) {
     const attributes = Object.assign(options, { expires: -1 });
     if (key instanceof RegExp) {
-      const cookies = Object.keys(this.getAll());
-      for (const cookie of cookies) {
-        if (key.test(cookie)) {
-          this.set(cookie, '', attributes);
-        }
-      }
-    } else {
-      this.set(key, '', attributes);
+      return this.removeByRegex(key, attributes);
     }
+
+    this.set(key, '', attributes);
+  }
+
+  /**
+   * Remove a cookie by regular expression.
+   * @param key
+   * @param attributes
+   */
+  protected static removeByRegex(key: RegExp, attributes: CookieAttributes) {
+    Object.keys(this.getAll()).map((name) => {
+      if (key.test(name)) {
+        this.set(name, '', attributes);
+      }
+    });
   }
 
   /**

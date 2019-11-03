@@ -1,6 +1,6 @@
 import CookieManager from '../cookies/cookie-manager';
 import store from '../store';
-import { Purpose } from '../../types';
+import { HavenService, Purpose } from '../../types';
 
 export default class ConsentRevoke {
   /**
@@ -8,38 +8,38 @@ export default class ConsentRevoke {
    */
   public static removeCookies(): void {
     for (const service of store.services) {
-      if (service.cookies && service.cookies.length) {
-        this.removeSimpleCookies(service.cookies);
-      }
-      if (service.name === 'google-analytics') {
-        this.removeGoogleAnalyticsCookies(service.id);
-      }
+      this.removeCookiesSetByService(service);
     }
     // Remove user specified cookies across all domains as well.
     if (store.cookies) {
-      const purposes = Object.keys(store.cookies);
-      purposes.map(purpose => this.removeSimpleCookies(store.cookies[purpose]));
+      Object.values(store.cookies).map(cookies => this.removeSimpleCookies(cookies));
     }
     window.location.reload();
   }
 
   public static removeCookiesForPurpose(purpose: Purpose) {
     for (const service of store.services) {
-      console.log(service.name);
       if (service.purposes.indexOf(purpose) === -1) {
         continue;
       }
-      if (service.cookies && service.cookies.length) {
-        this.removeSimpleCookies(service.cookies);
-      }
-      if (service.name === 'google-analytics') {
-        console.log('Its Google Analytics!');
-        this.removeGoogleAnalyticsCookies(service.id);
-      }
+      this.removeCookiesSetByService(service);
     }
     // Remove user specified cookies across all domains as well.
     if (store.cookies && store.cookies[purpose]) {
       this.removeSimpleCookies(store.cookies[purpose]);
+    }
+  }
+
+  /**
+   * Remove all cookies set by a given service.
+   * @param service
+   */
+  protected static removeCookiesSetByService(service: HavenService) {
+    if (service.cookies && service.cookies.length) {
+      this.removeSimpleCookies(service.cookies);
+    }
+    if (service.name === 'google-analytics') {
+      this.removeGoogleAnalyticsCookies(service.id);
     }
   }
 

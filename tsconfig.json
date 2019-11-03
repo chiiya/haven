@@ -6,6 +6,7 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "isolatedModules": false,
+    "downlevelIteration": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "noImplicitAny": true,
