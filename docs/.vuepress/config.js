@@ -2,7 +2,6 @@ module.exports = {
   title: 'Haven',
   description: 'GDPR-ready cookie consent manager with zero dependencies.',
   base: '/haven/',
-  dest: 'public',
   themeConfig: {
     sidebar: [
       {
