@@ -18,7 +18,7 @@ export const injectGoogleAnalytics = (id: string, options: HavenServiceOptions =
   firstScript.parentNode!.insertBefore(script, firstScript);
 
   window.ga('create', id, 'auto');
-  if (options.anonymizeIp === true) {
+  if (options.anonymizeIp !== false) {
     window.ga('set', 'anonymizeIp', true);
   }
   window.ga('send', 'pageview');
