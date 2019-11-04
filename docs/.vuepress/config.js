@@ -16,6 +16,7 @@ module.exports = {
           'cookie-preferences',
           'consent-revoke',
           'configuration',
+          'events',
         ]
       },
     ],
