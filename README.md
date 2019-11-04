@@ -94,3 +94,6 @@ Analytics will only be loaded once this consent has been given. Users may revoke
 their consent at any time by using the settings injected into your privacy policy 
 page. Upon consent revoke, all tracking cookies set by Google Analytics will be 
 removed.
+
+For further information and configuration details, check out the 
+[documentation](https://chiiya.github.io/haven/).
