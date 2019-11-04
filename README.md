@@ -13,36 +13,89 @@ Haven is a simple-to-use cookie consent manager enabling GDPR and ePrivacy compl
 | 📣    | **Cookie notification** for opt-in and opt-out strategies.   |
 | 🔧    | **Cookie preferences** enabling users to revoke or change their consent at any time. |
 | 📥    | **Automatic injection of services** (google-analytics, google-tag-manager, facebook-pixel or any custom solution) at runtime, after the user has given their consent. |
-| 🗑️ | **Deletion of all tracking cookies** after a user has revoked their consent. |
+| 🗑️ | **Removal of all tracking cookies** after a user has revoked their consent. |
 | 📙 | **Translations** for multiple languages with easy customization. |
-| 🎨 | Use one of the many available **themes** or bring your own components. |
+| 🎨 | Use one of the available **themes** or bring your own components. |
 | 🤖 | Written in TS, and as such compatible with **ES5, ES6+ and TS** projects out of the box. |
 
-## Example
-The following code snippet shows how easy it is to get started with Haven.
+# Quickstart
+
+## Installation
+```bash
+npm i @chiiya/haven -S
+```
+or
+```bash
+yarn add @chiiya/haven
+```
+
+## Usage
+To use Haven in your project, either load the library via a `script` tag in your
+HTML, or import it as a module in your Javascript.
+
+<details>
+  <summary>Script Tag</summary>
 
 ```html
+<script src="https://unpkg.com/@chiiya/haven@0.1.1"></script>
 <script>
-    Haven.create({
-        services: [
-            {
-                name: 'google-analytics',
-                id: 'UA-XXXXXXXX-1',
-                purposes: ['analytics'],
-                inject: true,
-            }
-        ]
-    })
+Haven.create({
+    services: [
+        {
+            name: 'google-analytics',
+            id: 'UA-XXXXXXXX-1',
+            purposes: ['analytics'],
+            inject: true,
+        }
+    ]
+});
 </script>
 ```
 
-And in your privacy policy:
+</details>
 
-```html
-<div id="cookie-preferences"></div>
+<details>
+  <summary>ES6+ Import</summary>
+
+```javascript
+import Haven from '@chiiya@haven';
+
+Haven.create({
+    services: [
+        {
+            name: 'google-analytics',
+            id: 'UA-XXXXXXXX-1',
+            purposes: ['analytics'],
+            inject: true,
+        }
+    ]
+});
 ```
 
-With that, users will get a cookie notification asking for their consent. Google Analytics will only be loaded once this consent has been given. Users may revoke their consent at any time by using the settings injected into your privacy policy page. Upon consent revoke, all tracking cookies set by Google Analytics will be removed.
+</details>
 
+<details>
+  <summary>ES5 Import</summary>
 
+```javascript
+var { Haven } = require('haven');
 
+Haven.create({
+    services: [
+        {
+            name: 'google-analytics',
+            id: 'UA-XXXXXXXX-1',
+            purposes: ['analytics'],
+            inject: true,
+        }
+    ]
+});
+```
+
+</details>
+
+With that, users will get a cookie notification asking for their consent. Google 
+Analytics will only be loaded once this consent has been given. Users may revoke 
+their consent at any time by using the settings injected into your privacy policy 
+page. Upon consent revoke, all tracking cookies set by Google Analytics will be 
+removed.
