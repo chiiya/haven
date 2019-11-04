@@ -15,7 +15,6 @@ Haven is a simple-to-use cookie consent manager enabling GDPR and ePrivacy compl
 | 📥    | **Automatic injection of services** (google-analytics, google-tag-manager, facebook-pixel or any custom solution) at runtime, after the user has given their consent. |
 | 🗑️ | **Removal of all tracking cookies** after a user has revoked their consent. |
 | 📙 | **Translations** for multiple languages with easy customization. |
-| 🎨 | Use one of the available **themes** or bring your own components. |
 | 🤖 | Written in TS, and as such compatible with **ES5, ES6+ and TS** projects out of the box. |
 
 # Quickstart
@@ -23,10 +22,6 @@ Haven is a simple-to-use cookie consent manager enabling GDPR and ePrivacy compl
 ## Installation
 ```bash
 npm i @chiiya/haven -S
-```
-or
-```bash
-yarn add @chiiya/haven
 ```
 
 ## Usage
@@ -37,7 +32,7 @@ HTML, or import it as a module in your Javascript.
   <summary>Script Tag</summary>
 
 ```html
-<script src="https://unpkg.com/@chiiya/haven@0.1.1"></script>
+<script src="https://unpkg.com/@chiiya/haven"></script>
 <script>
 Haven.create({
     services: [
@@ -55,10 +50,10 @@ Haven.create({
 </details>
 
 <details>
-  <summary>ES6+ Import</summary>
+  <summary>ES5 Import</summary>
 
 ```javascript
-import Haven from '@chiiya@haven';
+var { Haven } = require('haven');
 
 Haven.create({
     services: [
@@ -75,10 +70,10 @@ Haven.create({
 </details>
 
 <details>
-  <summary>ES5 Import</summary>
+  <summary>ES6+ Import</summary>
 
 ```javascript
-var { Haven } = require('haven');
+import Haven from '@chiiya@haven';
 
 Haven.create({
     services: [
