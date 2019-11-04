@@ -17,7 +17,6 @@ export default class ServiceLoader {
    * Inject all registered services.
    */
   public injectServices(): void {
-    console.log(store.services);
     for (const service of store.services) {
       this.injectService(service);
       EventBus.emit('service-loaded', service.name);
@@ -66,8 +65,10 @@ export default class ServiceLoader {
         return;
       }
     } else if (service.inject) {
-      return service.inject;
+      injector = service.inject;
     }
+
+    return injector;
   }
 
   /**

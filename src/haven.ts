@@ -60,7 +60,6 @@ export default class Haven {
    */
   protected registerDefaultListeners(): void {
     const purposes = getAllPurposes();
-    console.log(purposes);
     for (const purpose of purposes) {
       EventBus.on(`${purpose}-enabled`, () => {
         this.serviceLoader.injectServices();
