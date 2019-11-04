@@ -34,7 +34,6 @@ export default class CookieNotification {
 
     // Only show cookie notification when functional cookie has not been set yet
     if (this.cookieNotification !== null && !this.cookieManager.hasFunctionalCookie()) {
-      console.log('Shoudl show');
       this.showCookieNotification();
     }
 

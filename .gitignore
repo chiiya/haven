@@ -13,6 +13,4 @@ exports/
 node_modules
 lerna-debug.log
 .rpt2_cache
-/docs
-.rpt2_cache
 /dist

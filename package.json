@@ -20,7 +20,9 @@
   "scripts": {
     "build": "npm-run-all build:umd build:esm",
     "build:umd": "cross-env ESM=false bili",
-    "build:esm": "cross-env ESM=true bili"
+    "build:esm": "cross-env ESM=true bili",
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "vuepress build docs"
   },
   "devDependencies": {
     "@types/node": "^12.6.9",
@@ -32,6 +34,7 @@
     "ts-node": "^8.3.0",
     "tslint": "^5.18.0",
     "tslint-config-airbnb": "^5.11.1",
-    "typescript": "^3.5.3"
+    "typescript": "^3.5.3",
+    "vuepress": "^1.2.0"
   }
 }
