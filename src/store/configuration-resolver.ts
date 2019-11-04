@@ -1,4 +1,4 @@
-import { HavenOptions } from '../../types';
+import { HavenOptions } from '../types';
 import store from './index';
 import { mergeDeep } from '../utils';
 

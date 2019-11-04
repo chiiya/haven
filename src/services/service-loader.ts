@@ -3,7 +3,7 @@ import { injectGoogleAnalytics } from './google-analytics';
 import { injectGoogleTagManager } from './google-tag-manager';
 import store from '../store';
 import EventBus from '../store/event-bus';
-import { HavenService, Purpose } from '../../types';
+import { HavenService, Purpose } from '../types';
 import CookieManager from '../cookies/cookie-manager';
 
 export default class ServiceLoader {

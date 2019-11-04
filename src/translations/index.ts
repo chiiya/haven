@@ -1,6 +1,6 @@
 import en from './en.yml';
 import de from './de.yml';
-import { Translations } from '../../types/translations';
+import { Translations } from '../types/translations';
 
 const translations: Translations = {
   // @ts-ignore

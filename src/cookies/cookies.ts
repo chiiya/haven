@@ -1,4 +1,4 @@
-import { CookieAttributes } from '../../types';
+import { CookieAttributes } from '../types';
 
 export interface CookieJar {
   [name: string]: string;

@@ -1,6 +1,6 @@
 import CookieManager from '../cookies/cookie-manager';
 import store from '../store';
-import { HavenService, Purpose } from '../../types';
+import { HavenService, Purpose } from '../types';
 
 export default class ConsentRevoke {
   /**

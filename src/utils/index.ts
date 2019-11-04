@@ -1,5 +1,5 @@
 import store from '../store';
-import { Purpose } from '../../types';
+import { Purpose } from '../types';
 
 /**
  * Get the localized string for a given key.

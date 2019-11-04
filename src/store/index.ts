@@ -1,4 +1,4 @@
-import { HavenOptions, Purpose } from '../../types';
+import { HavenOptions, Purpose } from '../types';
 import translations from '../translations';
 
 const store: HavenOptions = {

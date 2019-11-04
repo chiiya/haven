@@ -1,4 +1,4 @@
-import { ConsentType, CookieAttributes, Purpose } from '../../types';
+import { ConsentType, CookieAttributes, Purpose } from '../types';
 import Cookies from './cookies';
 import EventBus from '../store/event-bus';
 import { getAllPurposes } from '../utils';

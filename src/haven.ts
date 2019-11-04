@@ -1,4 +1,4 @@
-import { CookieAttributes, HavenOptions, HavenService, Purpose } from '../types';
+import { CookieAttributes, HavenOptions, HavenService, Purpose } from './types';
 import ConfigurationResolver from './store/configuration-resolver';
 import CookieNotification from './notification';
 import CookiePreferences from './preferences';
