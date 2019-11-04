@@ -22,7 +22,8 @@
     "build:umd": "cross-env ESM=false bili",
     "build:esm": "cross-env ESM=true bili",
     "docs:dev": "vuepress dev docs",
-    "docs:build": "vuepress build docs"
+    "docs:build": "vuepress build docs",
+    "test": "echo \"Error: no tests specified\" && exit 1"
   },
   "devDependencies": {
     "@types/node": "^12.6.9",
