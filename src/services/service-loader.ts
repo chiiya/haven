@@ -8,6 +8,7 @@ import CookieManager from '../cookies/cookie-manager';
 
 export default class ServiceLoader {
   protected cookieManager: CookieManager;
+  protected injected: { [name: string]: boolean } = {};
 
   constructor() {
     this.cookieManager = new CookieManager(store.prefix, store.type);
@@ -38,9 +39,10 @@ export default class ServiceLoader {
     if (injector !== undefined) {
       if (service.id !== undefined) {
         injector(service.id);
+      } else {
+        injector();
       }
-
-      injector();
+      this.injected[service.name] = true;
     }
   }
 
@@ -49,7 +51,8 @@ export default class ServiceLoader {
    * @param service
    */
   protected shouldBeInjected(service: HavenService): boolean {
-    return service.required || this.cookieManager.hasAllNecessaryCookiesEnabled(service.purposes);
+    return (!this.injected[service.name])
+      && (service.required || this.cookieManager.hasAllNecessaryCookiesEnabled(service.purposes));
   }
 
   /**
