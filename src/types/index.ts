@@ -20,7 +20,7 @@ export interface HavenNotificationOptions {
 }
 
 export interface HavenCustomCookies {
-  [purpose: string]: string[];
+  [purpose: string]: (string | RegExp)[];
 }
 
 export interface HavenPreferencesOptions {
@@ -46,14 +46,20 @@ export interface HavenNotificationStyles {
 }
 
 export interface HavenService {
-  name: string;
+  name: HavenServiceName;
   purposes: Purpose[];
   title?: string;
   description?: string;
   id?: string;
   inject?: boolean | Function;
   required?: boolean;
-  cookies?: string[];
+  cookies?: (string | RegExp)[];
+  options?: HavenServiceOptions;
+}
+
+export interface HavenServiceOptions {
+  anonymizeIp?: boolean;
+  [option: string]: any;
 }
 
 export interface CookieAttributes {
@@ -84,3 +90,4 @@ export interface CookieAttributes {
 
 export type ConsentType = 'opt-in' | 'opt-out';
 export type Purpose = 'functional' | 'analytics' | 'marketing' | 'preferences' | string;
+export type HavenServiceName = 'google-analytics' | 'google-tag-manager' | 'facebook-pixel' | string;

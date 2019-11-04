@@ -59,7 +59,7 @@ export default class ConsentRevoke {
    * Remove simple cookies across all possible domains.
    * @param cookies
    */
-  protected static removeSimpleCookies(cookies: string[]): void {
+  protected static removeSimpleCookies(cookies: (string | RegExp)[]): void {
     for (const cookie of cookies) {
       for (const domain of store.domains) {
         CookieManager.removeCookie(cookie, { domain });
