@@ -1,6 +1,7 @@
 import CookieManager from '../cookies/cookie-manager';
 import store from '../store';
 import { HavenService, HavenServiceOptions, Purpose } from '../types';
+import { GoogleAnalyticsOptions } from '../services/google-analytics';
 
 export default class ConsentRevoke {
   /**
@@ -46,12 +47,15 @@ export default class ConsentRevoke {
   /**
    * Remove all cookies set by google analytics.
    */
-  protected static removeGoogleAnalyticsCookies(options: HavenServiceOptions = {}): void {
+  protected static removeGoogleAnalyticsCookies(options: GoogleAnalyticsOptions = {}): void {
     const simple = ['_ga', '_gid', '_gat', 'AMP_TOKEN'];
     const composite = ['_dc_gtm_', '_gac_', '_gat_gtag_', '_gat_'];
     this.removeSimpleCookies(simple);
     if (options.id !== undefined) {
       this.removeCompositeCookies(composite, options.id);
+    }
+    if (options.name !== undefined) {
+      this.removeCompositeCookies(composite, options.name);
     }
   }
 
