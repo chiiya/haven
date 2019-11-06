@@ -58,9 +58,10 @@ export default class ServiceLoader {
   protected getInjectorFunction(service: HavenService): Function | undefined {
     let injector: Function  | undefined;
     if (service.inject === true) {
-      injector = this.getDefaultInjector(service.type);
+      const type = service.type || service.name;
+      injector = this.getDefaultInjector(type);
       if (injector === undefined) {
-        console.error(`No default injector found for ${service.type}. Please specify your own implementation.`);
+        console.error(`No default injector found for ${type}. Please specify your own implementation.`);
         return;
       }
       return injector;
@@ -73,7 +74,7 @@ export default class ServiceLoader {
    * Get the default injector if it exists.
    * @param type
    */
-  public getDefaultInjector(type: HavenServiceType | undefined): Function | undefined {
+  public getDefaultInjector(type: string | undefined): Function | undefined {
     switch (type) {
       case 'google-analytics':
         return injectGoogleAnalytics;
