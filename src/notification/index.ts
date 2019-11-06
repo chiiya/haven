@@ -32,8 +32,10 @@ export default class CookieNotification {
     this.cookiesAccept = document.getElementById('cookie-notification__accept');
     this.cookiesDecline = document.getElementById('cookie-notification__decline');
 
-    // Only show cookie notification when functional cookie has not been set yet
-    if (this.cookieNotification !== null && !this.cookieManager.hasFunctionalCookie()) {
+    // Only show cookie notification when a purpose has not been set yet
+    // This also allows us to show the cookie notification again when at some point in the future
+    // we decide to add an additional purpose
+    if (this.cookieNotification !== null && !this.cookieManager.hasAllCookiesSet()) {
       this.showCookieNotification();
     }
 

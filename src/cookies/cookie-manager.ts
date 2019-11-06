@@ -83,6 +83,20 @@ export default class CookieManager {
   }
 
   /**
+   * Check whether cookies for all purposes have been set (regardless of whether they have been accepted or not).
+   */
+  public hasAllCookiesSet(): boolean {
+    const purposes = getAllPurposes();
+    for (const purpose of purposes) {
+      if (!CookieManager.cookieExists(`${this.prefix}-${purpose}`)) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  /**
    * Check whether cookies for a given purpose are enabled (e.g. analytics).
    * @param purpose
    */
