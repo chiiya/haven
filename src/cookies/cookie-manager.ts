@@ -70,7 +70,6 @@ export default class CookieManager {
    */
   public enableCookies(purpose: Purpose): void {
     CookieManager.setCookie(`${this.prefix}-${purpose}`, 'true', { expires: 365 });
-    console.log(`${purpose}-enabled`);
     EventBus.emit(`${purpose}-enabled`);
   }
 
@@ -101,7 +100,7 @@ export default class CookieManager {
    * Check whether cookies for all purposes have been accepted.
    * @param purposes
    */
-  public hasAllNecessaryCookiesEnabled(purposes: Purpose[]): boolean {
+  public hasAllNecessaryCookiesEnabled(purposes: Purpose[] = []): boolean {
     for (const purpose of purposes) {
       if (!this.hasCookiesEnabled(purpose)) {
         return false;

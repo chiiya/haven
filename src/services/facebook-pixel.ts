@@ -1,10 +1,38 @@
 import { hasLoadedScript } from '../utils';
+import { HavenServiceOptions } from '../types';
 
-export const injectFacebookPixel = (id: string) => {
-  if (hasLoadedScript('https://connect.facebook.net/en_US/fbevents.js')) {
+export interface FacebookPixelOptions extends HavenServiceOptions {
+  /**
+   * Facebook Pixel id
+   */
+  id?: string;
+}
+
+/**
+ * Inject facebook pixel service.
+ * @param options
+ */
+export const injectFacebookPixel = (options: FacebookPixelOptions = {}) => {
+  // Need an ID to instantiate the service.
+  if (options.id === undefined) {
+    console.error('FACEBOOK_PIXEL: No ID specified. Please specify an ID using `options.id`.');
     return;
   }
 
+  // Inject the script only once.
+  if (!hasLoadedScript('https://connect.facebook.net/en_US/fbevents.js')) {
+    injectScript();
+  }
+
+  // Instantiate pixel instance and send initial page view.
+  window.fbq('init', options.id);
+  window.fbq('track', 'PageView');
+};
+
+/**
+ * Inject the facebook pixel script tag.
+ */
+const injectScript = () => {
   if (window.fbq) {
     return;
   }
@@ -27,7 +55,4 @@ export const injectFacebookPixel = (id: string) => {
   script.src = 'https://connect.facebook.net/en_US/fbevents.js';
   const firstScript = document.getElementsByTagName('script')[0];
   firstScript.parentNode!.insertBefore(script, firstScript);
-
-  window.fbq('init', id);
-  window.fbq('track', 'PageView');
 };

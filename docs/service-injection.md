@@ -37,12 +37,14 @@ Each service may specify the following options:
 
 | Option     | Details                                                      | Required |
 | ---------- | ------------------------------------------------------------ | -------- |
-| `name`     | Name of the service. The value is used to determine whether a service has already been injected, and should thus be **unique**. If you wish to make use of the default injectors provided by Haven, make sure you use one of the following names: `google-analytics`, `google-tag-manager` or `facebook-pixel`. | _true_   |
+| `name`     | Name of the service. The value is used to determine whether a service has already been injected, and should thus be **unique**. | _true_   |
 | `purposes` | List of cookie purposes that apply to this service. The service will only be injected if _all_ of the purposes have been consented to by the user. The purposes available by default are: `functional`, `analytics`, `marketing`, `preferences`. When specifying custom purposes, please make sure you provide a corresponding translation entry. | _true_   |
-| `id`       | The `id` is only used for the default injections provided by Haven. Specify your Google Analytics / Google Tag Manager / Facebook Pixel project id here. | _false_  |
+| `type`     | If you wish to make use of the default injectors provided by Haven, make sure you use one of the following types: `google-analytics`, `google-tag-manager` or `facebook-pixel`. | _false_   |
 | `inject`   | The value may be a boolean or a custom injector function (see [Custom Injectors](#custom-injectors)). When set to `true`, it will attempt to use a default injector. | _false_  |
 | `required` | Boolean value that describes whether the service is required. When true, the service will _always_ be injected, no matter the consent. | _false_  |
 | `cookies`  | Array of cookie names provided by this service. The names may be strings or regular expressions. Haven will delete these cookies when the user revokes his consent. Cookies for any of the default injectors do not need to be specified here. | _false_  |
+| `options`  | Optional options passed to the injector function. When using a default injector, specify your Google Analyitcs / Google Tag Manager / Facebook Pixel ID here (`options.id`) | _false_  |
+
 
 ## Custom Injectors
 

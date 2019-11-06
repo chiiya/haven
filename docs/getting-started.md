@@ -22,9 +22,12 @@ Haven.create({
     services: [
         {
             name: 'google-analytics',
-            id: 'UA-XXXXXXXX-1',
             purposes: ['analytics'],
+            type: 'google-analytics',
             inject: true,
+            options: {
+              id: 'UA-XXXXXXXX-1',
+            }
         }
     ]
 });
@@ -39,9 +42,12 @@ Haven.create({
     services: [
         {
             name: 'google-analytics',
-            id: 'UA-XXXXXXXX-1',
             purposes: ['analytics'],
+            type: 'google-analytics',
             inject: true,
+            options: {
+                id: 'UA-XXXXXXXX-1',
+            }
         }
     ]
 });
@@ -55,9 +61,12 @@ Haven.create({
     services: [
         {
             name: 'google-analytics',
-            id: 'UA-XXXXXXXX-1',
             purposes: ['analytics'],
+            type: 'google-analytics',
             inject: true,
+            options: {
+                id: 'UA-XXXXXXXX-1',
+            }
         }
     ]
 });

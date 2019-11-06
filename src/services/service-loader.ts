@@ -3,7 +3,7 @@ import { injectGoogleAnalytics } from './google-analytics';
 import { injectGoogleTagManager } from './google-tag-manager';
 import store from '../store';
 import EventBus from '../store/event-bus';
-import { HavenService, Purpose } from '../types';
+import { HavenService, HavenServiceType, Purpose } from '../types';
 import CookieManager from '../cookies/cookie-manager';
 
 export default class ServiceLoader {
@@ -37,11 +37,7 @@ export default class ServiceLoader {
     const injector = this.getInjectorFunction(service);
 
     if (injector !== undefined) {
-      if (service.id !== undefined) {
-        injector(service.id);
-      } else {
-        injector();
-      }
+      injector(service.options || {});
       this.injected[service.name] = true;
     }
   }
@@ -62,24 +58,23 @@ export default class ServiceLoader {
   protected getInjectorFunction(service: HavenService): Function | undefined {
     let injector: Function  | undefined;
     if (service.inject === true) {
-      injector = this.getDefaultInjector(service.name);
+      injector = this.getDefaultInjector(service.type);
       if (injector === undefined) {
-        console.error(`No default injector found for ${service.name}. Please specify your own implementation.`);
+        console.error(`No default injector found for ${service.type}. Please specify your own implementation.`);
         return;
       }
+      return injector;
     } else if (service.inject) {
-      injector = service.inject;
+      return service.inject;
     }
-
-    return injector;
   }
 
   /**
    * Get the default injector if it exists.
-   * @param name
+   * @param type
    */
-  public getDefaultInjector(name: string): Function | undefined {
-    switch (name) {
+  public getDefaultInjector(type: HavenServiceType | undefined): Function | undefined {
+    switch (type) {
       case 'google-analytics':
         return injectGoogleAnalytics;
       case 'google-tag-manager':
