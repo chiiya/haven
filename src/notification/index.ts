@@ -1,6 +1,12 @@
 import CookieManager from '../cookies/cookie-manager';
 import DefaultNotification from './default-notification';
 import store from '../store';
+import { getAllPurposes } from '../utils';
+
+const Status = {
+  ENABLED: true,
+  DISABLED: false,
+};
 
 export default class CookieNotification {
   protected cookieManager: CookieManager;
@@ -45,6 +51,7 @@ export default class CookieNotification {
         event.preventDefault();
         this.cookieManager.enableAllCookies();
         this.hideCookieNotification();
+        this.togglePreferences(Status.ENABLED);
       });
     }
 
@@ -56,6 +63,7 @@ export default class CookieNotification {
         this.cookieManager.disableAllCookies();
         this.cookieManager.enableFunctionalCookie();
         this.hideCookieNotification();
+        this.togglePreferences(Status.DISABLED);
       });
     }
   }
@@ -76,6 +84,20 @@ export default class CookieNotification {
   public hideCookieNotification(): void {
     if (this.cookieNotification !== null) {
       this.cookieNotification.style.display = 'none';
+    }
+  }
+
+  /**
+   * Toggle the state of all preferences checkboxes once an action on the cookie notification has been made.
+   * @param enabled
+   */
+  protected togglePreferences(enabled: boolean): void {
+    const purposes = getAllPurposes();
+    for (const purpose of purposes) {
+      const checkbox = <HTMLInputElement | null>document.getElementById(`cookie-preferences--${purpose}`);
+      if (checkbox) {
+        checkbox.checked = enabled;
+      }
     }
   }
 }
