@@ -70,5 +70,5 @@ export function mergeDeep(target: any, source: any) {
  * @param src
  */
 export function hasLoadedScript(src: string) {
-  return document.querySelector(`script[src="${src}"`) !== null;
+  return document.querySelector(`script[src="${src}"]`) !== null;
 }
