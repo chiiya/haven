@@ -28,20 +28,8 @@ export default class Cookies {
     const cookieName = encodeURIComponent(String(key))
       .replace(/%(23|24|26|2B|5E|60|7C)/g, decodeURIComponent)
       .replace(/[()]/g, escape);
-    let cookieAttributes = '';
-    for (const name of Object.keys(attributes)) {
-      const attribute = attributes[name];
-      if (!attribute) {
-        continue;
-      }
-      cookieAttributes += `; ${name}`;
-      if (attribute !== true) {
-        cookieAttributes += `=${attribute.split(';')[0]}`;
-      }
-    }
+    const cookieAttributes = this.encodeAttributes(attributes);
     document.cookie = `${cookieName}=${cookieValue}${cookieAttributes}`;
-    // Try the unencoded key as well
-    document.cookie = `${key}=${cookieValue}${cookieAttributes}`;
   }
 
   /**
@@ -95,11 +83,14 @@ export default class Cookies {
    * @param options
    */
   public static remove(key: string | RegExp, options: CookieAttributes = {}) {
-    const attributes = Object.assign(options, { expires: -1 });
+    const attributes = this.resolveOptions(Object.assign(options, { expires: -1 }));
     if (key instanceof RegExp) {
       return this.removeByRegex(key, attributes);
     }
 
+    // Try deleting both unencoded and encoded cookie name
+    const cookieAttributes = this.encodeAttributes(attributes);
+    document.cookie = `${key}=''${cookieAttributes}`;
     this.set(key, '', attributes);
   }
 
@@ -111,9 +102,32 @@ export default class Cookies {
   protected static removeByRegex(key: RegExp, attributes: CookieAttributes) {
     Object.keys(this.getAll()).map((name) => {
       if (key.test(name)) {
+        // Try deleting both unencoded and encoded cookie name
+        const cookieAttributes = this.encodeAttributes(attributes);
+        document.cookie = `${name}=''${cookieAttributes}`;
         this.set(name, '', attributes);
       }
     });
+  }
+
+  /**
+   * Encode the cookie attributes.
+   * @param attributes
+   */
+  protected static encodeAttributes(attributes: CookieAttributes): string {
+    let cookieAttributes = '';
+    for (const name of Object.keys(attributes)) {
+      const attribute = attributes[name];
+      if (!attribute) {
+        continue;
+      }
+      cookieAttributes += `; ${name}`;
+      if (attribute !== true) {
+        cookieAttributes += `=${attribute.split(';')[0]}`;
+      }
+    }
+
+    return cookieAttributes;
   }
 
   /**
