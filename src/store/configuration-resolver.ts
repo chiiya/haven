@@ -9,7 +9,7 @@ export default class ConfigurationResolver {
    */
   public static resolve(options: Partial<HavenOptions>) {
     if (options.domains && Array.isArray(options.domains)) {
-      options.domains = options.domains.map(domain => domain.startsWith('.') ? domain : `.${domain}`);
+      options.domains = this.normalizeDomains(options.domains);
     }
 
     this.resolveBaseConfiguration(options);
@@ -61,6 +61,14 @@ export default class ConfigurationResolver {
       domains.push(matches[1]);
     }
     domains.push(host);
-    return domains;
+    return this.normalizeDomains(domains);
+  }
+
+  /**
+   * Normalize domains: they should start with a `.` symbol.
+   * @param domains
+   */
+  protected static normalizeDomains(domains: string[]): string[] {
+    return domains.map(domain => domain.startsWith('.') ? domain : `.${domain}`);
   }
 }
