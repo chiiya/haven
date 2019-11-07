@@ -22,13 +22,27 @@ export default class ConfigurationResolver {
    * @param options
    */
   public static resolveBaseConfiguration(options: Partial<HavenOptions>) {
-    for (const item of ['prefix', 'cookies', 'lang', 'type', 'services', 'purposes'])  {
+    for (const item of ['prefix', 'cookies', 'type', 'services', 'purposes'])  {
       if (options[item] !== undefined) {
         store[item] = options[item];
       }
     }
     const domains = options.domains || [];
     store.domains = domains.length > 0 ? domains : this.getDomains();
+    store.lang = this.detectLanguage(options);
+  }
+
+  /**
+   * Detect the language, from:
+   * - Configuration option
+   * - HTML lang attribute
+   * - Default value
+   * @param options
+   */
+  protected static detectLanguage(options: Partial<HavenOptions>): string {
+    const lang = (options.lang || document.documentElement.lang || 'en').toLowerCase();
+    const result = /^(\w{2})-(\w{2})$/.exec(lang);
+    return result === null ? lang : result[1];
   }
 
   /**

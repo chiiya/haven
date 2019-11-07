@@ -7,6 +7,10 @@ import { Purpose } from '../types';
  */
 export const trans = (key: string) => {
   const translation = store.translations[store.lang];
+  if (translation === undefined) {
+    console.error(`HAVEN: No translations found for language \`${store.lang}\``);
+    return undefined;
+  }
   const partials = key.split('.');
   let result: any = translation;
   for (const partial of partials) {
