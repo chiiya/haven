@@ -2,6 +2,7 @@ import CookieManager from '../cookies/cookie-manager';
 import store from '../store';
 import { HavenService, HavenServiceOptions, Purpose } from '../types';
 import { GoogleAnalyticsOptions } from '../services/google-analytics';
+import { FacebookPixelOptions } from '../services/facebook-pixel';
 
 export default class ConsentRevoke {
   /**
@@ -42,6 +43,9 @@ export default class ConsentRevoke {
     if (service.name === 'google-analytics') {
       this.removeGoogleAnalyticsCookies(service.options);
     }
+    if (service.name === 'facebook-pixel') {
+      this.removeFacebookPixelCookies(service.options);
+    }
   }
 
   /**
@@ -57,6 +61,11 @@ export default class ConsentRevoke {
     if (options.name !== undefined) {
       this.removeCompositeCookies(composite, options.name);
     }
+  }
+
+  protected static removeFacebookPixelCookies(options: FacebookPixelOptions = {}): void {
+    const simple = ['_fbp'];
+    this.removeSimpleCookies(simple);
   }
 
   /**
