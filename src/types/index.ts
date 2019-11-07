@@ -31,9 +31,6 @@ export interface HavenPreferencesStyles {
   textColor: string;
   toggleBackground: string;
   toggleBorder: string;
-  buttonBackground: string;
-  buttonBackgroundHover: string;
-  buttonColor: string;
 }
 
 export interface HavenNotificationStyles {

@@ -84,30 +84,6 @@ const createStyles = (): string => {
       top: 3px;
       width: 16px;
     }
-
-    .hv-button {
-      background: ${options.buttonBackground};
-      color: ${options.buttonColor};
-      align-items: center;
-      border: 0;
-      border-radius: 3px;
-      cursor: pointer;
-      display: inline-flex;
-      font-size: 15px;
-      justify-content: center;
-      padding: 8px 16px;
-      transition: background-color 150ms;
-      vertical-align: middle;
-      white-space: nowrap;
-    }
-
-    .hv-button:disabled {
-      cursor: not-allowed;
-    }
-
-    .hv-button:hover {
-      background: ${options.buttonBackgroundHover};
-    }
   `;
 };
 
@@ -128,7 +104,6 @@ const createPreferences = (): string => {
         <p class="hv-preference__description">${trans(`purposes.${purpose}.description`)}</p>
       `;
     }).join('')}
-    <button class="hv-button" id="cookie-preferences__save">${trans('preferences.save')}</button>
   `;
 };
 

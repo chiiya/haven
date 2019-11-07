@@ -1,4 +1,4 @@
-import { HavenOptions, Purpose } from '../types';
+import { HavenOptions } from '../types';
 import translations from '../translations';
 
 const store: HavenOptions = {
@@ -25,9 +25,6 @@ const store: HavenOptions = {
       textColor: '#666666',
       toggleBorder: '#666666',
       toggleBackground: '#9FD6AE',
-      buttonColor: '#FFF',
-      buttonBackground: '#3273DC',
-      buttonBackgroundHover: '#2F6BCD',
     },
   },
   translations: translations,

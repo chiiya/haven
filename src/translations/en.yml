@@ -5,8 +5,6 @@ notification:
   decline: Decline
 preferences:
   description: 'This website uses the following cookies:'
-  save: Save changes
-  saved: Saved
 purposes:
   functional:
     name: Functional

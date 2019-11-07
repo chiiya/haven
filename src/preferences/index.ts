@@ -24,49 +24,27 @@ export default class CookiePreferences {
     if (wrapper !== null) {
       DefaultPreferences.create(wrapper);
     }
+    this.attachListeners();
+  }
+
+  /**
+   * Attach event listeners to all checkboxes.
+   */
+  public attachListeners(): void {
     const purposes = getAllPurposes();
-    const checkboxes : { [purpose: string]: HTMLInputElement } = {};
     for (const purpose of purposes) {
       const checkbox = <HTMLInputElement | null>document.getElementById(`cookie-preferences--${purpose}`);
       if (checkbox !== null) {
-        checkboxes[purpose] = checkbox;
         checkbox.checked = this.cookieManager.hasCookiesEnabled(purpose);
         checkbox.addEventListener('change', () => {
-          this.enableButton();
-        });
-      }
-    }
-
-    this.saveButton = <HTMLButtonElement | null>document.getElementById('cookie-preferences__save');
-
-    if (this.saveButton !== null) {
-      this.saveButton.addEventListener('click', () => {
-        this.disableButton();
-        this.cookieManager.enableFunctionalCookie();
-        for (const purpose of purposes) {
-          if (checkboxes[purpose].checked) {
+          this.cookieManager.enableFunctionalCookie();
+          if (checkbox.checked) {
             this.cookieManager.enableCookies(purpose);
           } else {
             this.cookieManager.disableCookies(purpose);
           }
-        }
-      });
+        });
+      }
     }
-  }
-
-  /**
-   * Enable the submit button.
-   */
-  protected enableButton(): void {
-    this.saveButton!.disabled = false;
-    this.saveButton!.innerText = trans('preferences.save');
-  }
-
-  /**
-   * Disable the submit button.
-   */
-  protected disableButton(): void {
-    this.saveButton!.disabled = true;
-    this.saveButton!.innerText = trans('preferences.saved');
   }
 }
