@@ -3,7 +3,7 @@ import { injectGoogleAnalytics } from './google-analytics';
 import { injectGoogleTagManager } from './google-tag-manager';
 import store from '../store';
 import EventBus from '../store/event-bus';
-import { HavenService, HavenServiceType, Purpose } from '../types';
+import { HavenService, Purpose } from '../types';
 import CookieManager from '../cookies/cookie-manager';
 
 export default class ServiceLoader {
@@ -21,7 +21,6 @@ export default class ServiceLoader {
     for (const service of store.services) {
       this.injectService(service);
     }
-    EventBus.emit('services-loaded');
   }
 
   /**
@@ -37,10 +36,10 @@ export default class ServiceLoader {
 
     if (injector !== undefined) {
       injector(service.options || {});
+      EventBus.emit(`${service.name}-loaded`);
     }
 
     this.injected[service.name] = true;
-    EventBus.emit(`${service.name}-loaded`);
   }
 
   /**
