@@ -36,7 +36,7 @@ export default class ServiceLoader {
 
     if (injector !== undefined) {
       injector(service.options || {});
-      EventBus.emit(`${service.name}-loaded`);
+      EventBus.emit('service-loaded', service.name);
     }
 
     this.injected[service.name] = true;
