@@ -20,7 +20,6 @@ export default class ServiceLoader {
   public injectServices(): void {
     for (const service of store.services) {
       this.injectService(service);
-      EventBus.emit('service-loaded', service.name);
     }
     EventBus.emit('services-loaded');
   }
@@ -38,8 +37,10 @@ export default class ServiceLoader {
 
     if (injector !== undefined) {
       injector(service.options || {});
-      this.injected[service.name] = true;
     }
+
+    this.injected[service.name] = true;
+    EventBus.emit(`${service.name}-loaded`);
   }
 
   /**
@@ -47,7 +48,7 @@ export default class ServiceLoader {
    * @param service
    */
   protected shouldBeInjected(service: HavenService): boolean {
-    return (!this.injected[service.name])
+    return service.inject !== false && (!this.injected[service.name])
       && (service.required || this.cookieManager.hasAllNecessaryCookiesEnabled(service.purposes));
   }
 
