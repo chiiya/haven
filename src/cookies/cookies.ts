@@ -40,6 +40,8 @@ export default class Cookies {
       }
     }
     document.cookie = `${cookieName}=${cookieValue}${cookieAttributes}`;
+    // Try the unencoded key as well
+    document.cookie = `${key}=${cookieValue}${cookieAttributes}`;
   }
 
   /**
