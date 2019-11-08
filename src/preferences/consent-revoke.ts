@@ -40,10 +40,11 @@ export default class ConsentRevoke {
     if (service.cookies && service.cookies.length) {
       this.removeSimpleCookies(service.cookies);
     }
-    if (service.name === 'google-analytics') {
+    const type = service.type || service.name;
+    if (type === 'google-analytics') {
       this.removeGoogleAnalyticsCookies(service.options);
     }
-    if (service.name === 'facebook-pixel') {
+    if (type === 'facebook-pixel') {
       this.removeFacebookPixelCookies(service.options);
     }
   }
