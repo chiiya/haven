@@ -38,7 +38,9 @@ Haven.create({
     services: [
         {
             name: 'google-analytics',
-            id: 'UA-XXXXXXXX-1',
+            options: {
+                    id: 'UA-XXXXXXXX-1',
+            },
             purposes: ['analytics'],
             inject: true,
         }
@@ -59,7 +61,9 @@ Haven.create({
     services: [
         {
             name: 'google-analytics',
-            id: 'UA-XXXXXXXX-1',
+            options: {
+                    id: 'UA-XXXXXXXX-1',
+            },
             purposes: ['analytics'],
             inject: true,
         }
@@ -79,7 +83,9 @@ Haven.create({
     services: [
         {
             name: 'google-analytics',
-            id: 'UA-XXXXXXXX-1',
+            options: {
+                    id: 'UA-XXXXXXXX-1',
+            },
             purposes: ['analytics'],
             inject: true,
         }
