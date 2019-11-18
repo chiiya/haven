@@ -1,35 +1,41 @@
+import defaultConfig from './default';
+import { mergeDeep } from '../helpers/merge';
 import { HavenOptions } from '../types';
-import store from './index';
-import { mergeDeep } from '../utils';
 
 export default class ConfigurationResolver {
   /**
    * Resolve configuration using some default options.
    * @param options
    */
-  public static resolve(options: Partial<HavenOptions>) {
+  public static resolve(options: Partial<HavenOptions>): HavenOptions {
+    const config = { ...defaultConfig };
     if (options.domains && Array.isArray(options.domains)) {
       options.domains = this.normalizeDomains(options.domains);
     }
 
-    this.resolveBaseConfiguration(options);
-    store.notification = mergeDeep(store.notification, options.notification);
-    store.translations = mergeDeep(store.translations, options.translations);
+    this.resolveBaseConfiguration(config, options);
+    config.notification = mergeDeep(config.notification, options.notification);
+    config.translations = mergeDeep(config.translations, options.translations);
+
+    return config;
   }
 
   /**
    * Resolve the base configuration values.
+   * @param config
    * @param options
    */
-  public static resolveBaseConfiguration(options: Partial<HavenOptions>) {
-    for (const item of ['prefix', 'cookies', 'type', 'services', 'purposes'])  {
-      if (options[item] !== undefined) {
-        store[item] = options[item];
+  public static resolveBaseConfiguration(config: HavenOptions, options: Partial<HavenOptions>) {
+    const keys = ['prefix', 'cookies', 'type', 'services', 'purposes'];
+    for (const item of keys)  {
+      const value = options[item];
+      if (value !== undefined) {
+        config[item] = value;
       }
     }
     const domains = options.domains || [];
-    store.domains = domains.length > 0 ? domains : this.getDomains();
-    store.lang = this.detectLanguage(options);
+    config.domains = domains.length > 0 ? domains : this.getDomains();
+    config.lang = this.detectLanguage(options);
   }
 
   /**

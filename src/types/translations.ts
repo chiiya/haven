@@ -22,10 +22,10 @@ export interface PreferencesTranslation {
 }
 
 export interface Purposes {
-  [identifier: string]: Purpose;
+  [identifier: string]: PurposeTranslation;
 }
 
-export interface Purpose {
+export interface PurposeTranslation {
   name: string;
   description: string;
 }

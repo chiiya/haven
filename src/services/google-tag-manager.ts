@@ -1,5 +1,5 @@
 import { HavenServiceOptions } from '../types';
-import { hasLoadedScript } from '../utils';
+import { hasLoadedScript } from '../helpers/dom';
 
 export interface GoogleTagManagerOptions extends HavenServiceOptions {
   /**

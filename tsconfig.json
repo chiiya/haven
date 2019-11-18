@@ -1,32 +1,21 @@
 {
   "compilerOptions": {
-    "declaration": true,
-    "removeComments": true,
-    "outDir": "./dist",
-    "esModuleInterop": true,
-    "resolveJsonModule": true,
-    "isolatedModules": false,
-    "downlevelIteration": true,
-    "allowSyntheticDefaultImports": true,
     "strict": true,
-    "noImplicitAny": true,
-    "target": "es2017",
-    "module": "es2015",
+    "target": "esnext",
     "moduleResolution": "node",
+    "esModuleInterop": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "sourceMap": true,
+    "allowSyntheticDefaultImports": true,
     "suppressImplicitAnyIndexErrors": true,
     "lib": [
       "esnext",
       "dom",
-      "dom.iterable",
-      "scripthost"
+      "dom.iterable"
     ]
   },
   "include": [
-    "./src",
-    "./src/types"
+    "./src"
   ],
   "exclude": [
     "node_modules"

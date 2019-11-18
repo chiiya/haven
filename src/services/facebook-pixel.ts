@@ -1,4 +1,4 @@
-import { hasLoadedScript } from '../utils';
+import { hasLoadedScript } from '../helpers/dom';
 import { HavenServiceOptions } from '../types';
 
 export interface FacebookPixelOptions extends HavenServiceOptions {

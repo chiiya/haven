@@ -1,6 +1,6 @@
 interface EventBusSubscriptions {
   [name: string]: {
-    [id: number]: Function;
+    [id: string]: Function;
   };
 }
 

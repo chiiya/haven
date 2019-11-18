@@ -8,7 +8,6 @@ module.exports = {
         },
         modules: false,
         useBuiltIns: 'usage',
-        forceAllTransforms: true,
         corejs: 3,
         exclude: ['transform-regenerator', 'transform-async-to-generator']
       }
