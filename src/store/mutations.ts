@@ -7,10 +7,10 @@ const mutations: MutationsObject<State> = {
    * @param options
    */
   SET_INITIAL_STATE(state, options: HavenOptions) {
-    for (const key of Object.keys(options)) {
-      state[key] = options[key];
-    }
-    return state;
+    return {
+      ...state,
+      ...options
+    };
   },
 
   /**
