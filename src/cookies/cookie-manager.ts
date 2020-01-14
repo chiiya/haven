@@ -1,17 +1,23 @@
-import { ConsentType, CookieAttributes, Purpose } from '../types';
-import Cookies from './cookies';
-import EventBus from '../store/event-bus';
-import { getAllPurposes } from '../utils';
+import { ConsentType, CookieAttributes, Purpose } from "../types";
+import Cookies from "./cookies";
+import EventBus from "../store/event-bus";
+import { getAllPurposes } from "../utils";
 
 export default class CookieManager {
   /** Cookie prefix */
   protected prefix: string;
   /** Consent type: opt-in / opt-out */
   protected type: ConsentType;
+  protected attributes: CookieAttributes;
 
-  constructor(prefix: string, type: ConsentType = 'opt-in') {
+  constructor(
+    prefix: string,
+    type: ConsentType = "opt-in",
+    attributes: CookieAttributes = {}
+  ) {
     this.prefix = prefix;
     this.type = type;
+    this.attributes = attributes;
   }
 
   /**
@@ -28,7 +34,11 @@ export default class CookieManager {
    * @param value
    * @param options
    */
-  public static setCookie(name: string, value: string, options?: CookieAttributes): void {
+  public static setCookie(
+    name: string,
+    value: string,
+    options?: CookieAttributes
+  ): void {
     Cookies.set(name, value, options);
   }
 
@@ -37,7 +47,10 @@ export default class CookieManager {
    * @param name
    * @param options
    */
-  public static removeCookie(name: string | RegExp, options?: CookieAttributes): void {
+  public static removeCookie(
+    name: string | RegExp,
+    options?: CookieAttributes
+  ): void {
     Cookies.remove(name, options);
   }
 
@@ -46,15 +59,19 @@ export default class CookieManager {
    * @param name
    */
   public static cookieExists(name: string): boolean {
-    return Cookies.get(name) !== undefined && Cookies.get(name) !== '';
+    return Cookies.get(name) !== undefined && Cookies.get(name) !== "";
   }
 
   /**
    * Enable the functional cookie.
    */
   public enableFunctionalCookie(): void {
-    CookieManager.setCookie(`${this.prefix}-functional`, 'true', { expires: 365 });
-    EventBus.emit('functional-enabled');
+    CookieManager.setCookie(
+      `${this.prefix}-functional`,
+      "true",
+      this.attributes
+    );
+    EventBus.emit("functional-enabled");
   }
 
   /**
@@ -69,7 +86,11 @@ export default class CookieManager {
    * @param purpose
    */
   public enableCookies(purpose: Purpose): void {
-    CookieManager.setCookie(`${this.prefix}-${purpose}`, 'true', { expires: 365 });
+    CookieManager.setCookie(
+      `${this.prefix}-${purpose}`,
+      "true",
+      this.attributes
+    );
     EventBus.emit(`${purpose}-enabled`);
   }
 
@@ -78,7 +99,11 @@ export default class CookieManager {
    * @param purpose
    */
   public disableCookies(purpose: Purpose): void {
-    CookieManager.setCookie(`${this.prefix}-${purpose}`, 'false', { expires: 365 });
+    CookieManager.setCookie(
+      `${this.prefix}-${purpose}`,
+      "false",
+      this.attributes
+    );
     EventBus.emit(`${purpose}-disabled`);
   }
 
@@ -103,11 +128,11 @@ export default class CookieManager {
   public hasCookiesEnabled(purpose: Purpose): boolean {
     const cookie = CookieManager.getCookie(`${this.prefix}-${purpose}`);
 
-    if (this.type === 'opt-in') {
-      return cookie === 'true';
+    if (this.type === "opt-in") {
+      return cookie === "true";
     }
 
-    return cookie === undefined || cookie === 'true';
+    return cookie === undefined || cookie === "true";
   }
 
   /**
@@ -128,10 +153,7 @@ export default class CookieManager {
    * Accept all cookies.
    */
   public enableAllCookies(): void {
-    const purposes = [
-      'functional',
-      ...getAllPurposes(),
-    ];
+    const purposes = ["functional", ...getAllPurposes()];
     purposes.map(purpose => this.enableCookies(purpose));
   }
 

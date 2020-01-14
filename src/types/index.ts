@@ -1,7 +1,8 @@
-import { Translations } from './translations';
+import { Translations } from "./translations";
 
 export interface HavenOptions {
   prefix: string;
+  cookieAttributes: CookieAttributes;
   domains: string[];
   cookies: HavenCustomCookies;
   lang: string;
@@ -14,7 +15,7 @@ export interface HavenOptions {
 }
 
 export interface HavenNotificationOptions {
-  position: 'top' | 'bottom';
+  position: "top" | "bottom";
   policyUrl: string;
   styles: HavenNotificationStyles;
 }
@@ -84,6 +85,14 @@ export interface CookieAttributes {
   secure?: boolean;
 }
 
-export type ConsentType = 'opt-in' | 'opt-out';
-export type Purpose = 'functional' | 'analytics' | 'marketing' | 'preferences' | string;
-export type HavenServiceType = 'google-analytics' | 'google-tag-manager' | 'facebook-pixel';
+export type ConsentType = "opt-in" | "opt-out";
+export type Purpose =
+  | "functional"
+  | "analytics"
+  | "marketing"
+  | "preferences"
+  | string;
+export type HavenServiceType =
+  | "google-analytics"
+  | "google-tag-manager"
+  | "facebook-pixel";

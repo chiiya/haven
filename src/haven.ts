@@ -1,13 +1,13 @@
-import { CookieAttributes, HavenOptions, HavenService, Purpose } from './types';
-import ConfigurationResolver from './store/configuration-resolver';
-import CookieNotification from './notification';
-import CookiePreferences from './preferences';
-import { getAllPurposes } from './utils';
-import CookieManager from './cookies/cookie-manager';
-import EventBus, { EventBusSubscription } from './store/event-bus';
-import store from './store';
-import ServiceLoader from './services/service-loader';
-import ConsentRevoke from './preferences/consent-revoke';
+import { CookieAttributes, HavenOptions, HavenService, Purpose } from "./types";
+import ConfigurationResolver from "./store/configuration-resolver";
+import CookieNotification from "./notification";
+import CookiePreferences from "./preferences";
+import { getAllPurposes } from "./utils";
+import CookieManager from "./cookies/cookie-manager";
+import EventBus, { EventBusSubscription } from "./store/event-bus";
+import store from "./store";
+import ServiceLoader from "./services/service-loader";
+import ConsentRevoke from "./preferences/consent-revoke";
 
 declare global {
   interface Window {
@@ -30,7 +30,11 @@ export default class Haven {
     ConfigurationResolver.resolve(options);
     this.cookieNotification = new CookieNotification();
     this.cookiePreferences = new CookiePreferences();
-    this.cookieManager = new CookieManager(store.prefix, store.type);
+    this.cookieManager = new CookieManager(
+      store.prefix,
+      store.type,
+      store.cookieAttributes
+    );
     this.serviceLoader = new ServiceLoader();
   }
 
@@ -39,12 +43,12 @@ export default class Haven {
       this.cookieNotification.init();
       this.cookiePreferences.init();
     } else {
-      document.addEventListener('DOMContentLoaded', () => {
+      document.addEventListener("DOMContentLoaded", () => {
         this.cookieNotification.init();
         this.cookiePreferences.init();
       });
     }
-    
+
     this.registerDefaultListeners();
     this.checkInitialState();
   }
@@ -87,7 +91,7 @@ export default class Haven {
     name: string,
     purposes: Purpose[],
     inject: boolean | Function,
-    options: Partial<HavenService> = {},
+    options: Partial<HavenService> = {}
   ) {
     this.serviceLoader.registerService(name, purposes, inject, options);
   }
@@ -104,7 +108,9 @@ export default class Haven {
 
   public static create(options: Partial<HavenOptions>): Haven {
     if (Haven.instance) {
-      console.warn('Replacing an existing Haven instance. Are you sure this behaviour is intended?');
+      console.warn(
+        "Replacing an existing Haven instance. Are you sure this behaviour is intended?"
+      );
     }
     Haven.instance = new Haven(options);
     Haven.instance.init();
@@ -115,7 +121,9 @@ export default class Haven {
     if (Haven.instance) {
       return Haven.instance;
     }
-    console.error('No Haven instance found. Make sure to create a Haven instance before attempting to access it.');
+    console.error(
+      "No Haven instance found. Make sure to create a Haven instance before attempting to access it."
+    );
   }
 
   public static removeCookies(cookies: string[], options?: CookieAttributes) {
