@@ -35,10 +35,16 @@ export default class Haven {
   }
 
   public init(): void {
-    document.addEventListener('DOMContentLoaded', () => {
+    if (/complete|interactive|loaded/.test(document.readyState)) {
       this.cookieNotification.init();
       this.cookiePreferences.init();
-    });
+    } else {
+      document.addEventListener('DOMContentLoaded', () => {
+        this.cookieNotification.init();
+        this.cookiePreferences.init();
+      });
+    }
+    
     this.registerDefaultListeners();
     this.checkInitialState();
   }
