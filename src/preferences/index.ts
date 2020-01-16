@@ -13,7 +13,11 @@ export default class CookiePreferences {
    * Fetch DOM elements.
    */
   constructor() {
-    this.cookieManager = new CookieManager(store.prefix, store.type);
+    this.cookieManager = new CookieManager(
+      store.prefix,
+      store.type,
+      store.cookieAttributes
+    );
   }
 
   /**

@@ -1,11 +1,11 @@
-import CookieManager from '../cookies/cookie-manager';
-import DefaultNotification from './default-notification';
-import store from '../store';
-import { getAllPurposes } from '../utils';
+import CookieManager from "../cookies/cookie-manager";
+import DefaultNotification from "./default-notification";
+import store from "../store";
+import { getAllPurposes } from "../utils";
 
 const Status = {
   ENABLED: true,
-  DISABLED: false,
+  DISABLED: false
 };
 
 export default class CookieNotification {
@@ -18,7 +18,11 @@ export default class CookieNotification {
   protected cookiesDecline: HTMLElement | null = null;
 
   constructor() {
-    this.cookieManager = new CookieManager(store.prefix, store.type);
+    this.cookieManager = new CookieManager(
+      store.prefix,
+      store.type,
+      store.cookieAttributes
+    );
   }
 
   /**
@@ -26,28 +30,33 @@ export default class CookieNotification {
    */
   public init(): void {
     // Use custom cookie notification if present
-    this.cookieNotification = document.getElementById('cookie-notification');
+    this.cookieNotification = document.getElementById("cookie-notification");
 
     // If no custom cookie notification is found, create a default one.
     if (this.cookieNotification === null) {
       DefaultNotification.create();
-      this.cookieNotification = document.getElementById('cookie-notification');
+      this.cookieNotification = document.getElementById("cookie-notification");
     }
 
     // Fetch action buttons
-    this.cookiesAccept = document.getElementById('cookie-notification__accept');
-    this.cookiesDecline = document.getElementById('cookie-notification__decline');
+    this.cookiesAccept = document.getElementById("cookie-notification__accept");
+    this.cookiesDecline = document.getElementById(
+      "cookie-notification__decline"
+    );
 
     // Only show cookie notification when a purpose has not been set yet
     // This also allows us to show the cookie notification again when at some point in the future
     // we decide to add an additional purpose
-    if (this.cookieNotification !== null && !this.cookieManager.hasAllCookiesSet()) {
+    if (
+      this.cookieNotification !== null &&
+      !this.cookieManager.hasAllCookiesSet()
+    ) {
       this.showCookieNotification();
     }
 
     // Accept all cookies
     if (this.cookiesAccept !== null) {
-      this.cookiesAccept.addEventListener('click', (event) => {
+      this.cookiesAccept.addEventListener("click", event => {
         event.preventDefault();
         this.cookieManager.enableAllCookies();
         this.hideCookieNotification();
@@ -57,7 +66,7 @@ export default class CookieNotification {
 
     // Decline all but the functional cookie
     if (this.cookiesDecline !== null) {
-      this.cookiesDecline.addEventListener('click', (event) => {
+      this.cookiesDecline.addEventListener("click", event => {
         event.preventDefault();
         // Only set the functional cookie.
         this.cookieManager.disableAllCookies();
@@ -73,8 +82,9 @@ export default class CookieNotification {
    */
   public showCookieNotification(): void {
     if (this.cookieNotification !== null) {
-      this.cookieNotification.style.display = this.cookieNotification.dataset.display || 'block';
-      this.cookieNotification.classList.remove('hv-notification--hidden');
+      this.cookieNotification.style.display =
+        this.cookieNotification.dataset.display || "block";
+      this.cookieNotification.classList.remove("hv-notification--hidden");
     }
   }
 
@@ -83,7 +93,7 @@ export default class CookieNotification {
    */
   public hideCookieNotification(): void {
     if (this.cookieNotification !== null) {
-      this.cookieNotification.style.display = 'none';
+      this.cookieNotification.style.display = "none";
     }
   }
 
@@ -94,7 +104,9 @@ export default class CookieNotification {
   protected togglePreferences(enabled: boolean): void {
     const purposes = getAllPurposes();
     for (const purpose of purposes) {
-      const checkbox = <HTMLInputElement | null>document.getElementById(`cookie-preferences--${purpose}`);
+      const checkbox = <HTMLInputElement | null>(
+        document.getElementById(`cookie-preferences--${purpose}`)
+      );
       if (checkbox) {
         checkbox.checked = enabled;
       }

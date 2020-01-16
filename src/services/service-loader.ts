@@ -1,17 +1,21 @@
-import { injectFacebookPixel } from './facebook-pixel';
-import { injectGoogleAnalytics } from './google-analytics';
-import { injectGoogleTagManager } from './google-tag-manager';
-import store from '../store';
-import EventBus from '../store/event-bus';
-import { HavenService, Purpose } from '../types';
-import CookieManager from '../cookies/cookie-manager';
+import { injectFacebookPixel } from "./facebook-pixel";
+import { injectGoogleAnalytics } from "./google-analytics";
+import { injectGoogleTagManager } from "./google-tag-manager";
+import store from "../store";
+import EventBus from "../store/event-bus";
+import { HavenService, Purpose } from "../types";
+import CookieManager from "../cookies/cookie-manager";
 
 export default class ServiceLoader {
   protected cookieManager: CookieManager;
   protected injected: { [name: string]: boolean } = {};
 
   constructor() {
-    this.cookieManager = new CookieManager(store.prefix, store.type);
+    this.cookieManager = new CookieManager(
+      store.prefix,
+      store.type,
+      store.cookieAttributes
+    );
   }
 
   /**
@@ -36,7 +40,7 @@ export default class ServiceLoader {
 
     if (injector !== undefined) {
       injector(service.options || {});
-      EventBus.emit('service-loaded', service.name);
+      EventBus.emit("service-loaded", service.name);
     }
 
     this.injected[service.name] = true;
@@ -47,8 +51,12 @@ export default class ServiceLoader {
    * @param service
    */
   protected shouldBeInjected(service: HavenService): boolean {
-    return service.inject !== false && (!this.injected[service.name])
-      && (service.required || this.cookieManager.hasAllNecessaryCookiesEnabled(service.purposes));
+    return (
+      service.inject !== false &&
+      !this.injected[service.name] &&
+      (service.required ||
+        this.cookieManager.hasAllNecessaryCookiesEnabled(service.purposes))
+    );
   }
 
   /**
@@ -56,12 +64,14 @@ export default class ServiceLoader {
    * @param service
    */
   protected getInjectorFunction(service: HavenService): Function | undefined {
-    let injector: Function  | undefined;
+    let injector: Function | undefined;
     if (service.inject === true) {
       const type = service.type || service.name;
       injector = this.getDefaultInjector(type);
       if (injector === undefined) {
-        console.error(`No default injector found for ${type}. Please specify your own implementation.`);
+        console.error(
+          `No default injector found for ${type}. Please specify your own implementation.`
+        );
         return;
       }
       return injector;
@@ -76,11 +86,11 @@ export default class ServiceLoader {
    */
   public getDefaultInjector(type: string | undefined): Function | undefined {
     switch (type) {
-      case 'google-analytics':
+      case "google-analytics":
         return injectGoogleAnalytics;
-      case 'google-tag-manager':
+      case "google-tag-manager":
         return injectGoogleTagManager;
-      case 'facebook-pixel':
+      case "facebook-pixel":
         return injectFacebookPixel;
       default:
         return undefined;
@@ -98,13 +108,13 @@ export default class ServiceLoader {
     name: string,
     purposes: Purpose[],
     inject: boolean | Function,
-    options: Partial<HavenService> = {},
+    options: Partial<HavenService> = {}
   ) {
     const service = {
       name: name,
       purposes: purposes,
       inject: inject,
-      ...options,
+      ...options
     };
     store.services.push(service);
     this.injectService(service);
