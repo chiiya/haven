@@ -18,6 +18,7 @@ export default class CookieManager {
     this.prefix = prefix;
     this.type = type;
     this.attributes = attributes;
+    console.log(this.attributes);
   }
 
   /**
