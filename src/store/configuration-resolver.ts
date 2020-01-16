@@ -22,14 +22,7 @@ export default class ConfigurationResolver {
    * @param options
    */
   public static resolveBaseConfiguration(options: Partial<HavenOptions>) {
-    for (const item of [
-      "prefix",
-      "cookies",
-      "type",
-      "services",
-      "purposes",
-      "cookieAttributes"
-    ]) {
+    for (const item of ["prefix", "cookies", "type", "services", "purposes"]) {
       if (options[item] !== undefined) {
         store[item] = options[item];
       }
