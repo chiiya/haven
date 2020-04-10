@@ -1,0 +1,93 @@
+@keyframes fadeInUp{
+  from {
+    opacity: 0;
+    transform: translate3d(0, 100%, 0)
+  }
+  to {
+    opacity: 1;
+    transform: none
+  }
+}
+
+.hv-notification {
+  animation: fadeInUp 1.2s ease 0.5s forwards;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 -2px 4px -1px rgba(0, 0, 0, 0.06);
+  border-radius: 0.375rem;
+  box-sizing: border-box;
+  padding: 2rem;
+  background: #fff;
+  position: fixed;
+  left: 1rem;
+  bottom: 1rem;
+  max-width: 40rem;
+  z-index: 100;
+  opacity: 0;
+}
+
+.hv-notification--left {
+  left: 1rem;
+}
+
+.hv-notification--right {
+  right: 1rem;
+}
+
+.hv-notification a {
+  color: #f56565;
+  text-decoration: none;
+  margin-top: 0.25rem;
+}
+
+.hv-notification a:hover {
+  color: #e53e3e;
+}
+
+.hv-notification-button {
+  font-size: 12px;
+  letter-spacing: 0.25px;
+  font-weight: 900;
+  text-transform: uppercase;
+  text-align: center;
+  text-decoration: none;
+  line-height: 35px;
+  height: 35px;
+  padding: 0 15px;
+  vertical-align: middle;
+  display: inline-block;
+  overflow: hidden;
+  margin: 1rem 0.25rem 0 0;
+}
+
+.hv-notification__configure {
+  border: 1px solid #aaa;
+  color: #4299e1;
+}
+
+.hv-notification__configure:hover {
+  border-color: #4299e1;
+  background: #4299e1;
+  color: #fff;
+}
+
+.hv-notification__decline {
+  border: 1px solid #aaa;
+  color: #f56565;
+}
+
+.hv-notification__decline:hover {
+  border-color: #f56565;
+  background: #f56565;
+  color: #fff;
+}
+
+.hv-notification__accept {
+  border-color: #48bb78;
+  background-color: #48bb78;
+  color: #fff;
+}
+
+.hv-notification__accept:hover {
+  color: #fff;
+  border-color: #38a169;
+  background-color: #38a169;
+}

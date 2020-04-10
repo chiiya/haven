@@ -4,7 +4,7 @@ const ESM = process.env.ESM === 'true';
 
 module.exports = {
   input: {
-    haven: path.resolve(__dirname, `./src/index.${ESM ? 'esm' : 'umd'}.ts`)
+    haven: path.resolve(__dirname, `./src/index.${ESM ? 'esm' : 'umd'}.ts`),
   },
   banner: true,
   output: {
@@ -22,6 +22,12 @@ module.exports = {
           declaration: ESM
         }
       }
+    },
+    copy: {
+      targets: [
+        { src: 'src/themes/haven-theme-default.css', dest: 'dist/themes' },
+        { src: 'src/themes/haven-theme-detached.css', dest: 'dist/themes' },
+      ]
     },
   }
 };

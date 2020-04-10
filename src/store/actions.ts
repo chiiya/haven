@@ -1,18 +1,26 @@
-import { ActionsContext, ActionsObject, HavenOptions, HavenService, Purpose, State } from '../types';
-import CookieManager from '../cookies/cookie-manager';
-import EventBus from './event-bus';
+import {
+  ActionsContext,
+  ActionsObject,
+  HavenOptions,
+  HavenService,
+  Purpose,
+  State,
+} from '../types';
+import Cookies from '../cookies/cookies';
+import EventBus from '../events/event-bus';
 import ServiceLoader from '../services/service-loader';
 import ConfigurationResolver from '../config/configuration-resolver';
 
 const actions: ActionsObject<ActionsContext<State>> = {
   /**
    * Resolve configuration and set initial state.
+   * @param state
    * @param commit
    * @param config
    * @constructor
    */
-  RESOLVE_CONFIG({ commit }, config: Partial<HavenOptions>) {
-    const options = ConfigurationResolver.resolve(config);
+  RESOLVE_CONFIG({ state, commit }, config: Partial<HavenOptions>) {
+    const options = ConfigurationResolver.resolve(config, { ...state });
     commit('SET_INITIAL_STATE', options);
   },
 
@@ -24,14 +32,17 @@ const actions: ActionsObject<ActionsContext<State>> = {
    * @param consent
    * @constructor
    */
-  SET_CONSENT({ state, commit }, consent: { purpose: Purpose, status: boolean }) {
+  SET_CONSENT(
+    { state, commit },
+    consent: { purpose: Purpose; status: boolean }
+  ) {
     commit('SET_CONSENT', consent);
     const { purpose, status } = consent;
     if (status) {
-      CookieManager.enableCookies(purpose, state.prefix);
+      Cookies.set(`${state.prefix}-${purpose}`, 'true', state.cookieAttributes);
       EventBus.emit(`${purpose}-enabled`);
     } else {
-      CookieManager.disableCookies(purpose, state.prefix);
+      Cookies.set(`${state.prefix}-${purpose}`, 'false', state.cookieAttributes);
       EventBus.emit(`${purpose}-disabled`);
     }
   },
@@ -53,8 +64,10 @@ const actions: ActionsObject<ActionsContext<State>> = {
    */
   DISABLE_ALL_COOKIES({ getters, dispatch }) {
     const purposes: Purpose[] = getters.GET_PURPOSES;
-    purposes.map(purpose => dispatch('SET_CONSENT', { purpose, status: false }));
-    dispatch('SET_CONSENT', { purpose: 'functional', status: true })
+    purposes.map(purpose =>
+      dispatch('SET_CONSENT', { purpose, status: false })
+    );
+    dispatch('SET_CONSENT', { purpose: 'functional', status: true });
   },
 
   /**
@@ -76,8 +89,12 @@ const actions: ActionsObject<ActionsContext<State>> = {
    */
   INJECT_SERVICE({ state, getters, commit }, service: HavenService) {
     // Only inject service if it fulfills all requirement and hasn't already been injected before
-    if (state.injected[service.name] || service.inject === false
-      || (!service.required && !getters.HAS_ALL_NECESSARY_COOKIES_ENABLED(service.purposes))) {
+    if (
+      state.injected[service.name] ||
+      service.inject === false ||
+      (!service.required &&
+        !getters.HAS_ALL_NECESSARY_COOKIES_ENABLED(service.purposes))
+    ) {
       return;
     }
 

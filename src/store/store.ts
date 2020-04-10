@@ -1,47 +1,40 @@
-import EventBus from './event-bus';
+import EventBus from '../events/event-bus';
 import {
-  ActionsContext,
-  ActionsObject,
+  MutationsObject,
+  State,
   Getters,
   GettersObject,
-  MutationsObject,
-  StoreOptions,
+  ActionsObject,
+  ActionsContext,
 } from '../types';
+import state from './state';
+import mutations from './mutations';
+import getters from './getters';
+import actions from './actions';
 
-enum StoreState {
-  DEFAULT,
-  MUTATION,
-  ACTION,
-}
-
-export default class Store<S extends object = any> {
-  private _state: S;
+export default class Store {
+  private _state: State;
+  private readonly mutations: MutationsObject<State>;
+  private readonly actions: ActionsObject<ActionsContext<State>>;
   public readonly getters: Getters = {};
-  private readonly mutations: MutationsObject<S>;
-  private readonly actions: ActionsObject<ActionsContext<S>>;
-  private status: StoreState = StoreState.DEFAULT;
 
-  public constructor({ state,  getters, mutations, actions }: StoreOptions<S>) {
-    this._state = new Proxy<S>(state, {
-      set: (state, key: keyof S, value) => {
-        if (this.status !== StoreState.MUTATION) {
-          console.error('Use a mutation to update state');
-          return false;
-        }
-
-        state[key] = value;
-        EventBus.emit('state-updated');
-        this.status = StoreState.DEFAULT;
-
-        return true;
-      }
-    });
-    this.initGetters(getters || {});
-    this.mutations = mutations || {};
-    this.actions = actions || {};
+  public constructor() {
+    this._state = state;
+    this.mutations = mutations;
+    this.initGetters(getters);
+    this.actions = actions;
+    // bind commit and dispatch to self
+    const store = this;
+    const { dispatch, commit } = this;
+    this.dispatch = function boundDispatch(type, payload) {
+      return dispatch.call(store, type, payload);
+    };
+    this.commit = function boundCommit(type, payload) {
+      return commit.call(store, type, payload);
+    };
   }
 
-  get state(): S {
+  get state(): State {
     return this._state;
   }
 
@@ -49,7 +42,7 @@ export default class Store<S extends object = any> {
    * Initialize getters, binding them to the state.
    * @param getters
    */
-  protected initGetters(getters: GettersObject<S>) {
+  protected initGetters(getters: GettersObject<State>) {
     for (const key of Object.keys(getters)) {
       Object.defineProperty(this.getters, key, {
         get: () => getters[key](this._state, this.getters),
@@ -67,9 +60,9 @@ export default class Store<S extends object = any> {
       console.error(`Mutation ${mutation} not found.`);
     }
 
-    this.status = StoreState.MUTATION;
     const newState = this.mutations[mutation](this._state, payload);
     this._state = Object.assign(this._state, newState);
+    EventBus.emit('state-updated');
   }
 
   /**
@@ -77,19 +70,11 @@ export default class Store<S extends object = any> {
    * @param action
    * @param payload
    */
-  public dispatch(action: string, payload: any) {
+  public dispatch(action: string, payload?: any) {
     if (!this.actions[action]) {
       console.error(`Action ${action} not found.`);
     }
 
-    this.status = StoreState.ACTION;
-    const context = {
-      state: this.state,
-      getters: this.getters,
-      commit: this.commit,
-      dispatch: this.dispatch,
-    };
-    this.actions[action](context, payload);
+    this.actions[action](this, payload);
   }
 }
-

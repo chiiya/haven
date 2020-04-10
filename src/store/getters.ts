@@ -1,5 +1,4 @@
 import { GettersObject, Purpose, State } from '../types';
-import CookieManager from '../cookies/cookie-manager';
 import Cookies from '../cookies/cookies';
 
 const getters: GettersObject<State> = {
@@ -11,8 +10,10 @@ const getters: GettersObject<State> = {
     if (state.purposes !== undefined) {
       return state.purposes;
     }
-    const purposes = (state.services || []).map(service => service.purposes || []).flat();
-    return [...new Set(...purposes)];
+    const purposes = (state.services || [])
+      .map(service => service.purposes || [])
+      .flat();
+    return [...new Set(purposes)];
   },
 
   /**
@@ -25,7 +26,7 @@ const getters: GettersObject<State> = {
       const translations = state.translations;
       const lang = state.lang || 'en';
 
-      if (translations === undefined || translations[lang]) {
+      if (translations === undefined || !translations[lang]) {
         console.error(`HAVEN: No translations found for language \`${lang}\``);
         return undefined;
       }
@@ -43,7 +44,7 @@ const getters: GettersObject<State> = {
       }
 
       return result;
-    }
+    };
   },
 
   /**
@@ -76,7 +77,7 @@ const getters: GettersObject<State> = {
       }
 
       return cookie === undefined || cookie === 'true';
-    }
+    };
   },
 
   /**
@@ -93,8 +94,8 @@ const getters: GettersObject<State> = {
       }
 
       return true;
-    }
-  }
+    };
+  },
 };
 
 export default getters;

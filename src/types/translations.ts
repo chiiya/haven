@@ -13,6 +13,7 @@ export interface NotificationTranslation {
   policy: string;
   accept: string;
   decline: string;
+  configure: string;
 }
 
 export interface PreferencesTranslation {
