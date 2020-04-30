@@ -1,16 +1,15 @@
 const path = require("path");
 
-const ESM = process.env.ESM === 'true';
-
 module.exports = {
   input: {
-    haven: path.resolve(__dirname, `./src/index.${ESM ? 'esm' : 'umd'}.ts`)
+    haven: path.resolve(__dirname, `./src/index.umd.ts`)
   },
   banner: true,
   output: {
-    format: [ESM ? 'esm' : 'umd-min'],
+    format: 'umd-min',
     moduleName: 'haven',
     dir: 'dist',
+    extractCSS: false,
   },
   plugins: {
     yaml: {
@@ -19,7 +18,8 @@ module.exports = {
     typescript2: {
       tsconfigOverride: {
         compilerOptions: {
-          declaration: ESM
+          declaration: false,
+          sourceMap: true,
         }
       }
     },

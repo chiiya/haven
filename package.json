@@ -5,33 +5,44 @@
   "license": "MIT",
   "description": "GDPR-ready cookie consent manager with type definitions and zero dependencies",
   "main": "dist/haven.umd.min.js",
-  "module": "dist/haven.esm.js",
+  "module": "dist/esm/index.esm.js",
   "typings": "dist/index.esm.d.ts",
+  "sideEffects": false,
   "directories": {
-    "dist": "dist"
+    "dist": "dist",
+    "src": "src"
   },
   "files": [
-    "dist"
+    "dist", "src"
   ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/chiiya/haven"
   },
   "scripts": {
-    "build": "npm-run-all build:umd build:esm",
-    "build:umd": "cross-env ESM=false bili",
-    "build:esm": "cross-env ESM=true bili",
+    "build": "npm-run-all build:umd build:esm build:types",
+    "build:umd": "bili",
+    "build:esm": "rollup -c rollup.config.js",
+    "build:types": "tsc --project tsconfig.types.json",
     "docs:dev": "vuepress dev docs",
     "docs:build": "vuepress build docs",
     "test": "echo \"Error: no tests specified\" && exit 0"
   },
   "devDependencies": {
-    "@babel/core": "^7.7.2",
-    "@babel/preset-env": "latest",
+    "@babel/core": "^7.9.6",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-transform-runtime": "^7.9.6",
+    "@babel/preset-env": "^7.9.6",
+    "@babel/preset-typescript": "^7.9.0",
+    "@rollup/plugin-yaml": "^2.1.0",
     "@types/node": "^13.9.0",
     "bili": "^4.8.1",
+    "core-js": "3",
     "cross-env": "^7.0.2",
     "npm-run-all": "^4.1.5",
+    "rollup": "^2.7.5",
+    "rollup-plugin-babel": "^4.4.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-typescript2": "^0.26.0",
     "rollup-plugin-yaml": "^2.0.0",
     "ts-node": "^8.3.0",
@@ -39,8 +50,5 @@
     "tslint-config-airbnb": "^5.11.1",
     "typescript": "^3.5.3",
     "vuepress": "^1.2.0"
-  },
-  "dependencies": {
-    "core-js": "3"
   }
 }
