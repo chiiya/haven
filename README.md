@@ -109,11 +109,12 @@ For further information and configuration details, check out the
 Haven is compiled using [Babel](https://babeljs.io/) targeting browsers [with more than 1% of global usage](https://github.com/jshjohnson/Choices/blob/master/.browserslistrc) and expecting that all features listed below are available or polyfilled in browser:
 
 ```
-Object.keys
-Object.values
-Object.assign
-String.startsWith
-Array.flat
+Object.prototype.keys
+Object.prototype.values
+Object.prototype.assign
+String.prototype.startsWith
+Array.prototype.flat
+Array.prototype.forEach
 Set
 ```
 
