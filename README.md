@@ -109,16 +109,16 @@ For further information and configuration details, check out the
 Haven is compiled using [Babel](https://babeljs.io/) targeting browsers [with more than 1% of global usage](https://github.com/jshjohnson/Choices/blob/master/.browserslistrc) and expecting that all features listed below are available or polyfilled in browser:
 
 ```
-Object.prototype.keys
-Object.prototype.values
-Object.prototype.assign
-String.prototype.startsWith
-Array.prototype.flat
-Array.prototype.forEach
+Object.keys()
+Object.values()
+Object.assign()
+String.startsWith()
+Array.flat()
+Array.forEach()
 Set
 ```
 
-If you need to support a browser that does not have one of the features listed below, I suggest including a polyfill from the very good [polyfill.io](https://polyfill.io/v3/):
+If you need to support a browser that does not have one of the features listed above, I suggest including a polyfill from [polyfill.io](https://polyfill.io/v3/):
 
 ``` html
 <script crossorigin="anonymous" src="https://polyfill.io/v3/polyfill.min.js?features=Object.keys%2CObject.values%2CObject.assign%2CSet%2CString.prototype.startsWith%2CArray.prototype.flat"></script>
