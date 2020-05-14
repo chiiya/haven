@@ -29,6 +29,19 @@ The following style options may be configured:
 | `buttonBackgroundColorHover` | Custom background color on hover for the `Accept` button. |
 | `buttonTextColor`            | Custom text color for the `Accept` button.                |
 
+```javascript
+Haven.create({
+  notification: {
+    position: "top",
+    policyUrl: "/cookie-information",
+    styles: {
+      background: "#428bca",
+      textColor: "#ffffff"
+    }
+  }
+});
+```
+
 ## Custom Cookie Notification
 
 You may also use a completely custom cookie notification component, just make sure to use the following IDs on your elements:
@@ -53,22 +66,24 @@ If you are using a display option other than `block` for the wrapper element, yo
     >
       <div class="flex flex-wrap items-center">
         <div class="w-full lg:w-7/12">
-          <h3 class="border-heading">Gleich geht's los</h3>
           <p class="mt-3">
-            Wir nutzen Cookies, um Ihnen den bestmöglichen Services auf unserer
-            Webseite zu bieten.
+            We use cookies to collect and analyse information on our site's
+            performance and to enable the site to function. You can choose to
+            allow all cookies by clicking 'Allow all' or manage them
+            individually by clicking 'Manage cookie preferences', where you will
+            also find more information.
           </p>
         </div>
         <div class="w-full lg:w-5/12 mt-8 md:mt-0 flex flex-col items-center">
-          <a href="/cookie-information" class="text-center"
-            >Weitere Informationen zu unseren Cookies</a
+          <a href="/cookie-policy" class="text-center"
+            >Manage cookie preferences</a
           >
           <button
             type="button"
             id="cookie-notification__accept"
             class="mt-3 ap-btn ap-btn--primary"
           >
-            Ich stimme zu
+            Allow all
           </button>
         </div>
       </div>
