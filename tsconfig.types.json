@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig",
+  "compilerOptions": {
+    "outDir": "dist",
+    "declarationMap": true,
+    "isolatedModules": false,
+    "allowJs": false,
+    "emitDeclarationOnly": true
+  }
+}

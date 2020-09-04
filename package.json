@@ -1,47 +1,17 @@
 {
-  "name": "@chiiya/haven",
-  "version": "0.5.5",
+  "private": true,
   "author": "Elisha Witte <elishawitte@gmail.com>",
   "license": "MIT",
-  "description": "GDPR-ready cookie consent manager with type definitions and zero dependencies",
-  "main": "dist/haven.umd.min.js",
-  "module": "dist/haven.esm.js",
-  "typings": "dist/index.esm.d.ts",
-  "directories": {
-    "dist": "dist"
-  },
-  "files": [
-    "dist"
-  ],
+  "bugs": "https://github.com/chiiya/anshin/issues",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/chiiya/haven"
+    "url": "git+https://github.com/chiiya/anshin"
   },
-  "scripts": {
-    "build": "npm-run-all build:umd build:esm",
-    "build:umd": "cross-env ESM=false bili",
-    "build:esm": "cross-env ESM=true bili",
-    "docs:dev": "vuepress dev docs",
-    "docs:build": "vuepress build docs",
-    "test": "echo \"Error: no tests specified\" && exit 0",
-    "lint": "lynt src/**/*.js --ignore tests/**/*.* --typescript --react"
-  },
+  "workspaces": [
+    "packages/*"
+  ],
   "devDependencies": {
-    "@babel/core": "^7.7.2",
-    "@babel/preset-env": "latest",
-    "@types/node": "^12.6.9",
-    "@vue/babel-preset-app": "^4.1.0-beta.0",
-    "bili": "^4.8.1",
-    "core-js": "3",
-    "cross-env": "^6.0.3",
-    "lynt": "^0.5.5",
-    "npm-run-all": "^4.1.5",
-    "prettier": "^1.19.1",
-    "rollup-plugin-copy": "^3.3.0",
-    "rollup-plugin-postcss": "^2.5.0",
-    "rollup-plugin-typescript2": "^0.25.2",
-    "rollup-plugin-yaml": "^2.0.0",
-    "typescript": "^3.5.3",
-    "vuepress": "^1.2.0"
-  }
+    "lerna": "^3.22.1"
+  },
+  "name": "anshin"
 }

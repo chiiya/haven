@@ -1,0 +1,34 @@
+{
+  "name": "@anshin/plugin-notification",
+  "version": "0.1.0",
+  "author": "Elisha Witte <elishawitte@gmail.com>",
+  "license": "MIT",
+  "description": "Customizable cookie notification plugin for Anshin",
+  "main": "dist/index.min.js",
+  "module": "dist/esm/index.esm.js",
+  "typings": "dist/index.esm.d.ts",
+  "sideEffects": false,
+  "directories": {
+    "dist": "dist",
+    "src": "src"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chiiya/anshin/packages/plugin-notification"
+  },
+  "scripts": {
+    "build": "npm-run-all build:cjs build:esm build:types",
+    "build:cjs": "bili",
+    "build:esm": "rollup -c rollup.config.js",
+    "build:types": "tsc --project tsconfig.types.json",
+    "test": "echo \"Error: no tests specified\" && exit 0"
+  },
+  "devDependencies": {
+    "@anshin/core": "^0.1.0",
+    "@anshin/types": "^0.1.0"
+  }
+}

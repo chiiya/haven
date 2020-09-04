@@ -1,21 +1,21 @@
 {
   "compilerOptions": {
-    "strict": true,
-    "target": "esnext",
-    "moduleResolution": "node",
+    "declaration": true,
+    "removeComments": true,
+    "outDir": "./dist/esm",
     "esModuleInterop": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
-    "suppressImplicitAnyIndexErrors": true,
-    "lib": [
-      "esnext",
-      "dom",
-      "dom.iterable"
-    ]
+    "strict": true,
+    "noImplicitAny": true,
+    "target": "ES2019",
+    "moduleResolution": "node",
+    "lib": ["esnext", "dom", "dom.iterable", "scripthost"],
+    "resolveJsonModule": true,
+    "suppressImplicitAnyIndexErrors": true
   },
   "include": [
-    "./src"
+    "./src",
+    "./src/types"
   ],
   "exclude": [
     "node_modules"
