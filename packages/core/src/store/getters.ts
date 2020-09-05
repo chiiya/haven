@@ -1,5 +1,5 @@
 import { GettersObject, Purpose, State } from '@anshin/types';
-import Cookies from '../cookies/cookies';
+import Cookies from '../cookies';
 
 const getters: GettersObject<State> = {
   /**

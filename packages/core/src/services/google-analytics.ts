@@ -1,5 +1,5 @@
-import { hasLoadedScript } from '../helpers/dom';
-import { AnshinServiceOptions } from '@anshin/types';
+import { AnshinService, AnshinServiceOptions } from '@anshin/types';
+import { getRandomId, hasLoadedScript } from '../helpers';
 
 export interface GoogleAnalyticsOptions extends AnshinServiceOptions {
   /**
@@ -17,28 +17,7 @@ export interface GoogleAnalyticsOptions extends AnshinServiceOptions {
   name?: string;
 }
 
-/**
- * Inject google analytics service.
- * @param options
- */
-export const injectGoogleAnalytics = (options: GoogleAnalyticsOptions = {}) => {
-  // Need an ID to instantiate the service.
-  if (options.id === undefined) {
-    console.error('GOOGLE_ANALYTICS: No ID specified. Please specify an ID using `options.id`.');
-    return;
-  }
-
-  // Inject the script only once.
-  if (!hasLoadedScript('https://www.google-analytics.com/analytics.js')) {
-    injectScript();
-  }
-
-  if (options.name !== undefined) {
-    createNamedTracker(options);
-  } else {
-    createDefaultTracker(options);
-  }
-};
+type Options = AnshinService & { options: GoogleAnalyticsOptions };
 
 /**
  * Inject the google analytics script tag.
@@ -80,3 +59,34 @@ const createDefaultTracker = (options: GoogleAnalyticsOptions) => {
   }
   window.ga('send', 'pageview');
 };
+
+export function GoogleAnalytics(options: Partial<Options> = {}): AnshinService {
+  const defaults: AnshinService = {
+    name: `google-analytics-${getRandomId()}`,
+    purposes: ['analytics'],
+    title: 'Google Analytics',
+    cookies: ['_ga', '_gid', '_gat', '_gcl_au', 'AMP_TOKEN', /_dc_gtm_/, /_gac_/, /_gat_gtag_/, /_gat_/],
+    required: false,
+    options: {},
+    inject() {
+      // Need an ID to instantiate the service.
+      if (!this.options?.id) {
+        console.error('GOOGLE_ANALYTICS: No ID specified. Please specify an ID using `options.id`.');
+        return;
+      }
+
+      // Inject the script only once.
+      if (!hasLoadedScript('https://www.google-analytics.com/analytics.js')) {
+        injectScript();
+      }
+
+      if (options.name !== undefined) {
+        createNamedTracker(options);
+      } else {
+        createDefaultTracker(options);
+      }
+    }
+  };
+
+  return Object.freeze(Object.assign(defaults, options));
+}

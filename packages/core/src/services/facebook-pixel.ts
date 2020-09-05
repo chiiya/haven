@@ -1,5 +1,5 @@
-import { hasLoadedScript } from '../helpers/dom';
-import { AnshinServiceOptions } from '@anshin/types';
+import { AnshinService, AnshinServiceOptions } from '@anshin/types';
+import { getRandomId, hasLoadedScript } from '../helpers';
 
 export interface FacebookPixelOptions extends AnshinServiceOptions {
   /**
@@ -8,26 +8,7 @@ export interface FacebookPixelOptions extends AnshinServiceOptions {
   id?: string;
 }
 
-/**
- * Inject facebook pixel service.
- * @param options
- */
-export const injectFacebookPixel = (options: FacebookPixelOptions = {}) => {
-  // Need an ID to instantiate the service.
-  if (options.id === undefined) {
-    console.error('FACEBOOK_PIXEL: No ID specified. Please specify an ID using `options.id`.');
-    return;
-  }
-
-  // Inject the script only once.
-  if (!hasLoadedScript('https://connect.facebook.net/en_US/fbevents.js')) {
-    injectScript();
-  }
-
-  // Instantiate pixel instance and send initial page view.
-  window.fbq('init', options.id);
-  window.fbq('track', 'PageView');
-};
+type Options = AnshinService & { options: FacebookPixelOptions };
 
 /**
  * Inject the facebook pixel script tag.
@@ -56,3 +37,32 @@ const injectScript = () => {
   const firstScript = document.getElementsByTagName('script')[0];
   firstScript.parentNode!.insertBefore(script, firstScript);
 };
+
+export function FacebookPixel(options: Partial<Options> = {}): AnshinService {
+  const defaults: AnshinService = {
+    name: `facebook-pixel-${getRandomId()}`,
+    purposes: ['marketing', 'analytics'],
+    title: 'Facebook Pixel',
+    cookies: ['_fbp'],
+    required: false,
+    options: {},
+    inject() {
+      // Need an ID to instantiate the service.
+      if (!this.options?.id) {
+        console.error('FACEBOOK_PIXEL: No ID specified. Please specify an ID using `options.id`.');
+        return;
+      }
+
+      // Inject the script only once.
+      if (!hasLoadedScript('https://connect.facebook.net/en_US/fbevents.js')) {
+        injectScript();
+      }
+
+      // Instantiate pixel instance and send initial page view.
+      window.fbq('init', this.options.id);
+      window.fbq('track', 'PageView');
+    }
+  };
+
+  return Object.freeze(Object.assign(defaults, options));
+}

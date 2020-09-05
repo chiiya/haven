@@ -19,11 +19,10 @@ export interface AnshinService {
   purposes: Purpose[];
   title?: string;
   description?: string;
-  type?: AnshinServiceType;
   inject?: boolean | Function;
-  required?: boolean;
   cookies?: (string | RegExp)[];
   options?: AnshinServiceOptions;
+  required?: boolean;
 }
 
 export interface AnshinServiceOptions {

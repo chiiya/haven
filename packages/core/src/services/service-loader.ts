@@ -1,57 +1,18 @@
-import { injectFacebookPixel } from './facebook-pixel';
-import { injectGoogleAnalytics } from './google-analytics';
-import { injectGoogleTagManager } from './google-tag-manager';
 import { AnshinService } from '@anshin/types';
 
-export default class ServiceLoader {
+export class ServiceLoader {
   /**
    * Inject a specific service, if all requirements are met (cookies accepted _or_ service is required).
    * @param service
    */
   public static injectService(service: AnshinService): boolean {
-    const injector = this.getInjectorFunction(service);
+    const injector = service.inject;
 
-    if (injector !== undefined) {
+    if (injector !== undefined && !(injector === true || injector === false)) {
       injector(service.options || {});
       return true;
     }
 
     return false;
-  }
-
-  /**
-   * Get the injector function.
-   * @param service
-   */
-  protected static getInjectorFunction(service: AnshinService): Function | undefined {
-    let injector: Function  | undefined;
-    if (service.inject === true) {
-      const type = service.type || service.name;
-      injector = this.getDefaultInjector(type);
-      if (injector === undefined) {
-        console.error(`No default injector found for ${type}. Please specify your own implementation.`);
-        return;
-      }
-      return injector;
-    } else if (service.inject) {
-      return service.inject;
-    }
-  }
-
-  /**
-   * Get the default injector if it exists.
-   * @param type
-   */
-  protected static getDefaultInjector(type: string | undefined): Function | undefined {
-    switch (type) {
-      case 'google-analytics':
-        return injectGoogleAnalytics;
-      case 'google-tag-manager':
-        return injectGoogleTagManager;
-      case 'facebook-pixel':
-        return injectFacebookPixel;
-      default:
-        return undefined;
-    }
   }
 }

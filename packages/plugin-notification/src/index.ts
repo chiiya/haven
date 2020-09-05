@@ -1,4 +1,4 @@
-import { Anshin } from '@anshin/core';
+import { Anshin, FacebookPixel } from '@anshin/core';
 import { AnshinPlugin } from '@anshin/types';
 import NotificationComponent from './components/notification';
 import { Options } from './types';
@@ -20,5 +20,11 @@ export function CookieNotification(options: Partial<Options>): AnshinPlugin {
 
 Anshin.registerPlugin(CookieNotification({}));
 Anshin.create({
-
+  services: [
+    FacebookPixel({
+      options: {
+        id: '123123',
+      }
+    }),
+  ]
 });

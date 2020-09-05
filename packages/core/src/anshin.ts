@@ -1,8 +1,8 @@
-import store from './store';
 import { AnshinOptions, ConsentStatus, AnshinPlugin } from '@anshin/types';
+import store from './store';
 import EventBus, { EventBusSubscription } from './events/event-bus';
-import Store from "./store/store";
-import ConsentRevoke from "./services/consent-revoke";
+import Store from './store/store';
+import { ConsentRevoke } from './services';
 
 declare global {
   interface Window {

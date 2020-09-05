@@ -1,5 +1,5 @@
 import { AnshinOptions, AnshinPlugin } from '@anshin/types';
-import { mergeDeep } from "../helpers/merge";
+import { mergeDeep } from '../helpers';
 
 export default class ConfigurationResolver {
   /**

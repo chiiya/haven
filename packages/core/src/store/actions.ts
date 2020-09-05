@@ -6,9 +6,9 @@ import {
   Purpose,
   State,
 } from '@anshin/types';
-import Cookies from '../cookies/cookies';
+import Cookies from '../cookies';
 import EventBus from '../events/event-bus';
-import ServiceLoader from '../services/service-loader';
+import { ServiceLoader } from '../services';
 import ConfigurationResolver from '../config/configuration-resolver';
 
 interface ConfigResolveOptions {

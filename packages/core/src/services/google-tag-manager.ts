@@ -1,5 +1,5 @@
-import { AnshinServiceOptions } from '@anshin/types';
-import { hasLoadedScript } from '../helpers/dom';
+import { AnshinService, AnshinServiceOptions } from '@anshin/types';
+import { getRandomId, hasLoadedScript } from '../helpers';
 
 export interface GoogleTagManagerOptions extends AnshinServiceOptions {
   /**
@@ -8,24 +8,7 @@ export interface GoogleTagManagerOptions extends AnshinServiceOptions {
   id?: string;
 }
 
-/**
- * Inject the google tag manager service.
- * @param options
- */
-export const injectGoogleTagManager = (options: GoogleTagManagerOptions = {}) => {
-  // Need an ID to instantiate the service.
-  if (options.id === undefined) {
-    console.error('GOOGLE_TAG_MANAGER: No ID specified. Please specify an ID using `options.id`.');
-    return;
-  }
-
-  // Inject the script only once.
-  if (hasLoadedScript(`https://www.googletagmanager.com/gtm.js?id=${options.id}`)) {
-    return;
-  }
-
-  injectScript(options);
-};
+type Options = AnshinService & { options: GoogleTagManagerOptions };
 
 /**
  * Inject the google tag manager script tag.
@@ -41,3 +24,30 @@ const injectScript = (options: GoogleTagManagerOptions) => {
   script.src = `https://www.googletagmanager.com/gtm.js?id=${options.id}`;
   firstScript.parentNode!.insertBefore(script, firstScript);
 };
+
+export function GoogleTagManager(options: Partial<Options> = {}): AnshinService {
+  const defaults: AnshinService = {
+    name: `google-tag-manager-${getRandomId()}`,
+    purposes: ['analytics'],
+    title: 'Google Tag Manager',
+    cookies: ['_ga', '_gid', '_gat', '_gcl_au', 'AMP_TOKEN', /_dc_gtm_/, /_gac_/, /_gat_gtag_/, /_gat_/],
+    required: false,
+    options: {},
+    inject() {
+      // Need an ID to instantiate the service.
+      if (!this.options?.id) {
+        console.error('GOOGLE_TAG_MANAGER: No ID specified. Please specify an ID using `options.id`.');
+        return;
+      }
+
+      // Inject the script only once.
+      if (hasLoadedScript(`https://www.googletagmanager.com/gtm.js?id=${this.options.id}`)) {
+        return;
+      }
+
+      injectScript(this.options);
+    }
+  };
+
+  return Object.freeze(Object.assign(defaults, options));
+}
