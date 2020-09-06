@@ -1,117 +1,141 @@
 import {
-  ActionsContext,
-  ActionsObject,
-  AnshinOptions, AnshinPlugin,
+  AnshinActions,
+  AnshinOptions,
   AnshinService,
-  Purpose,
-  State,
+  AnshinStore,
+  ConsentDTO,
+  ConsentStatus,
+  Purpose
 } from '@anshin/types';
 import Cookies from '../cookies';
 import EventBus from '../events/event-bus';
-import { ServiceLoader } from '../services';
 import ConfigurationResolver from '../config/configuration-resolver';
 
-interface ConfigResolveOptions {
-  options: Partial<AnshinOptions>;
-  plugins: AnshinPlugin[];
-}
+type AnshinActionsModule = (set: (fn: (state: AnshinStore) => void) => void) => AnshinActions;
 
-const actions: ActionsObject<ActionsContext<State>> = {
-  /**
-   * Resolve configuration and set initial state.
-   * @param state
-   * @param commit
-   * @param options
-   * @param plugins
-   * @constructor
-   */
-  RESOLVE_CONFIG({ state, commit }, { options, plugins }: ConfigResolveOptions) {
-    const config = ConfigurationResolver.resolve(options, plugins, { ...state });
-    commit('SET_STATE', config);
-  },
+const actions: AnshinActionsModule = (set: (fn: (state: AnshinStore) => void) => void) => {
+  return {
+    /**
+     * Resolve configuration and set initial options state.
+     * @param options
+     */
+    RESOLVE_CONFIG: (options: Partial<AnshinOptions>) => set(state => {
+      state.options = ConfigurationResolver.resolve(options, { ...state.options });
+    }),
 
-  /**
-   * Set consent status for a given purpose. Will update the state, set cookies and
-   * dispatch necessary events.
-   * @param state
-   * @param commit
-   * @param consent
-   * @constructor
-   */
-  SET_CONSENT(
-    { state, commit },
-    consent: { purpose: Purpose; status: boolean }
-  ) {
-    commit('SET_CONSENT', consent);
-    const { purpose, status } = consent;
-    if (status) {
-      Cookies.set(`${state.prefix}-${purpose}`, 'true', state.cookieAttributes);
-      EventBus.emit(`${purpose}-enabled`);
-    } else {
-      Cookies.set(`${state.prefix}-${purpose}`, 'false', state.cookieAttributes);
-      EventBus.emit(`${purpose}-disabled`);
-    }
-  },
+    /**
+     * Set consent status for a given purpose. Will update the state, set cookies and
+     * dispatch necessary events.
+     * @param consent
+     */
+    SET_CONSENT: ({ purpose, status }: ConsentDTO) => set((state) => {
+      state.consent[purpose] = status;
+      if (status) {
+        Cookies.set(`${state.options.prefix}-${purpose}`, 'true', state.options.cookieAttributes);
+        EventBus.emit(`${purpose}-enabled`);
+      } else {
+        Cookies.set(`${state.options.prefix}-${purpose}`, 'false', state.options.cookieAttributes);
+        EventBus.emit(`${purpose}-disabled`);
+      }
+      if (state.getters.HAS_ALL_COOKIES_SET()) {
+        EventBus.emit('cookies-set');
+      }
+    }),
 
-  /**
-   * Enable cookies for all purposes.
-   * @param getters
-   * @param commit
-   */
-  ENABLE_ALL_COOKIES({ getters, dispatch }) {
-    const purposes: Purpose[] = ['functional', ...getters.GET_PURPOSES];
-    purposes.map(purpose => dispatch('SET_CONSENT', { purpose, status: true }));
-    EventBus.emit('cookies-set');
-  },
+    /**
+     * Set all initial consent values. Does _not_ set any cookies. Use SET_CONSENT on individual purposes
+     * to set cookies.
+     * @param consents
+     */
+    SET_INITIAL_CONSENT_VALUES: (consents: ConsentStatus) => set(state => {
+      for (const purpose of Object.keys(consents)) {
+        const consent = consents[purpose];
+        if (consent) {
+          EventBus.emit(`${purpose}-enabled`);
+        } else {
+          EventBus.emit(`${purpose}-disabled`);
+        }
+      }
 
-  /**
-   * Disable cookies for all purposes (except functional).
-   * @param getters
-   * @param dispatch
-   */
-  DISABLE_ALL_COOKIES({ getters, dispatch }) {
-    const purposes: Purpose[] = getters.GET_PURPOSES;
-    purposes.map(purpose =>
-      dispatch('SET_CONSENT', { purpose, status: false })
-    );
-    dispatch('SET_CONSENT', { purpose: 'functional', status: true });
-    EventBus.emit('cookies-set');
-  },
+      if (state.getters.HAS_ALL_COOKIES_SET()) {
+        EventBus.emit('cookies-set');
+      }
 
-  /**
-   * Inject all registered services that can be injected.
-   * @param state
-   * @param dispatch
-   */
-  INJECT_SERVICES({ state, dispatch }) {
-    for (const service of state.services || []) {
-      dispatch('INJECT_SERVICE', service);
-    }
-  },
+      state.consent = consents;
+    }),
 
-  /**
-   * Inject a given service, when possible.
-   * @param state
-   * @param getters
-   * @param commit
-   * @param service
-   */
-  INJECT_SERVICE({ state, getters, commit }, service: AnshinService) {
-    // Only inject service if it fulfills all requirement and hasn't already been injected before
-    if (
-      state.injected[service.name] ||
-      service.inject === false ||
-      (!service.required &&
-        !getters.HAS_ALL_NECESSARY_COOKIES_ENABLED(service.purposes))
-    ) {
-      return;
-    }
+    /**
+     * Enable cookies for all purposes.
+     */
+    ENABLE_ALL_COOKIES: () => set(state => {
+      const purposes: Purpose[] = ['functional', ...state.getters.GET_PURPOSES()];
+      purposes.map(purpose => state.actions.SET_CONSENT({ purpose, status: true }));
+      EventBus.emit('cookies-set');
+    }),
 
-    if (ServiceLoader.injectService(service)) {
-      commit('SET_INJECTED', service.name);
-      EventBus.emit('service-loaded', service.name);
-    }
-  },
+    /**
+     * Disable cookies for all purposes (except functional).
+     */
+    DISABLE_ALL_COOKIES: () => set(state => {
+      const purposes: Purpose[] = state.getters.GET_PURPOSES();
+      purposes.map(purpose => state.actions.SET_CONSENT({ purpose, status: false }));
+      state.actions.SET_CONSENT({ purpose: 'functional', status: true });
+      EventBus.emit('cookies-set');
+    }),
+
+    /**
+     * Inject all registered services that can be injected.
+     */
+    INJECT_SERVICES: () => set(state => {
+      for (const service of state.options.services || []) {
+        state.actions.INJECT_SERVICE(service);
+      }
+    }),
+
+    /**
+     * Inject a given service, when possible.
+     * @param service
+     */
+    INJECT_SERVICE: (service: AnshinService) => set(state => {
+      // Only inject service if it fulfills all requirement and hasn't already been injected before
+      if (
+        state.injected[service.name] ||
+        service.inject === false ||
+        (!service.required &&
+          !state.getters.HAS_ALL_NECESSARY_COOKIES_ENABLED(service.purposes))
+      ) {
+        return;
+      }
+
+      if (injectService(service)) {
+        state.injected[service.name] = true;
+        EventBus.emit('service-loaded', service.name);
+      }
+    }),
+
+    SET_SHOW_NOTIFICATION: (showNotification: boolean) => set(state => {
+      state.showNotification = showNotification;
+    }),
+
+    SET_SHOW_PREFERENCES: (showPreferences: boolean) => set(state => {
+      state.showPreferences = showPreferences;
+    }),
+  }
 };
+
+/**
+ * Inject a specific service, if all requirements are met (cookies accepted _or_ service is required).
+ * @param service
+ */
+function injectService(service: AnshinService): boolean {
+  const injector = service.inject;
+
+  if (injector !== undefined && !(injector === true || injector === false)) {
+    injector(service.options || {});
+    return true;
+  }
+
+  return false;
+}
 
 export default actions;

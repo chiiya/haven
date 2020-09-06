@@ -43,6 +43,7 @@ export function FacebookPixel(options: Partial<Options> = {}): AnshinService {
     name: `facebook-pixel-${getRandomId()}`,
     purposes: ['marketing', 'analytics'],
     title: 'Facebook Pixel',
+    description: 'Identifies browsers for the purposes of providing advertising and site analytics services.',
     cookies: ['_fbp'],
     required: false,
     options: {},

@@ -1,13 +1,15 @@
-import { CookieAttributes } from "./cookies";
+import { CookieAttributes } from './cookies';
 
-export interface AnshinOptions {
+export type AnshinOptions = {
   prefix: string;
   cookieAttributes: CookieAttributes;
   domains: string[];
   cookies: AnshinCustomCookies;
   type: ConsentType;
   services: AnshinService[];
+  thirdPartyServices?: AnshinThirdPartyService[];
   purposes?: Purpose[];
+  plugins: AnshinPlugin[];
 }
 
 export interface AnshinCustomCookies {
@@ -25,6 +27,13 @@ export interface AnshinService {
   required?: boolean;
 }
 
+export interface AnshinThirdPartyService {
+  title?: string;
+  description?: string;
+  cookies?: (string | RegExp)[];
+  link?: string;
+}
+
 export interface AnshinServiceOptions {
   [option: string]: any;
 }
@@ -36,10 +45,6 @@ export type Purpose =
   | 'marketing'
   | 'preferences'
   | string;
-export type AnshinServiceType =
-  | 'google-analytics'
-  | 'google-tag-manager'
-  | 'facebook-pixel';
 
 export interface AnshinPlugin {
   config?: Function;

@@ -65,6 +65,7 @@ export function GoogleAnalytics(options: Partial<Options> = {}): AnshinService {
     name: `google-analytics-${getRandomId()}`,
     purposes: ['analytics'],
     title: 'Google Analytics',
+    description: 'Collects information about the users and their activity on the website for analytics and reporting purposes.',
     cookies: ['_ga', '_gid', '_gat', '_gcl_au', 'AMP_TOKEN', /_dc_gtm_/, /_gac_/, /_gat_gtag_/, /_gat_/],
     required: false,
     options: {},

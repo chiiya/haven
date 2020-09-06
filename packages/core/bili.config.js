@@ -1,4 +1,4 @@
-const path = require("path");
+const path = require('path');
 
 module.exports = {
   input: {
@@ -6,6 +6,8 @@ module.exports = {
   },
   banner: true,
   output: {
+    format: 'umd-min',
+    moduleName: 'anshin',
     dir: 'dist',
     extractCSS: false,
   },

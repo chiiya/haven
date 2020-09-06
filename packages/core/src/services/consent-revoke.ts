@@ -7,12 +7,13 @@ export class ConsentRevoke {
    * Remove all cookies set by tracking services after opt-out / consent revoke.
    */
   public static removeAllCookies(): void {
-    for (const service of store.state.services) {
+    for (const service of store.getState().options.services) {
       this.removeCookies(service.cookies || []);
     }
     // Remove user specified cookies across all domains as well.
-    if (store.state.cookies) {
-      Object.values(store.state.cookies).map(cookies => this.removeCookies(cookies));
+    const cookies = store.getState().options.cookies;
+    if (cookies) {
+      Object.values(cookies).map(cookies => this.removeCookies(cookies));
     }
     window.location.reload();
   }
@@ -22,14 +23,15 @@ export class ConsentRevoke {
    * @param purpose
    */
   public static removeCookiesForPurpose(purpose: Purpose) {
-    for (const service of store.state.services) {
+    for (const service of store.getState().options.services) {
       if (service.purposes.indexOf(purpose) !== -1) {
         this.removeCookies(service.cookies || []);
       }
     }
     // Remove user specified cookies across all domains as well.
-    if (store.state.cookies && store.state.cookies[purpose]) {
-      this.removeCookies(store.state.cookies[purpose]);
+    const cookies = store.getState().options.cookies;
+    if (cookies && cookies[purpose]) {
+      this.removeCookies(cookies[purpose]);
     }
   }
 
@@ -39,7 +41,7 @@ export class ConsentRevoke {
    */
   protected static removeCookies(cookies: (string | RegExp)[]): void {
     for (const cookie of cookies) {
-      for (const domain of store.state.domains) {
+      for (const domain of store.getState().options.domains) {
         Cookies.remove(cookie, { domain });
       }
       Cookies.remove(cookie);

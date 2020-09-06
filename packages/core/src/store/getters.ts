@@ -1,70 +1,67 @@
-import { GettersObject, Purpose, State } from '@anshin/types';
+import { AnshinGetters, AnshinStore, Purpose } from '@anshin/types';
 import Cookies from '../cookies';
+import { GetState } from 'zustand';
 
-const getters: GettersObject<State> = {
-  /**
-   * Get all purposes used within the application.
-   * @param state
-   */
-  GET_PURPOSES(state: State): Purpose[] {
-    if (state.purposes !== undefined) {
-      return state.purposes;
-    }
-    const purposes = (state.services || [])
-      .map(service => service.purposes || [])
-      .flat();
-    return [...new Set(purposes)];
-  },
+type AnshinGettersModule = (get: GetState<AnshinStore>) => AnshinGetters;
 
-  /**
-   * Check whether cookies for all purposes have been set, regardless of whether they have been
-   * accepted or not.
-   * @param state
-   * @param getters
-   */
-  HAS_ALL_COOKIES_SET(state: State, getters) {
-    const purposes: Purpose[] = ['functional', ...getters.GET_PURPOSES];
-    for (const purpose of purposes) {
-      if (!Cookies.exists(`${state.prefix}-${purpose}`)) {
-        return false;
-      }
-    }
-
-    return true;
-  },
-
-  /**
-   * Check whether cookies for a given purpose have been enabled.
-   * @param state
-   */
-  HAS_COOKIES_ENABLED(state: State) {
-    return (purpose: Purpose): boolean => {
-      const cookie = Cookies.get(`${state.prefix}-${purpose}`);
-
-      if (state.type === 'opt-in') {
-        return cookie === 'true';
+const getters: AnshinGettersModule = (get) => {
+  return {
+    /**
+     * Get all purposes used within the application.
+     */
+    GET_PURPOSES: () => {
+      const userDefinedPurposes = get().options.purposes;
+      if (userDefinedPurposes !== undefined) {
+        return userDefinedPurposes;
       }
 
-      return cookie === undefined || cookie === 'true';
-    };
-  },
+      const purposes = (get().options.services || [])
+        .map(service => service.purposes || [])
+        .flat();
+      return [...new Set(purposes)];
+    },
 
-  /**
-   * Check whether cookies for _all_ given purposes have been enabled.
-   * @param state
-   * @param getters
-   */
-  HAS_ALL_NECESSARY_COOKIES_ENABLED(state: State, getters) {
-    return (purposes: Purpose[] = []): boolean => {
+    /**
+     * Check whether cookies for all purposes have been set, regardless of whether they have been
+     * accepted or not.
+     */
+    HAS_ALL_COOKIES_SET: () => {
+      const purposes: Purpose[] = ['functional', ...get().getters.GET_PURPOSES()];
       for (const purpose of purposes) {
-        if (!getters.HAS_COOKIES_ENABLED(purpose)) {
+        if (!Cookies.exists(`${get().options.prefix}-${purpose}`)) {
           return false;
         }
       }
 
       return true;
-    };
-  },
+    },
+
+    /**
+     * Check whether cookies for a given purpose have been enabled.
+     */
+    HAS_COOKIES_ENABLED: (purpose: Purpose) => {
+      const cookie = Cookies.get(`${get().options.prefix}-${purpose}`);
+
+      if (get().options.type === 'opt-in') {
+        return cookie === 'true';
+      }
+
+      return cookie === undefined || cookie === 'true';
+    },
+
+    /**
+     * Check whether cookies for _all_ given purposes have been enabled.
+     */
+    HAS_ALL_NECESSARY_COOKIES_ENABLED: (purposes: Purpose[] = []) => {
+      for (const purpose of purposes) {
+        if (!get().getters.HAS_COOKIES_ENABLED(purpose)) {
+          return false;
+        }
+      }
+
+      return true;
+    },
+  }
 };
 
 export default getters;

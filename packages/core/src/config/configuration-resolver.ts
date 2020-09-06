@@ -1,16 +1,15 @@
-import { AnshinOptions, AnshinPlugin } from '@anshin/types';
+import { AnshinOptions } from '@anshin/types';
 import { mergeDeep } from '../helpers';
+import EventBus from '../events/event-bus';
 
 export default class ConfigurationResolver {
   /**
    * Resolve configuration using some default options.
    * @param options
-   * @param plugins
    * @param config
    */
   public static resolve(
     options: Partial<AnshinOptions>,
-    plugins: AnshinPlugin[],
     config: AnshinOptions
   ): AnshinOptions {
     let resolved = config;
@@ -21,11 +20,13 @@ export default class ConfigurationResolver {
 
     this.resolveBaseConfiguration(resolved, options);
 
-    for (const plugin of plugins) {
+    for (const plugin of options.plugins || []) {
       if (plugin.config) {
         resolved = mergeDeep(resolved, plugin.config());
       }
     }
+
+    EventBus.emit('config-resolved', resolved);
 
     return resolved;
   }
