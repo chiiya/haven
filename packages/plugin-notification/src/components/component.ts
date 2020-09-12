@@ -1,19 +1,24 @@
-import { Anshin } from '@anshin/core';
-import { EventStore } from '../event-store';
-import { AnshinStore } from "@anshin/types";
+import { AnshinActions, AnshinStore, PluginParameters } from '@anshin/types';
+import { GetState } from 'zustand/vanilla';
 import { Options } from '../types';
+import { EventStore } from '../event-store';
 
 export default abstract class Component {
-  protected eventStore = EventStore();
-  protected store: AnshinStore;
+  protected events = EventStore();
+  protected state: GetState<AnshinStore>;
+  protected commit: (action: keyof AnshinActions, data?: any) => void;
   protected options: Options;
 
-  public constructor(store: AnshinStore, options: Options) {
-    this.store = store;
+  public constructor({ store, commit, events}: PluginParameters, options: Options) {
+    const { getState, subscribe } = store;
     this.options = options;
-    Anshin.on('state-updated', () => {
+    this.commit = commit;
+    this.state = getState;
+    subscribe(() => {
       this.render();
-    });
+    }, state => state.consent);
+    // Render once since we might not be able to catch the initial state change.
+    this.render();
   }
 
   abstract render(): void;

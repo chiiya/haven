@@ -1,14 +1,20 @@
-import { Anshin, FacebookPixel } from '@anshin/core';
-import { AnshinPlugin } from '@anshin/types';
+import { AnshinPlugin, PluginParameters } from '@anshin/types';
 import NotificationComponent from './components/notification';
 import { Options } from './types';
+import { resolveOptions } from './helpers/options';
 
-export function CookieNotification(options: Partial<Options>): AnshinPlugin {
+export function CookieNotification(options: Partial<Options> = {}): AnshinPlugin {
 
-  function register() {
-    Anshin.on('dom-loaded', () => {
-      new NotificationComponent(Anshin.store(), options);
-    });
+  const config = resolveOptions(options);
+
+  function register(parameters : PluginParameters) {
+    if (/complete|interactive|loaded/.test(document.readyState)) {
+      new NotificationComponent(parameters, config);
+    } else {
+      document.addEventListener('DOMContentLoaded', () => {
+        new NotificationComponent(parameters, config);
+      });
+    }
   }
 
   const self: AnshinPlugin = {
@@ -17,14 +23,3 @@ export function CookieNotification(options: Partial<Options>): AnshinPlugin {
 
   return Object.freeze(self);
 }
-
-Anshin.registerPlugin(CookieNotification({}));
-Anshin.create({
-  services: [
-    FacebookPixel({
-      options: {
-        id: '123123',
-      }
-    }),
-  ]
-});

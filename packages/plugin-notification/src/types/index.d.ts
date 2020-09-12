@@ -1,14 +1,14 @@
 export interface Options {
   lang: string;
   notification: HavenNotificationOptions;
-  translation: Translations;
+  translations: Translations;
 }
 
 export interface HavenNotificationOptions {
   positionX: 'left' | 'right';
   positionY: 'top' | 'bottom';
   includePolicyUrl: boolean;
-  policyUrl: string;
+  policyUrl?: string;
 }
 
 export interface Translations {
@@ -26,6 +26,7 @@ export interface NotificationTranslation {
   policy: string;
   accept: string;
   decline: string;
+  configure: string;
 }
 
 export interface PreferencesTranslation {

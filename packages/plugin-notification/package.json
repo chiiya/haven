@@ -2,8 +2,17 @@
   "name": "@anshin/plugin-notification",
   "version": "0.1.0",
   "author": "Elisha Witte <elishawitte@gmail.com>",
-  "license": "MIT",
   "description": "Customizable cookie notification plugin for Anshin",
+  "keywords": [
+    "anshin",
+    "cookies",
+    "cookie-notification"
+  ],
+  "homepage": "https://github.com/chiiya/anshin/tree/master/packages/plugin-notification#readme",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "dist/index.min.js",
   "module": "dist/esm/index.esm.js",
   "typings": "dist/index.esm.d.ts",
@@ -21,14 +30,18 @@
     "url": "git+https://github.com/chiiya/anshin/packages/plugin-notification"
   },
   "scripts": {
-    "build": "npm-run-all build:cjs build:esm build:types",
-    "build:cjs": "bili",
-    "build:esm": "rollup -c rollup.config.js",
+    "build": "npm-run-all build:bundle build:types",
+    "build:bundle": "rollup -c rollup.config.js",
     "build:types": "tsc --project tsconfig.types.json",
     "test": "echo \"Error: no tests specified\" && exit 0"
   },
+  "dependencies": {
+    "@babel/runtime": "^7.11.2",
+    "deepmerge": "^4.2.2"
+  },
   "devDependencies": {
-    "@anshin/core": "^0.1.0",
-    "@anshin/types": "^0.1.0"
+    "@anshin/types": "^0.1.0",
+    "@types/deepmerge": "^2.2.0",
+    "zustand": "^3.1.2"
   }
 }
