@@ -1,5 +1,5 @@
 import { Purpose } from '@anshin/types';
-import store from '../store';
+import { store } from '../store';
 import Cookies from '../cookies';
 
 export class ConsentRevoke {

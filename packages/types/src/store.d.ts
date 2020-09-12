@@ -30,8 +30,10 @@ export interface AnshinActions {
   DISABLE_ALL_COOKIES: () => void;
   INJECT_SERVICES: () => void;
   INJECT_SERVICE: (service: AnshinService) => void;
-  SET_SHOW_NOTIFICATION: (showNotification: boolean) => void;
-  SET_SHOW_PREFERENCES: (showPreferences: boolean) => void;
+  SHOW_NOTIFICATION: () => void;
+  HIDE_NOTIFICATION: () => void;
+  SHOW_PREFERENCES: () => void;
+  HIDE_PREFERENCES: () => void;
 }
 
 export interface ConsentStatus {

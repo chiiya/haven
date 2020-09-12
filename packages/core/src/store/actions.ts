@@ -113,12 +113,20 @@ const actions: AnshinActionsModule = (set: (fn: (state: AnshinStore) => void) =>
       }
     }),
 
-    SET_SHOW_NOTIFICATION: (showNotification: boolean) => set(state => {
-      state.showNotification = showNotification;
+    SHOW_NOTIFICATION: () => set(state => {
+      state.showNotification = true;
     }),
 
-    SET_SHOW_PREFERENCES: (showPreferences: boolean) => set(state => {
-      state.showPreferences = showPreferences;
+    HIDE_NOTIFICATION: () => set(state => {
+      state.showNotification = false;
+    }),
+
+    SHOW_PREFERENCES: () => set(state => {
+      state.showPreferences = true;
+    }),
+
+    HIDE_PREFERENCES: () => set(state => {
+      state.showPreferences = false;
     }),
   }
 };

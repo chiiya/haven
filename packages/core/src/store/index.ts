@@ -1,7 +1,7 @@
 import produce from 'immer';
 import create from 'zustand/vanilla';
 import { State, StateCreator } from 'zustand';
-import { AnshinStore } from '@anshin/types';
+import { AnshinActions, AnshinStore } from '@anshin/types';
 import getters from './getters';
 import actions from './actions';
 
@@ -33,4 +33,11 @@ const store = create<AnshinStore>(
   }))
 );
 
-export default store;
+const setState = (fn: (state: AnshinStore) => void) => store.setState(produce(fn));
+const commit = (action: keyof AnshinActions, data: any = {}) => store.getState().actions[action](data);
+
+export {
+  store,
+  setState,
+  commit,
+}

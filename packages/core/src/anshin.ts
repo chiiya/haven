@@ -1,5 +1,6 @@
 import { AnshinOptions, ConsentStatus, AnshinStore } from '@anshin/types';
-import store from './store';
+import { store, commit } from './store';
+import Cookies from './cookies';
 import EventBus, { EventBusSubscription } from './events/event-bus';
 import { ConsentRevoke, FacebookPixel, GoogleAnalytics, GoogleTagManager } from './services';
 import { StoreApi } from 'zustand';
@@ -11,6 +12,7 @@ declare global {
     fbq: Function;
     _fbq: Function;
     Anshin: typeof Anshin;
+    Cookies: typeof Cookies;
   }
 }
 
@@ -27,20 +29,12 @@ export default class Anshin {
       }
     }
 
-    store.getState().actions.RESOLVE_CONFIG(options);
+    commit('RESOLVE_CONFIG', options);
   }
 
   public init(): void {
     this.registerDefaultListeners();
     this.checkInitialState();
-
-    if (/complete|interactive|loaded/.test(document.readyState)) {
-      EventBus.emit('dom-loaded');
-    } else {
-      document.addEventListener('DOMContentLoaded', () => {
-        EventBus.emit('dom-loaded');
-      });
-    }
   }
 
   /**
@@ -54,7 +48,7 @@ export default class Anshin {
       consents[purpose] = store.getState().getters.HAS_COOKIES_ENABLED(purpose);
     }
 
-    store.getState().actions.SET_INITIAL_CONSENT_VALUES(consents);
+    commit('SET_INITIAL_CONSENT_VALUES', consents);
   }
 
   /**
@@ -64,15 +58,12 @@ export default class Anshin {
     const purposes = store.getState().getters.GET_PURPOSES();
     for (const purpose of purposes) {
       EventBus.on(`${purpose}-enabled`, () => {
-        store.getState().actions.INJECT_SERVICES();
+        commit('INJECT_SERVICES');
       });
       EventBus.on(`${purpose}-disabled`, () => {
         ConsentRevoke.removeCookiesForPurpose(purpose);
       });
     }
-    EventBus.on('cookies-set', () => {
-      store.getState().actions.SET_SHOW_NOTIFICATION(false);
-    });
   }
 
   /**

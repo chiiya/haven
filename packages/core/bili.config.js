@@ -2,7 +2,7 @@ const path = require('path');
 
 module.exports = {
   input: {
-    anshin: path.resolve(__dirname, `./src/index.ts`)
+    anshin: path.resolve(__dirname, `./src/index.umd.ts`)
   },
   banner: true,
   output: {
