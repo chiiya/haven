@@ -1,0 +1,46 @@
+{
+  "name": "@anshin/service-facebook-pixel",
+  "version": "0.1.0",
+  "description": "Facebook Pixel injectable service for Anshin",
+  "keywords": [
+    "anshin",
+    "service",
+    "facebook",
+    "facebook-pixel"
+  ],
+  "author": "Elisha Witte <elishawitte@gmail.com>",
+  "homepage": "https://github.com/chiiya/anshin/tree/master/packages/service-facebook-pixel#readme",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "dist/facebook-pixel.js",
+  "module": "dist/esm/index.js",
+  "typings": "dist/index.d.ts",
+  "sideEffects": false,
+  "directories": {
+    "dist": "dist",
+    "src": "src"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chiiya/anshin"
+  },
+  "scripts": {
+    "build": "npm-run-all build:bundle build:types",
+    "build:bundle": "rollup -c rollup.config.js",
+    "build:types": "tsc --project tsconfig.types.json",
+    "test": "echo \"Error: no tests specified\" && exit 0"
+  },
+  "devDependencies": {
+    "@anshin/types": "^0.1.0"
+  },
+  "dependencies": {
+    "@anshin/helpers": "^0.1.0",
+    "@babel/runtime": "^7.11.2"
+  }
+}
