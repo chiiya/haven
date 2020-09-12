@@ -1,0 +1,14 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "paths": {
+      "@anshin/types": ["../types/src"]
+    }
+  },
+  "include": [
+    "./src"
+  ],
+  "references": [{ "path": "../types" }]
+}
