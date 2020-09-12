@@ -29,7 +29,10 @@ const actions: AnshinActionsModule = (set: (fn: (state: AnshinStore) => void) =>
      * @param consent
      */
     SET_CONSENT: ({ purpose, status }: ConsentDTO) => set((state) => {
-      state.consent[purpose] = status;
+      state.consent = {
+        ...state.consent,
+        [purpose]: status,
+      };
       if (status) {
         Cookies.set(`${state.options.prefix}-${purpose}`, 'true', state.options.cookieAttributes);
         EventBus.emit(`${purpose}-enabled`);

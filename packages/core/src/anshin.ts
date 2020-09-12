@@ -1,8 +1,8 @@
-import { AnshinOptions, ConsentStatus, AnshinStore } from '@anshin/types';
+import { AnshinOptions, ConsentStatus, AnshinStore, EventBusSubscription } from '@anshin/types';
 import { store, commit } from './store';
 import Cookies from './cookies';
-import EventBus, { EventBusSubscription } from './events/event-bus';
-import { ConsentRevoke, FacebookPixel, GoogleAnalytics, GoogleTagManager } from './services';
+import EventBus from './events/event-bus';
+import { ConsentRevoke, GoogleAnalytics } from './services';
 import { StoreApi } from 'zustand';
 
 declare global {
@@ -17,38 +17,22 @@ declare global {
 }
 
 export default class Anshin {
-  public static FacebookPixel = FacebookPixel;
   public static GoogleAnalytics = GoogleAnalytics;
-  public static GoogleTagManager = GoogleTagManager;
   private static instance: Anshin;
 
   private constructor(options: Partial<AnshinOptions>) {
+    commit('RESOLVE_CONFIG', options);
     for (const plugin of options.plugins || []) {
       if (plugin.register) {
-        plugin.register();
+        plugin.register({ store, commit, events: EventBus });
       }
     }
-
-    commit('RESOLVE_CONFIG', options);
   }
 
   public init(): void {
     this.registerDefaultListeners();
     this.checkInitialState();
-  }
-
-  /**
-   * Check initial application state and fire events accordingly.
-   */
-  protected checkInitialState(): void {
-    const purposes = store.getState().getters.GET_PURPOSES();
-    const consents: ConsentStatus = {};
-
-    for (const purpose of purposes) {
-      consents[purpose] = store.getState().getters.HAS_COOKIES_ENABLED(purpose);
-    }
-
-    commit('SET_INITIAL_CONSENT_VALUES', consents);
+    console.log(store.getState());
   }
 
   /**
@@ -64,6 +48,20 @@ export default class Anshin {
         ConsentRevoke.removeCookiesForPurpose(purpose);
       });
     }
+  }
+
+  /**
+   * Check initial application state and fire events accordingly.
+   */
+  protected checkInitialState(): void {
+    const purposes = ['functional', ...store.getState().getters.GET_PURPOSES()];
+    const consents: ConsentStatus = {};
+
+    for (const purpose of purposes) {
+      consents[purpose] = store.getState().getters.HAS_COOKIES_ENABLED(purpose);
+    }
+
+    commit('SET_INITIAL_CONSENT_VALUES', consents);
   }
 
   /**

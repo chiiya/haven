@@ -1,14 +1,6 @@
-interface EventBusSubscriptions {
-  [name: string]: {
-    [id: string]: Function;
-  };
-}
+import { EventBusSubscription, EventBusSubscriptions, EventBus as IEventBus } from '@anshin/types';
 
-export interface EventBusSubscription {
-  unsubscribe: Function;
-}
-
-class EventBus {
+class EventBus implements IEventBus {
   private subscriptions: EventBusSubscriptions = {};
   private counter: number = 0;
 

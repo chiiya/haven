@@ -1,3 +1,3 @@
 export * from './anshin';
 export * from './cookies';
-export * from './store';
+export * from './events';

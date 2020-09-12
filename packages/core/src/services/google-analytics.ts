@@ -1,5 +1,5 @@
 import { AnshinService, AnshinServiceOptions } from '@anshin/types';
-import { getRandomId, hasLoadedScript } from '../helpers';
+import { getRandomId, hasLoadedScript } from '@anshin/helpers';
 
 export interface GoogleAnalyticsOptions extends AnshinServiceOptions {
   /**
@@ -22,7 +22,7 @@ type Options = AnshinService & { options: GoogleAnalyticsOptions };
 /**
  * Inject the google analytics script tag.
  */
-const injectScript = () => {
+function injectScript() {
   window.ga = window.ga || function () {
     (window.ga.q = window.ga.q || []).push(arguments);
   };
@@ -40,7 +40,7 @@ const injectScript = () => {
  * Useful when having multiple trackers.
  * @param options
  */
-const createNamedTracker = (options: GoogleAnalyticsOptions) => {
+function createNamedTracker (options: GoogleAnalyticsOptions) {
   window.ga('create', options.id, 'auto', options.name);
   if (options.anonymizeIp !== false) {
     window.ga(`${options.name}.set`, 'anonymizeIp', true);
@@ -52,13 +52,13 @@ const createNamedTracker = (options: GoogleAnalyticsOptions) => {
  * Create the default google analytics tracker.
  * @param options
  */
-const createDefaultTracker = (options: GoogleAnalyticsOptions) => {
+function createDefaultTracker(options: GoogleAnalyticsOptions) {
   window.ga('create', options.id, 'auto');
   if (options.anonymizeIp !== false) {
     window.ga('set', 'anonymizeIp', true);
   }
   window.ga('send', 'pageview');
-};
+}
 
 export function GoogleAnalytics(options: Partial<Options> = {}): AnshinService {
   const defaults: AnshinService = {
@@ -71,7 +71,7 @@ export function GoogleAnalytics(options: Partial<Options> = {}): AnshinService {
     options: {},
     inject() {
       // Need an ID to instantiate the service.
-      if (!this.options?.id) {
+      if (!options?.options?.id) {
         console.error('GOOGLE_ANALYTICS: No ID specified. Please specify an ID using `options.id`.');
         return;
       }
@@ -81,10 +81,10 @@ export function GoogleAnalytics(options: Partial<Options> = {}): AnshinService {
         injectScript();
       }
 
-      if (options.name !== undefined) {
-        createNamedTracker(options);
+      if (options.options.name !== undefined) {
+        createNamedTracker(options.options);
       } else {
-        createDefaultTracker(options);
+        createDefaultTracker(options.options);
       }
     }
   };
