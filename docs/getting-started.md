@@ -55,7 +55,7 @@ Haven.create({
 
 ### ES6+ Import
 ```javascript
-import Haven from '@chiiya@haven';
+import Haven from '@chiiya/haven';
 
 Haven.create({
     services: [
