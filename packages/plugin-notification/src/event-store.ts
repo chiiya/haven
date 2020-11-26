@@ -7,7 +7,7 @@ export type EventStore = {
     node: EventTarget,
     type: string,
     handler: EventHandler,
-    options?: EventOptions
+    options?: EventOptions,
   ) => EventStore;
   removeAll: () => EventStore;
 };
@@ -19,7 +19,7 @@ export function EventStore(): EventStore {
     node: EventTarget,
     type: string,
     handler: EventHandler,
-    options: EventOptions = false
+    options: EventOptions = false,
   ): EventStore {
     node.addEventListener(type, handler, options);
     listeners.push(() => {

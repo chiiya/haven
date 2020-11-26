@@ -17,8 +17,8 @@ export function resolveOptions(options: Partial<Options>): Options {
           accept: 'Allow',
           decline: 'Decline',
           configure: 'Configure cookies',
-        }
-      }
-    }
-  }, options)
+        },
+      },
+    },
+  }, options);
 }

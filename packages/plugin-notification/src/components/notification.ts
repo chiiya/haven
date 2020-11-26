@@ -68,7 +68,7 @@ export default class NotificationComponent extends Component {
    * Get the display property (shown or hidden).
    */
   protected get display(): string {
-    if (this.state().getters.HAS_ALL_COOKIES_SET()) {
+    if (this.getters.HAS_ALL_COOKIES_SET()) {
       return 'none';
     }
 

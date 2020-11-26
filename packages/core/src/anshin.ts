@@ -1,9 +1,8 @@
 import { AnshinOptions, ConsentStatus, AnshinStore, EventBusSubscription } from '@anshin/types';
-import { store, commit } from './store';
+import { state, getters, commit } from './store';
 import Cookies from './cookies';
 import EventBus from './events/event-bus';
 import { ConsentRevoke, GoogleAnalytics } from './services';
-import { StoreApi } from 'zustand';
 
 declare global {
   interface Window {
@@ -24,7 +23,7 @@ export default class Anshin {
     commit('RESOLVE_CONFIG', options);
     for (const plugin of options.plugins || []) {
       if (plugin.register) {
-        plugin.register({ store, commit, events: EventBus });
+        plugin.register({ store: { state, getters, commit }, events: EventBus });
       }
     }
   }
@@ -32,14 +31,13 @@ export default class Anshin {
   public init(): void {
     this.registerDefaultListeners();
     this.checkInitialState();
-    console.log(store.getState());
   }
 
   /**
    * Register some default listeners for injecting services and removing cookies.
    */
   protected registerDefaultListeners(): void {
-    const purposes = store.getState().getters.GET_PURPOSES();
+    const purposes = getters.GET_PURPOSES();
     for (const purpose of purposes) {
       EventBus.on(`${purpose}-enabled`, () => {
         commit('INJECT_SERVICES');
@@ -54,11 +52,11 @@ export default class Anshin {
    * Check initial application state and fire events accordingly.
    */
   protected checkInitialState(): void {
-    const purposes = ['functional', ...store.getState().getters.GET_PURPOSES()];
+    const purposes = ['functional', ...getters.GET_PURPOSES()];
     const consents: ConsentStatus = {};
 
     for (const purpose of purposes) {
-      consents[purpose] = store.getState().getters.HAS_COOKIES_ENABLED(purpose);
+      consents[purpose] = getters.HAS_COOKIES_ENABLED(purpose);
     }
 
     commit('SET_INITIAL_CONSENT_VALUES', consents);
@@ -77,14 +75,14 @@ export default class Anshin {
   /**
    * Get access to the store.
    */
-  public static store(): StoreApi<AnshinStore> {
-    return store;
+  public static store(): AnshinStore {
+    return { state, getters, commit };
   }
 
   public static create(options: Partial<AnshinOptions>): Anshin {
     if (Anshin.instance) {
       console.warn(
-        'Replacing an existing Anshin instance. Are you sure this behaviour is intended?'
+        'Replacing an existing Anshin instance. Are you sure this behaviour is intended?',
       );
     }
     Anshin.instance = new Anshin(options);
@@ -97,7 +95,7 @@ export default class Anshin {
       return Anshin.instance;
     }
     console.error(
-      'No Anshin instance found. Make sure to create a Anshin instance before attempting to access it.'
+      'No Anshin instance found. Make sure to create a Anshin instance before attempting to access it.',
     );
   }
 }

@@ -33,20 +33,20 @@ function injectScript() {
   const script = document.createElement('script');
   script.src = 'https://www.google-analytics.com/analytics.js';
   firstScript.parentNode!.insertBefore(script, firstScript);
-};
+}
 
 /**
  * Create a named google analytics tracker.
  * Useful when having multiple trackers.
  * @param options
  */
-function createNamedTracker (options: GoogleAnalyticsOptions) {
+function createNamedTracker(options: GoogleAnalyticsOptions) {
   window.ga('create', options.id, 'auto', options.name);
   if (options.anonymizeIp !== false) {
     window.ga(`${options.name}.set`, 'anonymizeIp', true);
   }
   window.ga(`${options.name}.send`, 'pageview');
-};
+}
 
 /**
  * Create the default google analytics tracker.
@@ -86,7 +86,7 @@ export function GoogleAnalytics(options: Partial<Options> = {}): AnshinService {
       } else {
         createDefaultTracker(options.options);
       }
-    }
+    },
   };
 
   return Object.freeze(Object.assign(defaults, options));

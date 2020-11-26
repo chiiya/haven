@@ -27,7 +27,7 @@ export default [
       }),
     ],
     preserveModules: true,
-    external: /(@anshin|deepmerge|immer|zustand|@babel\/runtime)/
+    external: /(@anshin|deepmerge|@babel\/runtime)/
   },
   {
     input: 'src/index.iife.ts',

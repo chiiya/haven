@@ -43,4 +43,3 @@ export interface Purpose {
   name: string;
   description: string;
 }
-

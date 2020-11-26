@@ -26,8 +26,5 @@
   },
   "bugs": {
     "url": "https://github.com/chiiya/anshin/issues"
-  },
-  "dependencies": {
-    "immer": "^7.0.9"
   }
 }

@@ -46,7 +46,7 @@ export function GoogleTagManager(options: Partial<Options> = {}): AnshinService 
       }
 
       injectScript(options.options);
-    }
+    },
   };
 
   return Object.freeze(Object.assign(defaults, options));

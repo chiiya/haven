@@ -1,21 +1,20 @@
-import { AnshinGetters, AnshinStore, Purpose } from '@anshin/types';
+import { AnshinGetters, AnshinState, Purpose } from '@anshin/types';
 import Cookies from '../cookies';
-import { GetState } from 'zustand';
 
-type AnshinGettersModule = (get: GetState<AnshinStore>) => AnshinGetters;
+type AnshinGettersModule = (state: AnshinState) => AnshinGetters;
 
-const getters: AnshinGettersModule = (get) => {
-  return {
+const getters: AnshinGettersModule = (state) => {
+  const module = {
     /**
      * Get all purposes used within the application.
      */
     GET_PURPOSES: () => {
-      const userDefinedPurposes = get().options.purposes;
+      const userDefinedPurposes = state.options.purposes;
       if (userDefinedPurposes !== undefined) {
         return userDefinedPurposes;
       }
 
-      const purposes = (get().options.services || [])
+      const purposes = (state.options.services || [])
         .map(service => service.purposes || [])
         .flat();
       return [...new Set(purposes)];
@@ -26,9 +25,9 @@ const getters: AnshinGettersModule = (get) => {
      * accepted or not.
      */
     HAS_ALL_COOKIES_SET: () => {
-      const purposes: Purpose[] = ['functional', ...get().getters.GET_PURPOSES()];
+      const purposes: Purpose[] = ['functional', ...module.GET_PURPOSES()];
       for (const purpose of purposes) {
-        if (!Cookies.exists(`${get().options.prefix}-${purpose}`)) {
+        if (!Cookies.exists(`${state.options.prefix}-${purpose}`)) {
           return false;
         }
       }
@@ -40,9 +39,9 @@ const getters: AnshinGettersModule = (get) => {
      * Check whether cookies for a given purpose have been enabled.
      */
     HAS_COOKIES_ENABLED: (purpose: Purpose) => {
-      const cookie = Cookies.get(`${get().options.prefix}-${purpose}`);
+      const cookie = Cookies.get(`${state.options.prefix}-${purpose}`);
 
-      if (get().options.type === 'opt-in') {
+      if (state.options.type === 'opt-in') {
         return cookie === 'true';
       }
 
@@ -54,14 +53,16 @@ const getters: AnshinGettersModule = (get) => {
      */
     HAS_ALL_NECESSARY_COOKIES_ENABLED: (purposes: Purpose[] = []) => {
       for (const purpose of purposes) {
-        if (!get().getters.HAS_COOKIES_ENABLED(purpose)) {
+        if (!module.HAS_COOKIES_ENABLED(purpose)) {
           return false;
         }
       }
 
       return true;
     },
-  }
+  };
+
+  return module;
 };
 
 export default getters;

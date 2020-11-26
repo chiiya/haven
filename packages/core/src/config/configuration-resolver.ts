@@ -10,7 +10,7 @@ export default class ConfigurationResolver {
    */
   public static resolve(
     options: Partial<AnshinOptions>,
-    config: AnshinOptions
+    config: AnshinOptions,
   ): AnshinOptions {
     let resolved = config;
 
@@ -38,7 +38,7 @@ export default class ConfigurationResolver {
    */
   public static resolveBaseConfiguration(
     config: AnshinOptions,
-    options: Partial<AnshinOptions>
+    options: Partial<AnshinOptions>,
   ) {
     const keys = ['prefix', 'cookies', 'type', 'services', 'purposes'];
     for (const item of keys) {
@@ -59,13 +59,13 @@ export default class ConfigurationResolver {
     const domains = [];
     const host = window.location.hostname;
     const simple = host.match(
-      /(?:[A-Za-z0-9-]+\.)*([A-Za-z0-9-]+\.co.uk|\.com.br|\.co.jp|\.com.au)\b/
+      /(?:[A-Za-z0-9-]+\.)*([A-Za-z0-9-]+\.co.uk|\.com.br|\.co.jp|\.com.au)\b/,
     );
     if (simple !== null) {
       domains.push(simple[1]);
     }
     const matches = host.match(
-      /(?:[A-Za-z0-9-]+\.)*([A-Za-z0-9-]+\.(?:[A-za-z]{2}|[A-Za-z]{3,}))\b/
+      /(?:[A-Za-z0-9-]+\.)*([A-Za-z0-9-]+\.(?:[A-za-z]{2}|[A-Za-z]{3,}))\b/,
     );
     if (matches !== null) {
       domains.push(matches[1]);
@@ -80,7 +80,7 @@ export default class ConfigurationResolver {
    */
   protected static normalizeDomains(domains: string[]): string[] {
     return domains.map(domain =>
-      domain.startsWith('.') ? domain : `.${domain}`
+      domain.startsWith('.') ? domain : `.${domain}`,
     );
   }
 }

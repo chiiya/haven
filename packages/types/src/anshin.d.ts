@@ -1,4 +1,3 @@
-import { StoreApi } from 'zustand';
 import { CookieAttributes } from './cookies';
 import { EventBus } from './events';
 
@@ -12,7 +11,7 @@ export type AnshinOptions = {
   thirdPartyServices?: AnshinThirdPartyService[];
   purposes?: Purpose[];
   plugins: AnshinPlugin[];
-}
+};
 
 export interface AnshinCustomCookies {
   [purpose: string]: (string | RegExp)[];
@@ -54,8 +53,7 @@ export interface AnshinPlugin {
 }
 
 export interface PluginParameters {
-  store: StoreApi<AnshinStore>;
-  commit: (action: keyof AnshinActions, data?: any) => void;
+  store: AnshinStore;
   events: EventBus;
 }
 
@@ -66,17 +64,21 @@ export interface PluginParameters {
 export type ConsentDTO = {
   purpose: Purpose;
   status: boolean;
-}
+};
 
-export type AnshinStore = {
+export type AnshinState = {
   consent: ConsentStatus;
   injected: InjectedServices;
   showNotification: boolean;
   showPreferences: boolean;
   options: AnshinOptions;
+};
+
+export type AnshinStore = {
+  state: AnshinState;
   getters: AnshinGetters;
-  actions: AnshinActions;
-}
+  commit: (action: keyof AnshinActions, data?: any) => void;
+};
 
 export interface AnshinGetters {
   GET_PURPOSES: () => Purpose[];

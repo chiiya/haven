@@ -62,7 +62,7 @@ export function FacebookPixel(options: Partial<Options> = {}): AnshinService {
       // Instantiate pixel instance and send initial page view.
       (<any>window).fbq('init', this.options.id);
       (<any>window).fbq('track', 'PageView');
-    }
+    },
   };
 
   return Object.freeze(Object.assign(defaults, options));
