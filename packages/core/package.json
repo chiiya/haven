@@ -38,11 +38,9 @@
   },
   "dependencies": {
     "@anshin/helpers": "^0.1.0",
-    "@babel/runtime": "^7.11.2",
-    "deepmerge": "^4.2.2"
+    "@babel/runtime": "^7.11.2"
   },
   "devDependencies": {
-    "@anshin/types": "^0.1.0",
-    "@types/deepmerge": "^2.2.0"
+    "@anshin/types": "^0.1.0"
   }
 }

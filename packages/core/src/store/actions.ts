@@ -74,7 +74,6 @@ const module: AnshinActionsModule = (state: AnshinState, getters: AnshinGetters)
     ENABLE_ALL_COOKIES: () => {
       const purposes: Purpose[] = ['functional', ...getters.GET_PURPOSES()];
       purposes.map(purpose => actions.SET_CONSENT({ purpose, status: true }));
-      EventBus.emit('cookies-set');
     },
 
     /**

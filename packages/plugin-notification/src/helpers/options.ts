@@ -1,8 +1,8 @@
-const merge = require('deepmerge');
+import { deepmerge } from '@anshin/helpers';
 import { Options } from '../types';
 
 export function resolveOptions(options: Partial<Options>): Options {
-  return merge({
+  return deepmerge({
     lang: 'en',
     notification: {
       positionX: 'left',

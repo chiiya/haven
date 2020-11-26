@@ -12,3 +12,5 @@ export function getRandomId(): string {
 export function hasLoadedScript(src: string) {
   return document.querySelector(`script[src="${src}"]`) !== null;
 }
+
+export * from './deep-merge';

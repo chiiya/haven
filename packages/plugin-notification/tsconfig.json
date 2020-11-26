@@ -4,11 +4,12 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "paths": {
+      "@anshin/helpers": ["../helpers/src"],
       "@anshin/types": ["../types/src"]
     }
   },
   "include": [
     "./src"
   ],
-  "references": [{ "path": "../types" }]
+  "references": [{ "path":  "../helpers" }, { "path": "../types" }]
 }

@@ -2,8 +2,6 @@ import Component from './component';
 import { translate } from '../helpers/translate';
 
 export default class NotificationComponent extends Component {
-  protected element: HTMLElement|null = null;
-
   /**
    * Render the default cookie notification component.
    */

@@ -1,6 +1,6 @@
 import { AnshinOptions } from '@anshin/types';
+import { deepmerge } from '@anshin/helpers';
 import EventBus from '../events/event-bus';
-const merge = require('deepmerge');
 
 export default class ConfigurationResolver {
   /**
@@ -22,7 +22,7 @@ export default class ConfigurationResolver {
 
     for (const plugin of options.plugins || []) {
       if (plugin.config) {
-        resolved = merge(resolved, plugin.config());
+        resolved = deepmerge(resolved, plugin.config());
       }
     }
 
