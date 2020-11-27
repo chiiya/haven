@@ -29,10 +29,10 @@ export default [
     external: /(@anshin|deepmerge|zustand|@babel\/runtime)/
   },
   {
-    input: 'src/index.iife.ts',
+    input: 'src/index.umd.ts',
     output: {
-      file: 'dist/anshin-notification.iife.js',
-      format: 'iife'
+      file: 'dist/anshin-notification.js',
+      format: 'umd'
     },
     plugins: [
       babel({

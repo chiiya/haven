@@ -30,10 +30,10 @@ export default [
     external: /@anshin|(@babel\/runtime)/
   },
   {
-    input: 'src/index.iife.ts',
+    input: 'src/index.umd.ts',
     output: {
-      file: 'dist/google-tag-manager.iife.js',
-      format: 'iife'
+      file: 'dist/google-tag-manager.js',
+      format: 'umd'
     },
     plugins: [
       babel({

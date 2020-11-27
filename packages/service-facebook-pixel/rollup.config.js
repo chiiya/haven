@@ -30,10 +30,10 @@ export default [
     external: /@anshin|(@babel\/runtime)/
   },
   {
-    input: 'src/index.iife.ts',
+    input: 'src/index.umd.ts',
     output: {
-      file: 'dist/facebook-pixel.iife.js',
-      format: 'iife'
+      file: 'dist/facebook-pixel.js',
+      format: 'umd'
     },
     plugins: [
       babel({

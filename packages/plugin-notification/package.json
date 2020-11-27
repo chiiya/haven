@@ -13,9 +13,9 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "dist/index.min.js",
-  "module": "dist/esm/index.esm.js",
-  "typings": "dist/index.esm.d.ts",
+  "main": "dist/anshin-notification.js",
+  "module": "dist/esm/index.js",
+  "typings": "dist/index.d.ts",
   "sideEffects": false,
   "directories": {
     "dist": "dist",

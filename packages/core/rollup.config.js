@@ -30,10 +30,10 @@ export default [
     external: /(@anshin|deepmerge|@babel\/runtime)/
   },
   {
-    input: 'src/index.iife.ts',
+    input: 'src/index.umd.ts',
     output: {
-      file: 'dist/anshin.iife.js',
-      format: 'iife'
+      file: 'dist/anshin.js',
+      format: 'umd',
     },
     plugins: [
       babel({
