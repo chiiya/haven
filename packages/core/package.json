@@ -1,6 +1,6 @@
 {
   "name": "@anshin/core",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "author": "Elisha Witte <elishawitte@gmail.com>",
   "description": "GDPR-ready, modular cookie consent manager with zero dependencies",
   "keywords": [
@@ -41,6 +41,6 @@
     "@babel/runtime": "^7.11.2"
   },
   "devDependencies": {
-    "@anshin/types": "^0.2.1"
+    "@anshin/types": "^0.2.2"
   }
 }
