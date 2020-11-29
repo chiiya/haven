@@ -28,10 +28,10 @@ const module: AnshinActionsModule = (state: AnshinState, getters: AnshinGetters)
      * @param consent
      */
     SET_CONSENT: ({ purpose, status }: ConsentDTO) => {
-      state.consent = {
-        ...state.consent,
+      state.consent.set({
+        ...state.consent.get(),
         [purpose]: status,
-      };
+      });
       if (status) {
         Cookies.set(`${state.options.prefix}-${purpose}`, 'true', state.options.cookieAttributes);
         EventBus.emit(`${purpose}-enabled`);
@@ -64,7 +64,7 @@ const module: AnshinActionsModule = (state: AnshinState, getters: AnshinGetters)
         EventBus.emit('cookies-set');
       }
 
-      state.consent = consents;
+      state.consent.set(consents);
       EventBus.emit('consent-updated');
     },
 
@@ -100,9 +100,10 @@ const module: AnshinActionsModule = (state: AnshinState, getters: AnshinGetters)
      * @param service
      */
     INJECT_SERVICE: (service: AnshinService) => {
+      const injected = state.injected.get();
       // Only inject service if it fulfills all requirement and hasn't already been injected before
       if (
-        state.injected[service.name] ||
+        injected[service.name] ||
         service.inject === false ||
         (!service.required &&
           !getters.HAS_ALL_NECESSARY_COOKIES_ENABLED(service.purposes))
@@ -111,25 +112,12 @@ const module: AnshinActionsModule = (state: AnshinState, getters: AnshinGetters)
       }
 
       if (injectService(service)) {
-        state.injected[service.name] = true;
+        state.injected.set({
+          ...state.injected.get(),
+          [service.name]: true,
+        });
         EventBus.emit('service-loaded', service.name);
       }
-    },
-
-    SHOW_NOTIFICATION: () => {
-      state.showNotification = true;
-    },
-
-    HIDE_NOTIFICATION: () => {
-      state.showNotification = false;
-    },
-
-    SHOW_PREFERENCES: () => {
-      state.showPreferences = true;
-    },
-
-    HIDE_PREFERENCES: () => {
-      state.showPreferences = false;
     },
   };
 

@@ -1,13 +1,12 @@
-import { AnshinActions, AnshinState } from '@anshin/types';
+import { AnshinActions, AnshinState, Store } from '@anshin/types';
 import EventBus from '../events/event-bus';
+import { store } from './store';
 import gettersModule from './getters';
 import actionsModule from './actions';
 
 const state: AnshinState = {
-  consent: {},
-  injected: {},
-  showNotification: false,
-  showPreferences: false,
+  consent: store({}),
+  injected: store({}),
   options: {
     prefix: 'cookies',
     cookieAttributes: { expires: 395 },

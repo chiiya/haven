@@ -67,10 +67,8 @@ export type ConsentDTO = {
 };
 
 export type AnshinState = {
-  consent: ConsentStatus;
-  injected: InjectedServices;
-  showNotification: boolean;
-  showPreferences: boolean;
+  consent: Store<ConsentStatus>;
+  injected: Store<InjectedServices>;
   options: AnshinOptions;
 };
 
@@ -79,6 +77,13 @@ export type AnshinStore = {
   getters: AnshinGetters;
   commit: (action: keyof AnshinActions, data?: any) => void;
 };
+
+export interface Store<T> {
+  subscribe: (callback: (val: T) => void) => () => void;
+  set: (val: T) => void;
+  update: (callback: (val: T) => T) => void;
+  get: () => T;
+}
 
 export interface AnshinGetters {
   GET_PURPOSES: () => Purpose[];
@@ -95,10 +100,6 @@ export interface AnshinActions {
   DISABLE_ALL_COOKIES: () => void;
   INJECT_SERVICES: () => void;
   INJECT_SERVICE: (service: AnshinService) => void;
-  SHOW_NOTIFICATION: () => void;
-  HIDE_NOTIFICATION: () => void;
-  SHOW_PREFERENCES: () => void;
-  HIDE_PREFERENCES: () => void;
 }
 
 export interface ConsentStatus {
