@@ -36,6 +36,13 @@ const getters: AnshinGettersModule = (state) => {
     },
 
     /**
+     * Check whether cookies for the given purpose have been set.
+     */
+    HAS_COOKIES_SET: (purpose: Purpose) => {
+      return Cookies.exists(`${state.options.prefix}-${purpose}`);
+    },
+
+    /**
      * Check whether cookies for a given purpose have been enabled.
      */
     HAS_COOKIES_ENABLED: (purpose: Purpose) => {

@@ -88,6 +88,7 @@ export interface Store<T> {
 export interface AnshinGetters {
   GET_PURPOSES: () => Purpose[];
   HAS_ALL_COOKIES_SET: () => boolean;
+  HAS_COOKIES_SET: (purpose: Purpose) => boolean;
   HAS_COOKIES_ENABLED: (purpose: Purpose) => boolean;
   HAS_ALL_NECESSARY_COOKIES_ENABLED: (purposes: Purpose[]) => boolean;
 }
