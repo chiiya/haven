@@ -1,6 +1,6 @@
 {
   "name": "@anshin/service-facebook-pixel",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Facebook Pixel injectable service for Anshin",
   "keywords": [
     "anshin",
