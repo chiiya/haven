@@ -49,7 +49,7 @@ export function FacebookPixel(options: Partial<Options> = {}): AnshinService {
     options: {},
     inject() {
       // Need an ID to instantiate the service.
-      if (!this.options?.id) {
+      if (!options?.options?.id) {
         console.error('FACEBOOK_PIXEL: No ID specified. Please specify an ID using `options.id`.');
         return;
       }
@@ -60,7 +60,7 @@ export function FacebookPixel(options: Partial<Options> = {}): AnshinService {
       }
 
       // Instantiate pixel instance and send initial page view.
-      (<any>window).fbq('init', this.options.id);
+      (<any>window).fbq('init', options.options.id);
       (<any>window).fbq('track', 'PageView');
     },
   };
