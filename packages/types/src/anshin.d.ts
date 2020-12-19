@@ -40,12 +40,7 @@ export interface AnshinServiceOptions {
 }
 
 export type ConsentType = 'opt-in' | 'opt-out';
-export type Purpose =
-  | 'functional'
-  | 'analytics'
-  | 'marketing'
-  | 'preferences'
-  | string;
+export type Purpose = 'functional' | 'analytics' | 'marketing' | 'preferences' | string;
 
 export interface AnshinPlugin {
   config?: Function;
@@ -104,7 +99,7 @@ export interface AnshinActions {
 }
 
 export interface ConsentStatus {
-  [purpose: string]: boolean;
+  [purpose: string]: boolean | null;
 }
 
 export interface InjectedServices {

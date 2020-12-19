@@ -23,7 +23,10 @@ export default class Anshin {
     commit('RESOLVE_CONFIG', options);
     for (const plugin of options.plugins || []) {
       if (plugin.register) {
-        plugin.register({ store: { state, getters, commit }, events: EventBus });
+        plugin.register({
+          store: { state, getters, commit },
+          events: EventBus,
+        });
       }
     }
   }
@@ -56,7 +59,9 @@ export default class Anshin {
     const consents: ConsentStatus = {};
 
     for (const purpose of purposes) {
-      consents[purpose] = getters.HAS_COOKIES_ENABLED(purpose);
+      consents[purpose] = getters.HAS_COOKIES_SET(purpose)
+        ? getters.HAS_COOKIES_ENABLED(purpose)
+        : null;
     }
 
     commit('SET_INITIAL_CONSENT_VALUES', consents);
@@ -82,7 +87,7 @@ export default class Anshin {
   public static create(options: Partial<AnshinOptions>): Anshin {
     if (Anshin.instance) {
       console.warn(
-        'Replacing an existing Anshin instance. Are you sure this behaviour is intended?',
+        'Replacing an existing Anshin instance. Are you sure this behaviour is intended?'
       );
     }
     Anshin.instance = new Anshin(options);
@@ -95,7 +100,7 @@ export default class Anshin {
       return Anshin.instance;
     }
     console.error(
-      'No Anshin instance found. Make sure to create a Anshin instance before attempting to access it.',
+      'No Anshin instance found. Make sure to create a Anshin instance before attempting to access it.'
     );
   }
 }
