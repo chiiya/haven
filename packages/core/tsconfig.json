@@ -8,8 +8,6 @@
       "@anshin/types": ["../types/src"]
     }
   },
-  "include": [
-    "./src"
-  ],
-  "references": [{ "path":  "../helpers" }, { "path": "../types" }]
+  "include": ["./src"],
+  "references": [{ "path": "../helpers" }, { "path": "../types" }]
 }

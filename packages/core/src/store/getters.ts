@@ -15,7 +15,7 @@ const getters: AnshinGettersModule = (state) => {
       }
 
       const purposes = (state.options.services || [])
-        .map(service => service.purposes || [])
+        .map((service) => service.purposes || [])
         .flat();
       return [...new Set(purposes)];
     },

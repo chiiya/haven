@@ -18,9 +18,9 @@ const injectScript = () => {
     return;
   }
 
-  const fb: any = (<any>window).fbq = function () {
+  const fb: any = ((<any>window).fbq = function () {
     fb.callMethod ? fb.callMethod.apply(fb, arguments) : fb.queue.push(arguments);
-  };
+  });
 
   if (!(<any>window)._fbq) {
     (<any>window)._fbq = fb;
@@ -43,7 +43,8 @@ export function FacebookPixel(options: Partial<Options> = {}): AnshinService {
     name: `facebook-pixel-${getRandomId()}`,
     purposes: ['marketing', 'analytics'],
     title: 'Facebook Pixel',
-    description: 'Identifies browsers for the purposes of providing advertising and site analytics services.',
+    description:
+      'Identifies browsers for the purposes of providing advertising and site analytics services.',
     cookies: ['_fbp'],
     required: false,
     options: {},

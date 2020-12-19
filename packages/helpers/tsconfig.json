@@ -5,10 +5,9 @@
     "baseUrl": "./",
     "paths": {
       "@anshin/types": ["../types/src"]
-    }
+    },
+    "composite": true
   },
-  "include": [
-    "./src"
-  ],
+  "include": ["./src"],
   "references": [{ "path": "../types" }]
 }

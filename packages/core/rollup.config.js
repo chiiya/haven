@@ -18,8 +18,8 @@ export default [
         include: ['src/**/*'],
         babelHelpers: 'runtime',
         plugins: [
-          "@babel/proposal-class-properties",
-          ["@babel/plugin-transform-runtime", { version: '^7.11.2' }],
+          '@babel/proposal-class-properties',
+          ['@babel/plugin-transform-runtime', { version: '^7.11.2' }],
         ],
       }),
       nodeResolve({
@@ -27,7 +27,7 @@ export default [
       }),
     ],
     preserveModules: true,
-    external: /(@anshin|deepmerge|@babel\/runtime)/
+    external: /(@anshin|deepmerge|@babel\/runtime)/,
   },
   {
     input: 'src/index.umd.ts',
@@ -40,9 +40,7 @@ export default [
         extensions,
         include: ['src/**/*'],
         babelHelpers: 'inline',
-        plugins: [
-          "@babel/proposal-class-properties"
-        ],
+        plugins: ['@babel/proposal-class-properties'],
       }),
       replace({
         'process.env.NODE_ENV': JSON.stringify('production'),
@@ -53,5 +51,5 @@ export default [
       commonjs(),
       uglify(),
     ],
-  }
+  },
 ];

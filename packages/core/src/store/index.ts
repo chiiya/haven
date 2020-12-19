@@ -26,8 +26,4 @@ const commit = (action: keyof AnshinActions, data: any = {}) => {
   EventBus.emit('state-updated');
 };
 
-export {
-  state,
-  getters,
-  commit,
-};
+export { state, getters, commit };

@@ -14,8 +14,8 @@ export default {
       include: ['src/**/*'],
       babelHelpers: 'runtime',
       plugins: [
-        "@babel/proposal-class-properties",
-        ["@babel/plugin-transform-runtime", { version: '^7.11.2' }],
+        '@babel/proposal-class-properties',
+        ['@babel/plugin-transform-runtime', { version: '^7.11.2' }],
       ],
     }),
     nodeResolve({
@@ -23,5 +23,5 @@ export default {
     }),
   ],
   preserveModules: true,
-  external: /(@babel\/runtime)/
+  external: /(@babel\/runtime)/,
 };

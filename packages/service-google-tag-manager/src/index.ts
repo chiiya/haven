@@ -30,13 +30,25 @@ export function GoogleTagManager(options: Partial<Options> = {}): AnshinService 
     name: `google-tag-manager-${getRandomId()}`,
     purposes: ['analytics'],
     title: 'Google Tag Manager',
-    cookies: ['_ga', '_gid', '_gat', '_gcl_au', 'AMP_TOKEN', /_dc_gtm_/, /_gac_/, /_gat_gtag_/, /_gat_/],
+    cookies: [
+      '_ga',
+      '_gid',
+      '_gat',
+      '_gcl_au',
+      'AMP_TOKEN',
+      /_dc_gtm_/,
+      /_gac_/,
+      /_gat_gtag_/,
+      /_gat_/,
+    ],
     required: false,
     options: {},
     inject() {
       // Need an ID to instantiate the service.
       if (!options?.options?.id) {
-        console.error('GOOGLE_TAG_MANAGER: No ID specified. Please specify an ID using `options.id`.');
+        console.error(
+          'GOOGLE_TAG_MANAGER: No ID specified. Please specify an ID using `options.id`.'
+        );
         return;
       }
 

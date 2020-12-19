@@ -10,7 +10,7 @@ class EventBus implements IEventBus {
    * @param callback
    */
   on(event: string, callback: Function): EventBusSubscription {
-    const id = this.counter += 1;
+    const id = (this.counter += 1);
     if (this.subscriptions[event] === undefined) {
       this.subscriptions[event] = {};
     }

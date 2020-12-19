@@ -13,7 +13,7 @@ export class ConsentRevoke {
     // Remove user specified cookies across all domains as well.
     const cookies = state.options.cookies;
     if (cookies) {
-      Object.values(cookies).map(cookies => this.removeCookies(cookies));
+      Object.values(cookies).map((cookies) => this.removeCookies(cookies));
     }
     window.location.reload();
   }

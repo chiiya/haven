@@ -6,7 +6,7 @@ export function store<T>(value: T): Store<T> {
   const subs: { [id: string]: Function } = {};
 
   const subscribe = (callback: (val: T) => void) => {
-    const id = counter += 1;
+    const id = (counter += 1);
     subs[id] = callback;
     callback(_val);
 

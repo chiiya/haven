@@ -61,9 +61,7 @@ export default class Cookies {
    * @param options
    */
   public static remove(key: string | RegExp, options: CookieAttributes = {}) {
-    const attributes = this.resolveOptions(
-      Object.assign(options, { expires: -1 }),
-    );
+    const attributes = this.resolveOptions(Object.assign(options, { expires: -1 }));
     if (key instanceof RegExp) {
       return this.removeByRegex(key, attributes);
     }
@@ -119,9 +117,7 @@ export default class Cookies {
    * Resolve cookie attributes using some default options.
    * @param options
    */
-  protected static resolveOptions(
-    options?: CookieAttributes,
-  ): CookieAttributes {
+  protected static resolveOptions(options?: CookieAttributes): CookieAttributes {
     if (options && typeof options.expires === 'number') {
       options.expires = new Date(Date.now() + options.expires * 864e5);
     }
@@ -133,7 +129,7 @@ export default class Cookies {
       {
         path: '/',
       },
-      options,
+      options
     );
   }
 }

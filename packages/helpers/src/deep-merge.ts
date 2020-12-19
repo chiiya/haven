@@ -26,54 +26,56 @@
 import { isMergeableObject } from './is-mergeable';
 
 function cloneUnlessOtherwiseSpecified(value: any): any {
-  return isMergeableObject(value)
-    ? deepmerge(Array.isArray(value) ? [] : {}, value)
-    : value
+  return isMergeableObject(value) ? deepmerge(Array.isArray(value) ? [] : {}, value) : value;
 }
 
 function arrayMerge(target: any, source: any): any {
-  return target.concat(source).map(function(element: any) {
-    return cloneUnlessOtherwiseSpecified(element)
-  })
+  return target.concat(source).map(function (element: any) {
+    return cloneUnlessOtherwiseSpecified(element);
+  });
 }
 
 function getEnumerableOwnPropertySymbols(target: any): any {
   return Object.getOwnPropertySymbols
-    ? Object.getOwnPropertySymbols(target).filter(function(symbol) {
-      return target.propertyIsEnumerable(symbol)
-    })
-    : []
+    ? Object.getOwnPropertySymbols(target).filter(function (symbol) {
+        return target.propertyIsEnumerable(symbol);
+      })
+    : [];
 }
 
 function getKeys(target: any) {
-  return Object.keys(target).concat(getEnumerableOwnPropertySymbols(target))
+  return Object.keys(target).concat(getEnumerableOwnPropertySymbols(target));
 }
 
 function propertyIsOnObject(object: any, property: string) {
   try {
-    return property in object
-  } catch(_) {
-    return false
+    return property in object;
+  } catch (_) {
+    return false;
   }
 }
 
 // Protects from prototype poisoning and unexpected merging up the prototype chain.
 function propertyIsUnsafe(target: any, key: string) {
-  return propertyIsOnObject(target, key) // Properties are safe to merge if they don't exist in the target yet,
-    && !(Object.hasOwnProperty.call(target, key) // unsafe if they exist up the prototype chain,
-      && Object.propertyIsEnumerable.call(target, key)) // and also unsafe if they're nonenumerable.
+  return (
+    propertyIsOnObject(target, key) && // Properties are safe to merge if they don't exist in the target yet,
+    !(
+      Object.hasOwnProperty.call(target, key) && // unsafe if they exist up the prototype chain,
+      Object.propertyIsEnumerable.call(target, key)
+    )
+  ); // and also unsafe if they're nonenumerable.
 }
 
 function mergeObject(target: any, source: any) {
   const destination = {};
   if (isMergeableObject(target)) {
-    getKeys(target).forEach(function(key) {
+    getKeys(target).forEach(function (key) {
       destination[key] = cloneUnlessOtherwiseSpecified(target[key]);
-    })
+    });
   }
-  getKeys(source).forEach(function(key) {
+  getKeys(source).forEach(function (key) {
     if (propertyIsUnsafe(target, key)) {
-      return
+      return;
     }
 
     if (propertyIsOnObject(target, key) && isMergeableObject(source[key])) {
@@ -82,7 +84,7 @@ function mergeObject(target: any, source: any) {
       destination[key] = cloneUnlessOtherwiseSpecified(source[key]);
     }
   });
-  return destination
+  return destination;
 }
 
 export function deepmerge(target: any, source: any) {
@@ -91,10 +93,10 @@ export function deepmerge(target: any, source: any) {
   const sourceAndTargetTypesMatch = sourceIsArray === targetIsArray;
 
   if (!sourceAndTargetTypesMatch) {
-    return cloneUnlessOtherwiseSpecified(source)
+    return cloneUnlessOtherwiseSpecified(source);
   } else if (sourceIsArray) {
-    return arrayMerge(target, source)
+    return arrayMerge(target, source);
   } else {
-    return mergeObject(target, source)
+    return mergeObject(target, source);
   }
 }

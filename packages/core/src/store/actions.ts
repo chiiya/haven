@@ -1,7 +1,9 @@
 import {
-  AnshinActions, AnshinGetters,
+  AnshinActions,
+  AnshinGetters,
   AnshinOptions,
-  AnshinService, AnshinState,
+  AnshinService,
+  AnshinState,
   ConsentDTO,
   ConsentStatus,
   Purpose,
@@ -19,7 +21,9 @@ const module: AnshinActionsModule = (state: AnshinState, getters: AnshinGetters)
      * @param options
      */
     RESOLVE_CONFIG: (options: Partial<AnshinOptions>) => {
-      state.options = ConfigurationResolver.resolve(options, { ...state.options });
+      state.options = ConfigurationResolver.resolve(options, {
+        ...state.options,
+      });
     },
 
     /**
@@ -53,9 +57,9 @@ const module: AnshinActionsModule = (state: AnshinState, getters: AnshinGetters)
     SET_INITIAL_CONSENT_VALUES: (consents: ConsentStatus) => {
       for (const purpose of Object.keys(consents)) {
         const consent = consents[purpose];
-        if (consent) {
+        if (consent === true) {
           EventBus.emit(`${purpose}-enabled`);
-        } else {
+        } else if (consent === false) {
           EventBus.emit(`${purpose}-disabled`);
         }
       }
@@ -73,7 +77,7 @@ const module: AnshinActionsModule = (state: AnshinState, getters: AnshinGetters)
      */
     ENABLE_ALL_COOKIES: () => {
       const purposes: Purpose[] = ['functional', ...getters.GET_PURPOSES()];
-      purposes.map(purpose => actions.SET_CONSENT({ purpose, status: true }));
+      purposes.map((purpose) => actions.SET_CONSENT({ purpose, status: true }));
     },
 
     /**
@@ -81,7 +85,7 @@ const module: AnshinActionsModule = (state: AnshinState, getters: AnshinGetters)
      */
     DISABLE_ALL_COOKIES: () => {
       const purposes: Purpose[] = getters.GET_PURPOSES();
-      purposes.map(purpose => actions.SET_CONSENT({ purpose, status: false }));
+      purposes.map((purpose) => actions.SET_CONSENT({ purpose, status: false }));
       actions.SET_CONSENT({ purpose: 'functional', status: true });
       EventBus.emit('cookies-set');
     },
@@ -105,8 +109,7 @@ const module: AnshinActionsModule = (state: AnshinState, getters: AnshinGetters)
       if (
         injected[service.name] ||
         service.inject === false ||
-        (!service.required &&
-          !getters.HAS_ALL_NECESSARY_COOKIES_ENABLED(service.purposes))
+        (!service.required && !getters.HAS_ALL_NECESSARY_COOKIES_ENABLED(service.purposes))
       ) {
         return;
       }

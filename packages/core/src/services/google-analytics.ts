@@ -23,11 +23,13 @@ type Options = AnshinService & { options: GoogleAnalyticsOptions };
  * Inject the google analytics script tag.
  */
 function injectScript() {
-  window.ga = window.ga || function () {
-    (window.ga.q = window.ga.q || []).push(arguments);
-  };
+  window.ga =
+    window.ga ||
+    function () {
+      (window.ga.q = window.ga.q || []).push(arguments);
+    };
 
-  window.ga.l = +new Date;
+  window.ga.l = +new Date();
 
   const firstScript = document.getElementsByTagName('script')[0];
   const script = document.createElement('script');
@@ -65,14 +67,27 @@ export function GoogleAnalytics(options: Partial<Options> = {}): AnshinService {
     name: `google-analytics-${getRandomId()}`,
     purposes: ['analytics'],
     title: 'Google Analytics',
-    description: 'Collects information about the users and their activity on the website for analytics and reporting purposes.',
-    cookies: ['_ga', '_gid', '_gat', '_gcl_au', 'AMP_TOKEN', /_dc_gtm_/, /_gac_/, /_gat_gtag_/, /_gat_/],
+    description:
+      'Collects information about the users and their activity on the website for analytics and reporting purposes.',
+    cookies: [
+      '_ga',
+      '_gid',
+      '_gat',
+      '_gcl_au',
+      'AMP_TOKEN',
+      /_dc_gtm_/,
+      /_gac_/,
+      /_gat_gtag_/,
+      /_gat_/,
+    ],
     required: false,
     options: {},
     inject() {
       // Need an ID to instantiate the service.
       if (!options?.options?.id) {
-        console.error('GOOGLE_ANALYTICS: No ID specified. Please specify an ID using `options.id`.');
+        console.error(
+          'GOOGLE_ANALYTICS: No ID specified. Please specify an ID using `options.id`.'
+        );
         return;
       }
 

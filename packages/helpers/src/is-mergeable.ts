@@ -3,7 +3,7 @@ export function isMergeableObject(value: any) {
 }
 
 function isNonNullObject(value: any) {
-  return !!value && typeof value === 'object'
+  return !!value && typeof value === 'object';
 }
 
 function isSpecial(value: any) {
