@@ -1,6 +1,6 @@
 {
   "name": "@anshin/service-facebook-pixel",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "Facebook Pixel injectable service for Anshin",
   "keywords": [
     "anshin",
@@ -37,10 +37,10 @@
     "test": "echo \"Error: no tests specified\" && exit 0"
   },
   "devDependencies": {
-    "@anshin/types": "^0.2.3"
+    "@anshin/types": "^0.2.5"
   },
   "dependencies": {
-    "@anshin/helpers": "^0.2.1",
+    "@anshin/helpers": "^0.2.5",
     "@babel/runtime": "^7.11.2"
   }
 }
