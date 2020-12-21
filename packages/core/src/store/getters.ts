@@ -48,11 +48,16 @@ const getters: AnshinGettersModule = (state) => {
     HAS_COOKIES_ENABLED: (purpose: Purpose) => {
       const cookie = Cookies.get(`${state.options.prefix}-${purpose}`);
 
-      if (state.options.type === 'opt-in') {
-        return cookie === 'true';
-      }
+      return cookie === 'true';
+    },
 
-      return cookie === undefined || cookie === 'true';
+    /**
+     * Check whether cookies for a given purpose have been disabled.
+     */
+    HAS_COOKIES_DISABLED: (purpose: Purpose) => {
+      const cookie = Cookies.get(`${state.options.prefix}-${purpose}`);
+
+      return cookie === 'false';
     },
 
     /**

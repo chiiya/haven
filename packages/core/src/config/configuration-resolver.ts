@@ -34,7 +34,7 @@ export default class ConfigurationResolver {
    * @param options
    */
   public static resolveBaseConfiguration(config: AnshinOptions, options: Partial<AnshinOptions>) {
-    const keys = ['prefix', 'cookies', 'type', 'services', 'purposes'];
+    const keys = ['prefix', 'cookies', 'services', 'purposes'];
     for (const item of keys) {
       const value = options[item];
       if (value !== undefined) {

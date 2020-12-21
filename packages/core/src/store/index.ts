@@ -1,4 +1,4 @@
-import { AnshinActions, AnshinState, Store } from '@anshin/types';
+import { AnshinActions, AnshinState } from '@anshin/types';
 import EventBus from '../events/event-bus';
 import { store } from './store';
 import gettersModule from './getters';
@@ -12,7 +12,6 @@ const state: AnshinState = {
     cookieAttributes: { expires: 395 },
     domains: [],
     cookies: {},
-    type: 'opt-in',
     services: [],
     plugins: [],
   },
@@ -25,5 +24,9 @@ const commit = (action: keyof AnshinActions, data: any = {}) => {
   actions[action](data);
   EventBus.emit('state-updated');
 };
+
+state.consent.subscribe(() => {
+  commit('SYNC_CONSENT_STATUS');
+});
 
 export { state, getters, commit };

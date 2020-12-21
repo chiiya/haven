@@ -1,4 +1,4 @@
-import { AnshinOptions, ConsentStatus, AnshinStore, EventBusSubscription } from '@anshin/types';
+import { AnshinOptions, AnshinStore, EventBusSubscription } from '@anshin/types';
 import { state, getters, commit } from './store';
 import Cookies from './cookies';
 import EventBus from './events/event-bus';
@@ -33,7 +33,7 @@ export default class Anshin {
 
   public init(): void {
     this.registerDefaultListeners();
-    this.checkInitialState();
+    commit('SET_INITIAL_CONSENT_VALUES');
   }
 
   /**
@@ -49,22 +49,6 @@ export default class Anshin {
         ConsentRevoke.removeCookiesForPurpose(purpose);
       });
     }
-  }
-
-  /**
-   * Check initial application state and fire events accordingly.
-   */
-  protected checkInitialState(): void {
-    const purposes = ['functional', ...getters.GET_PURPOSES()];
-    const consents: ConsentStatus = {};
-
-    for (const purpose of purposes) {
-      consents[purpose] = getters.HAS_COOKIES_SET(purpose)
-        ? getters.HAS_COOKIES_ENABLED(purpose)
-        : null;
-    }
-
-    commit('SET_INITIAL_CONSENT_VALUES', consents);
   }
 
   /**

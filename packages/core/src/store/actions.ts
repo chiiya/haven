@@ -4,8 +4,6 @@ import {
   AnshinOptions,
   AnshinService,
   AnshinState,
-  ConsentDTO,
-  ConsentStatus,
   Purpose,
 } from '@anshin/types';
 import Cookies from '../cookies';
@@ -27,48 +25,45 @@ const module: AnshinActionsModule = (state: AnshinState, getters: AnshinGetters)
     },
 
     /**
-     * Set consent status for a given purpose. Will update the state, set cookies and
-     * dispatch necessary events.
-     * @param consent
+     * Set all initial consent values, based on currently set cookies. Does _not_ set
+     * any new cookies. It is used at page-load to set initial consent state and dispatch
+     * consent events even though the values have not technically changed.
      */
-    SET_CONSENT: ({ purpose, status }: ConsentDTO) => {
-      state.consent.set({
-        ...state.consent.get(),
-        [purpose]: status,
+    SET_INITIAL_CONSENT_VALUES: () => {
+      const purposes: Purpose[] = ['functional', ...getters.GET_PURPOSES()];
+      const consent = purposes.map((purpose) =>
+        getters.HAS_COOKIES_SET(purpose)
+          ? [purpose, getters.HAS_COOKIES_ENABLED(purpose)]
+          : [purpose, null]
+      );
+      // Dispatch initial events
+      consent.map(([purpose, status]) => {
+        if (status === true) {
+          EventBus.emit(`${purpose}-enabled`);
+        } else if (status === false) {
+          EventBus.emit(`${purpose}-disabled`);
+        }
       });
-      if (status) {
-        Cookies.set(`${state.options.prefix}-${purpose}`, 'true', state.options.cookieAttributes);
-        EventBus.emit(`${purpose}-enabled`);
-      } else {
-        Cookies.set(`${state.options.prefix}-${purpose}`, 'false', state.options.cookieAttributes);
-        EventBus.emit(`${purpose}-disabled`);
-      }
-      if (getters.HAS_ALL_COOKIES_SET()) {
-        EventBus.emit('cookies-set');
-      }
-      EventBus.emit('consent-updated');
+      state.consent.set(Object.fromEntries(consent));
     },
 
     /**
-     * Set all initial consent values. Does _not_ set any cookies. Use SET_CONSENT on individual purposes
-     * to set cookies.
-     * @param consents
+     * Sync cookies with current consent state. Executed every time the consent state changes.
      */
-    SET_INITIAL_CONSENT_VALUES: (consents: ConsentStatus) => {
-      for (const purpose of Object.keys(consents)) {
-        const consent = consents[purpose];
-        if (consent === true) {
+    SYNC_CONSENT_STATUS: () => {
+      const consent = state.consent.get();
+      Object.keys(consent).map((purpose) => {
+        if (consent[purpose] === true && !getters.HAS_COOKIES_ENABLED(purpose)) {
+          actions.SET_COOKIE_VALUE({ purpose, value: 'true' });
           EventBus.emit(`${purpose}-enabled`);
-        } else if (consent === false) {
+        } else if (consent[purpose] === false && !getters.HAS_COOKIES_DISABLED(purpose)) {
+          actions.SET_COOKIE_VALUE({ purpose, value: 'false' });
           EventBus.emit(`${purpose}-disabled`);
         }
-      }
-
+      });
       if (getters.HAS_ALL_COOKIES_SET()) {
         EventBus.emit('cookies-set');
       }
-
-      state.consent.set(consents);
       EventBus.emit('consent-updated');
     },
 
@@ -77,7 +72,7 @@ const module: AnshinActionsModule = (state: AnshinState, getters: AnshinGetters)
      */
     ENABLE_ALL_COOKIES: () => {
       const purposes: Purpose[] = ['functional', ...getters.GET_PURPOSES()];
-      purposes.map((purpose) => actions.SET_CONSENT({ purpose, status: true }));
+      state.consent.set(Object.fromEntries(purposes.map((purpose) => [purpose, true])));
     },
 
     /**
@@ -85,9 +80,10 @@ const module: AnshinActionsModule = (state: AnshinState, getters: AnshinGetters)
      */
     DISABLE_ALL_COOKIES: () => {
       const purposes: Purpose[] = getters.GET_PURPOSES();
-      purposes.map((purpose) => actions.SET_CONSENT({ purpose, status: false }));
-      actions.SET_CONSENT({ purpose: 'functional', status: true });
-      EventBus.emit('cookies-set');
+      state.consent.set({
+        ...Object.fromEntries(purposes.map((purpose) => [purpose, false])),
+        functional: true,
+      });
     },
 
     /**
@@ -121,6 +117,10 @@ const module: AnshinActionsModule = (state: AnshinState, getters: AnshinGetters)
         });
         EventBus.emit('service-loaded', service.name);
       }
+    },
+
+    SET_COOKIE_VALUE: ({ purpose, value }: { purpose: Purpose; value: string }) => {
+      Cookies.set(`${state.options.prefix}-${purpose}`, value, state.options.cookieAttributes);
     },
   };
 
