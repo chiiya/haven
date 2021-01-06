@@ -1,6 +1,6 @@
 {
   "name": "@chiiya/haven",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "author": "Elisha Witte <elishawitte@gmail.com>",
   "license": "MIT",
   "description": "GDPR-ready cookie consent manager with type definitions and zero dependencies",
