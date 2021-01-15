@@ -53,6 +53,14 @@ export default class Haven {
     this.checkInitialState();
   }
 
+  get preferences(): CookiePreferences {
+    return this.cookiePreferences;
+  }
+
+  get notification(): CookieNotification {
+    return this.cookieNotification;
+  }
+
   /**
    * Check initial application state and fire events accordingly.
    */
