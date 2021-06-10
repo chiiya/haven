@@ -1,5 +1,4 @@
 import { AnshinOptions } from '@anshin/types';
-import { deepmerge } from '@anshin/helpers';
 import EventBus from '../events/event-bus';
 
 export default class ConfigurationResolver {
@@ -9,23 +8,14 @@ export default class ConfigurationResolver {
    * @param config
    */
   public static resolve(options: Partial<AnshinOptions>, config: AnshinOptions): AnshinOptions {
-    let resolved = config;
-
     if (options.domains && Array.isArray(options.domains)) {
       options.domains = this.normalizeDomains(options.domains);
     }
 
-    this.resolveBaseConfiguration(resolved, options);
+    this.resolveBaseConfiguration(config, options);
+    EventBus.emit('config-resolved', config);
 
-    for (const plugin of options.plugins || []) {
-      if (plugin.config) {
-        resolved = deepmerge(resolved, plugin.config());
-      }
-    }
-
-    EventBus.emit('config-resolved', resolved);
-
-    return resolved;
+    return config;
   }
 
   /**
@@ -43,6 +33,7 @@ export default class ConfigurationResolver {
     }
     const domains = options.domains || [];
     config.domains = domains.length > 0 ? domains : this.getDomains();
+    config.cookieAttributes = Object.assign(config.cookieAttributes, options.cookieAttributes || {});
   }
 
   /**

@@ -22,6 +22,13 @@ export interface CookieAttributes {
    * secure protocol (https). Defaults to false.
    */
   secure?: boolean;
+
+  /**
+   * Asserts that a cookie must not be sent with cross-origin requests,
+   * providing some protection against cross-site request forgery
+   * attacks (CSRF)
+   */
+  sameSite?: 'strict' | 'Strict' | 'lax' | 'Lax' | 'none' | 'None';
 }
 
 export interface CookieJar {

@@ -41,7 +41,6 @@ export interface AnshinServiceOptions {
 export type Purpose = 'functional' | 'analytics' | 'marketing' | 'preferences' | string;
 
 export interface AnshinPlugin {
-  config?: Function;
   register?: (parameters: PluginParameters) => void;
 }
 
