@@ -1,6 +1,6 @@
 {
   "name": "@anshin/types",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "Common type and interface definitions for anshin",
   "keywords": [
     "anshin",

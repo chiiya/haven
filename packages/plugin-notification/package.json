@@ -1,6 +1,6 @@
 {
   "name": "@anshin/plugin-notification",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "author": "Elisha Witte <elishawitte@gmail.com>",
   "description": "Customizable cookie notification plugin for Anshin",
   "keywords": [
@@ -41,7 +41,7 @@
     "deepmerge": "^4.2.2"
   },
   "devDependencies": {
-    "@anshin/types": "^0.2.5",
+    "@anshin/types": "^0.2.6",
     "@types/deepmerge": "^2.2.0",
     "zustand": "^3.1.2"
   }
