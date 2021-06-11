@@ -8,7 +8,6 @@ import {
 } from '@anshin/types';
 import Cookies from '../cookies';
 import EventBus from '../events';
-import { resolveConfig } from '../config';
 
 type AnshinActionsModule = (state: AnshinState, getters: AnshinGetters) => AnshinActions;
 

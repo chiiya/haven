@@ -8,8 +8,7 @@ export function resolveConfig(
   defaults: AnshinOptions
 ): AnshinOptions {
   let config = Object.assign(defaults, options);
-  const domains = options.domains || [];
-  config.domains = normalizeDomains(domains.length > 0 ? domains : resolveDefaultDomains());
+  config.domains = normalizeDomains(options.domains || resolveDefaultDomains());
   config.cookieAttributes = Object.assign(
     defaults.cookieAttributes,
     options.cookieAttributes || {}

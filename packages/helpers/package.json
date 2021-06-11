@@ -12,14 +12,8 @@
   "publishConfig": {
     "access": "public"
   },
-  "scripts": {
-    "build": "npm-run-all build:bundle build:types",
-    "build:bundle": "rollup -c rollup.config.js",
-    "build:types": "tsc --project tsconfig.types.json",
-    "test": "echo \"Error: no tests specified\" && exit 0"
-  },
   "main": "dist/index.js",
-  "module": "dist/index.js",
+  "module": "dist/esm/index.js",
   "typings": "dist/index.d.ts",
   "sideEffects": false,
   "directories": {
@@ -36,6 +30,12 @@
   },
   "bugs": {
     "url": "https://github.com/chiiya/anshin/issues"
+  },
+  "scripts": {
+    "build": "npm-run-all build:bundle build:types",
+    "build:bundle": "rollup -c rollup.config.js",
+    "build:types": "tsc --project tsconfig.types.json",
+    "test": "echo \"Error: no tests specified\" && exit 0"
   },
   "dependencies": {
     "@babel/runtime": "^7.11.2"

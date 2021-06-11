@@ -14,7 +14,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "dist/facebook-pixel.js",
+  "main": "dist/index.js",
   "module": "dist/esm/index.js",
   "typings": "dist/index.d.ts",
   "sideEffects": false,

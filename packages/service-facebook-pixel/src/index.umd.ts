@@ -1,3 +1,7 @@
 import { FacebookPixel } from './index';
 
-(<any>window).FacebookPixel = FacebookPixel;
+if (typeof window !== 'undefined') {
+  (window as any).FacebookPixel = FacebookPixel;
+}
+
+export { FacebookPixel };
