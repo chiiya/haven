@@ -2,7 +2,8 @@ import { nodeResolve } from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
 import babel from '@rollup/plugin-babel';
 import replace from '@rollup/plugin-replace';
-import { uglify } from 'rollup-plugin-uglify';
+import { terser } from 'rollup-plugin-terser';
+
 const extensions = ['.js', '.jsx', '.ts', '.tsx'];
 
 export default [
@@ -27,7 +28,7 @@ export default [
       }),
     ],
     preserveModules: true,
-    external: /(@anshin|deepmerge|@babel\/runtime)/,
+    external: /(@anshin|@babel\/runtime)/,
   },
   {
     input: 'src/index.umd.ts',
@@ -49,7 +50,7 @@ export default [
         extensions,
       }),
       commonjs(),
-      uglify(),
+      terser(),
     ],
   },
 ];

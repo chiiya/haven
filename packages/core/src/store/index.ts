@@ -1,5 +1,5 @@
-import { AnshinActions, AnshinState, Store } from '@anshin/types';
-import EventBus from '../events/event-bus';
+import { AnshinActions, AnshinState } from '@anshin/types';
+import EventBus from '../events';
 import { store } from './store';
 import gettersModule from './getters';
 import actionsModule from './actions';

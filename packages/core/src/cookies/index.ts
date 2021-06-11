@@ -6,9 +6,6 @@ import { CookieAttributes, CookieJar } from '@anshin/types';
 export default class Cookies {
   /**
    * Create a new cookie or replace an existing one.
-   * @param key
-   * @param value
-   * @param options
    */
   public static set(key: string, value: any, options?: CookieAttributes) {
     const attributes = this.resolveOptions(options);
@@ -18,7 +15,6 @@ export default class Cookies {
 
   /**
    * Retrieve a cookie by name.
-   * @param key
    */
   public static get(key: string): string | undefined {
     const cookies = document.cookie ? document.cookie.split('; ') : [];
@@ -34,7 +30,6 @@ export default class Cookies {
 
   /**
    * Check whether cookie exists.
-   * @param key
    */
   public static exists(key: string): boolean {
     return Cookies.get(key) !== undefined && Cookies.get(key) !== '';
@@ -57,8 +52,6 @@ export default class Cookies {
 
   /**
    * Remove an existing cookie.
-   * @param key
-   * @param options
    */
   public static remove(key: string | RegExp, options: CookieAttributes = {}) {
     const attributes = this.resolveOptions(Object.assign(options, { expires: -1 }));
@@ -71,7 +64,6 @@ export default class Cookies {
 
   /**
    * Get the value for a cookie.
-   * @param parts
    */
   protected static getValue(parts: string[]): string {
     let value = parts.slice(1).join('=');
@@ -85,8 +77,6 @@ export default class Cookies {
 
   /**
    * Remove a cookie by regular expression.
-   * @param key
-   * @param attributes
    */
   protected static removeByRegex(key: RegExp, attributes: CookieAttributes) {
     Object.keys(this.getAll()).map((name) => {
@@ -98,7 +88,6 @@ export default class Cookies {
 
   /**
    * Encode the cookie attributes.
-   * @param attributes
    */
   protected static encodeAttributes(attributes: CookieAttributes): string {
     let cookieAttributes = '';
@@ -115,7 +104,6 @@ export default class Cookies {
 
   /**
    * Resolve cookie attributes using some default options.
-   * @param options
    */
   protected static resolveOptions(options?: CookieAttributes): CookieAttributes {
     if (options && typeof options.expires === 'number') {

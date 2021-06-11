@@ -6,8 +6,6 @@ class EventBus implements IEventBus {
 
   /**
    * Register a new callback
-   * @param event
-   * @param callback
    */
   on(event: string, callback: Function): EventBusSubscription {
     const id = (this.counter += 1);
@@ -26,8 +24,6 @@ class EventBus implements IEventBus {
 
   /**
    * Emit a new event
-   * @param event
-   * @param payload
    */
   emit(event: string, payload?: any): void {
     if (this.subscriptions[event] === undefined) {

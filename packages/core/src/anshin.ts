@@ -1,26 +1,13 @@
 import { AnshinOptions, ConsentStatus, AnshinStore, EventBusSubscription } from '@anshin/types';
 import { state, getters, commit } from './store';
-import Cookies from './cookies';
-import EventBus from './events/event-bus';
-import { ConsentRevoke, GoogleAnalytics } from './services';
-
-declare global {
-  interface Window {
-    dataLayer: any[];
-    ga: any;
-    fbq: Function;
-    _fbq: Function;
-    Anshin: typeof Anshin;
-    Cookies: typeof Cookies;
-  }
-}
+import EventBus from './events';
+import { resolveConfig } from './config';
 
 export default class Anshin {
-  public static GoogleAnalytics = GoogleAnalytics;
   private static instance: Anshin;
 
   private constructor(options: Partial<AnshinOptions>) {
-    commit('RESOLVE_CONFIG', options);
+    commit('SET_OPTIONS', resolveConfig(options, { ...state.options }));
     for (const plugin of options.plugins || []) {
       if (plugin.register) {
         plugin.register({
@@ -29,9 +16,6 @@ export default class Anshin {
         });
       }
     }
-  }
-
-  public init(): void {
     this.registerDefaultListeners();
     this.checkInitialState();
   }
@@ -46,7 +30,7 @@ export default class Anshin {
         commit('INJECT_SERVICES');
       });
       EventBus.on(`${purpose}-disabled`, () => {
-        ConsentRevoke.removeCookiesForPurpose(purpose);
+        commit('REMOVE_COOKIES_FOR_PURPOSE', purpose);
       });
     }
   }
@@ -70,8 +54,6 @@ export default class Anshin {
   /**
    * Proxy event bus subscription method to the event bus singleton so that users can call this method
    * anywhere in their application.
-   * @param event
-   * @param callback
    */
   public static on(event: string, callback: Function): EventBusSubscription {
     return EventBus.on(event, callback);
@@ -84,6 +66,9 @@ export default class Anshin {
     return { state, getters, commit };
   }
 
+  /**
+   * Create a new Anshin singleton instance.
+   */
   public static create(options: Partial<AnshinOptions>): Anshin {
     if (Anshin.instance) {
       console.warn(
@@ -91,10 +76,12 @@ export default class Anshin {
       );
     }
     Anshin.instance = new Anshin(options);
-    Anshin.instance.init();
     return Anshin.instance;
   }
 
+  /**
+   * Get Anshin singleton instance.
+   */
   public static getInstance(): Anshin | undefined {
     if (Anshin.instance) {
       return Anshin.instance;

@@ -9,27 +9,24 @@ import {
   Purpose,
 } from '@anshin/types';
 import Cookies from '../cookies';
-import EventBus from '../events/event-bus';
-import ConfigurationResolver from '../config/configuration-resolver';
+import EventBus from '../events';
+import { resolveConfig } from '../config';
 
 type AnshinActionsModule = (state: AnshinState, getters: AnshinGetters) => AnshinActions;
 
 const module: AnshinActionsModule = (state: AnshinState, getters: AnshinGetters) => {
   const actions = {
     /**
-     * Resolve configuration and set initial options state.
+     * Set state options.
      * @param options
      */
-    RESOLVE_CONFIG: (options: Partial<AnshinOptions>) => {
-      state.options = ConfigurationResolver.resolve(options, {
-        ...state.options,
-      });
+    SET_OPTIONS: (options: AnshinOptions) => {
+      state.options = options;
     },
 
     /**
      * Set consent status for a given purpose. Will update the state, set cookies and
      * dispatch necessary events.
-     * @param consent
      */
     SET_CONSENT: ({ purpose, status }: ConsentDTO) => {
       state.consent.set({
@@ -52,7 +49,6 @@ const module: AnshinActionsModule = (state: AnshinState, getters: AnshinGetters)
     /**
      * Set all initial consent values. Does _not_ set any cookies. Use SET_CONSENT on individual purposes
      * to set cookies.
-     * @param consents
      */
     SET_INITIAL_CONSENT_VALUES: (consents: ConsentStatus) => {
       for (const purpose of Object.keys(consents)) {
@@ -84,10 +80,11 @@ const module: AnshinActionsModule = (state: AnshinState, getters: AnshinGetters)
      * Disable cookies for all purposes (except functional).
      */
     DISABLE_ALL_COOKIES: () => {
-      const purposes: Purpose[] = getters.GET_PURPOSES();
+      const purposes: Purpose[] = getters
+        .GET_PURPOSES()
+        .filter((purpose) => purpose !== 'functional');
       purposes.map((purpose) => actions.SET_CONSENT({ purpose, status: false }));
       actions.SET_CONSENT({ purpose: 'functional', status: true });
-      EventBus.emit('cookies-set');
     },
 
     /**
@@ -101,7 +98,6 @@ const module: AnshinActionsModule = (state: AnshinState, getters: AnshinGetters)
 
     /**
      * Inject a given service, when possible.
-     * @param service
      */
     INJECT_SERVICE: (service: AnshinService) => {
       const injected = state.injected.get();
@@ -122,6 +118,22 @@ const module: AnshinActionsModule = (state: AnshinState, getters: AnshinGetters)
         EventBus.emit('service-loaded', service.name);
       }
     },
+
+    /**
+     * Remove all cookies set by services for a given purpose.
+     */
+    REMOVE_COOKIES_FOR_PURPOSE: (purpose: Purpose) => {
+      for (const service of state.options.services) {
+        if (service.purposes.indexOf(purpose) !== -1) {
+          removeCookies(service.cookies || [], state.options.domains);
+        }
+      }
+      // Remove user specified cookies across all domains as well.
+      const cookies = state.options.cookies;
+      if (cookies && cookies[purpose]) {
+        removeCookies(cookies[purpose], state.options.domains);
+      }
+    },
   };
 
   return actions;
@@ -129,7 +141,6 @@ const module: AnshinActionsModule = (state: AnshinState, getters: AnshinGetters)
 
 /**
  * Inject a specific service, if all requirements are met (cookies accepted _or_ service is required).
- * @param service
  */
 function injectService(service: AnshinService): boolean {
   const injector = service.inject;
@@ -140,6 +151,18 @@ function injectService(service: AnshinService): boolean {
   }
 
   return false;
+}
+
+/**
+ * Remove a list of cookies from all configured domains.
+ */
+function removeCookies(cookies: (string | RegExp)[], domains: string[]): void {
+  for (const cookie of cookies) {
+    for (const domain of domains) {
+      Cookies.remove(cookie, { domain });
+    }
+    Cookies.remove(cookie);
+  }
 }
 
 export default module;

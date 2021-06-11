@@ -89,13 +89,14 @@ export interface AnshinGetters {
 }
 
 export interface AnshinActions {
-  RESOLVE_CONFIG: (options: Partial<AnshinOptions>) => void;
+  SET_OPTIONS: (options: AnshinOptions) => void;
   SET_CONSENT: (consent: ConsentDTO) => void;
   SET_INITIAL_CONSENT_VALUES: (consents: ConsentStatus) => void;
   ENABLE_ALL_COOKIES: () => void;
   DISABLE_ALL_COOKIES: () => void;
   INJECT_SERVICES: () => void;
   INJECT_SERVICE: (service: AnshinService) => void;
+  REMOVE_COOKIES_FOR_PURPOSE: (purpose: Purpose) => void;
 }
 
 export interface ConsentStatus {
