@@ -6,7 +6,6 @@ export type AnshinOptions = {
   cookieAttributes: CookieAttributes;
   domains: string[];
   cookies: AnshinCustomCookies;
-  type: ConsentType;
   services: AnshinService[];
   thirdPartyServices?: AnshinThirdPartyService[];
   purposes?: Purpose[];
@@ -39,7 +38,6 @@ export interface AnshinServiceOptions {
   [option: string]: any;
 }
 
-export type ConsentType = 'opt-in' | 'opt-out';
 export type Purpose = 'functional' | 'analytics' | 'marketing' | 'preferences' | string;
 
 export interface AnshinPlugin {
@@ -51,15 +49,6 @@ export interface PluginParameters {
   store: AnshinStore;
   events: EventBus;
 }
-
-/**
- * Store Types
- */
-
-export type ConsentDTO = {
-  purpose: Purpose;
-  status: boolean;
-};
 
 export type AnshinState = {
   consent: Store<ConsentStatus>;
@@ -85,18 +74,20 @@ export interface AnshinGetters {
   HAS_ALL_COOKIES_SET: () => boolean;
   HAS_COOKIES_SET: (purpose: Purpose) => boolean;
   HAS_COOKIES_ENABLED: (purpose: Purpose) => boolean;
+  HAS_COOKIES_DISABLED: (purpose: Purpose) => boolean;
   HAS_ALL_NECESSARY_COOKIES_ENABLED: (purposes: Purpose[]) => boolean;
 }
 
 export interface AnshinActions {
   SET_OPTIONS: (options: AnshinOptions) => void;
-  SET_CONSENT: (consent: ConsentDTO) => void;
-  SET_INITIAL_CONSENT_VALUES: (consents: ConsentStatus) => void;
+  SET_INITIAL_CONSENT_VALUES: () => void;
+  SYNC_CONSENT_STATUS: () => void;
   ENABLE_ALL_COOKIES: () => void;
   DISABLE_ALL_COOKIES: () => void;
   INJECT_SERVICES: () => void;
   INJECT_SERVICE: (service: AnshinService) => void;
   REMOVE_COOKIES_FOR_PURPOSE: (purpose: Purpose) => void;
+  SET_COOKIE_VALUE: (data: { purpose: Purpose; value: string }) => void;
 }
 
 export interface ConsentStatus {

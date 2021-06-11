@@ -114,6 +114,7 @@ Haven is compiled using [Babel](https://babeljs.io/) targeting browsers
 and expecting that all features listed below are available or polyfilled in browser:
 
 ```
+Object.fromEntries()
 Object.keys()
 Object.values()
 Object.assign()
