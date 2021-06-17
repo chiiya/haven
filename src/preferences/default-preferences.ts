@@ -47,17 +47,25 @@ const createStyles = (): string => {
     }
 
     .hv-toggle {
-      display: none;
+      border: 0px;
+      clip: rect(0px, 0px, 0px, 0px);
+      height: 1px;
+      width: 1px;
+      margin: -1px;
+      padding: 0px;
+      overflow: hidden;
+      white-space: nowrap;
+      position: absolute;
     }
 
-    .hv-toggle:checked + label::before {
+    .hv-toggle:checked + .hv-toggle-label::before {
       background: ${options.toggleBackground};
       left: auto;
       right: 20px;
       transform: translateX(16px);
     }
 
-    .hv-toggle:disabled + label {
+    .hv-toggle:disabled + .hv-toggle-label {
       cursor: not-allowed;
       opacity: .5;
     }
@@ -97,9 +105,11 @@ const createPreferences = (): string => {
     ${purposes.map((purpose) => {
       return `
         <div class="hv-preference">
-          <h3 class="hv-preference__purpose">${trans(`purposes.${purpose}.name`)}</h3>
-          <input type="checkbox" class="hv-toggle" id="cookie-preferences--${purpose}" ${purpose === 'functional' ? 'disabled checked' : ''}>
-          <label for="cookie-preferences--${purpose}" class="hv-toggle-label"></label>
+          <label for="cookie-preferences--${purpose}"><h3 class="hv-preference__purpose">${trans(`purposes.${purpose}.name`)}</h3></label>
+          <label>
+            <input type="checkbox" class="hv-toggle" id="cookie-preferences--${purpose}" ${purpose === 'functional' ? 'disabled checked' : ''}>
+            <span class="hv-toggle-label" aria-hidden="true" />
+          </label>
         </div>
         <p class="hv-preference__description">${trans(`purposes.${purpose}.description`)}</p>
       `;
