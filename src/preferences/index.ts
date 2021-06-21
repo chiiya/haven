@@ -37,9 +37,9 @@ export default class CookiePreferences {
   public attachListeners(): void {
     const purposes = getAllPurposes();
     const checkboxes: { [purpose: string]: HTMLInputElement } = {};
-    const saveButton = document.getElementById(
+    const saveButton = <HTMLButtonElement | null>document.getElementById(
       "cookie-preferences__save"
-    ) as HTMLButtonElement;
+    );
 
     for (const purpose of purposes) {
       const checkbox = <HTMLInputElement | null>(
