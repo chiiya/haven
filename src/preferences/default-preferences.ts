@@ -47,14 +47,9 @@ const createStyles = (): string => {
     }
 
     .hv-toggle {
-      border: 0px;
-      clip: rect(0px, 0px, 0px, 0px);
-      height: 1px;
-      width: 1px;
-      margin: -1px;
-      padding: 0px;
-      overflow: hidden;
-      white-space: nowrap;
+      opacity: 0;
+      height: 0;
+      width: 0;
       position: absolute;
     }
 
@@ -104,13 +99,11 @@ const createPreferences = (): string => {
     <p>${trans('preferences.description')}</p>
     ${purposes.map((purpose) => {
       return `
-        <div class="hv-preference">
-          <label for="cookie-preferences--${purpose}"><h3 class="hv-preference__purpose">${trans(`purposes.${purpose}.name`)}</h3></label>
-          <label>
-            <input type="checkbox" class="hv-toggle" id="cookie-preferences--${purpose}" ${purpose === 'functional' ? 'disabled checked' : ''}>
-            <span class="hv-toggle-label" aria-hidden="true" />
-          </label>
-        </div>
+        <label class="hv-preference" for="cookie-preferences--${purpose}">
+          <h3 class="hv-preference__purpose">${trans(`purposes.${purpose}.name`)}</h3>
+          <input type="checkbox" class="hv-toggle" id="cookie-preferences--${purpose}" ${purpose === 'functional' ? 'disabled checked' : ''} aria-label="${trans(`purposes.${purpose}.name`)}">
+          <span class="hv-toggle-label" aria-hidden="true" />
+        </label>
         <p class="hv-preference__description">${trans(`purposes.${purpose}.description`)}</p>
       `;
     }).join('')}
