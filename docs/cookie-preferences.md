@@ -36,3 +36,10 @@ You may also use a completely custom cookie preferences component, just make sur
 
 - `#cookie-preferences--${purpose}` checkbox for a given `purpose`.
 - `#cookie-preferences__save`: button for saving the preferences.
+
+## Accessing Cookie Preferences
+
+```js
+const haven = Haven.create({});
+haven.preferences.init();
+```
