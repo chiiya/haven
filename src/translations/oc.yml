@@ -1,0 +1,27 @@
+notification:
+  message: Aqueste site web utiliza de cookies per vos assegurar la melhora experiéncia sus nòstre site web.
+  policy: Ne saber mai
+  accept: Autorizar cookies
+  decline: Refusar
+preferences:
+  description: 'Aqueste site utiliza los cookies seguents :'
+purposes:
+  functional:
+    name: Fonctionals
+    description: >
+      Los cookies foncionals son absolument necessaris pel quite foncionament del site 
+      coma per la navegacion en zòna segura. Lo site web pòt pas foncionar corrèctament sens aqueles cookies
+  analytics:
+    name: Estatisticas
+    description: >
+      Los cookies d’estatisticas servisson a melhorar las performanças e las foncionalitats d’aqueste site web
+      en collectant e reportant d’informacions d’un biais anonim.
+  marketing:
+    name: Comercials
+    description: >
+      Los cookies comercials servisson a pistar los visitaires de site en site. L’intencion es d’afichar de publicitats que son pertinentas e
+      sedusentas per cada utilizaire e doncas qu’an mai de valor pels editors e los publicitaires tèrces.
+  preferences:
+    name: Preferéncias
+    description: >
+      Las preferéncias de cookies son utilizadas per memorizar los paramètres e personalizacions que càmbian la manièra que lo site web reagís e sembla.
