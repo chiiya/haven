@@ -50,8 +50,8 @@ export function createAlpineStore(config: PluginOptions, store: AnshinStore): vo
     save() {
       store.state.consent.set({
         ...store.state.consent.get(),
-        functional: true,
         ...Object.fromEntries(purposes.map(purpose => [purpose, !!this[purpose]])),
+        functional: true,
       });
     },
 
