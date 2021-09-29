@@ -38,6 +38,6 @@
     "test": "echo \"Error: no tests specified\" && exit 0"
   },
   "dependencies": {
-    "@babel/runtime": "^7.11.2"
+    "@babel/runtime": "^7.15.4"
   }
 }

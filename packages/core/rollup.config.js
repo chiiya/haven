@@ -35,6 +35,7 @@ export default [
     output: {
       file: 'dist/anshin.js',
       format: 'umd',
+      name: 'Anshin',
     },
     plugins: [
       babel({

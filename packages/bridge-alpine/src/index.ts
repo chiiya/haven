@@ -2,7 +2,8 @@ import Alpine from 'alpinejs';
 import { AnshinPlugin, AnshinStore, PluginParameters, Purpose } from '@anshin/types';
 
 export interface PluginOptions {
-  display: string;
+  reactive: boolean;
+  state?: Record<string, unknown>;
 }
 
 export function AlpineBridge(options: Partial<PluginOptions> = {}): AnshinPlugin {
@@ -26,16 +27,15 @@ export function createAlpineStore(config: PluginOptions, store: AnshinStore): vo
   Alpine.store('anshin', {
     ...properties,
     purposes: purposes,
-    display: 'none',
+    display: false,
+    ...config.state || {},
 
     init() {
       store.state.consent.subscribe((consent) => {
         for (const [purpose, state] of Object.entries(consent)) {
           this[purpose] = state;
         }
-        this.display = Object.values(consent).some((status) => status === null)
-          ? config.display
-          : 'none';
+        this.display = store.getters.HAS_ALL_COOKIES_SET();
       });
     },
 
@@ -56,32 +56,33 @@ export function createAlpineStore(config: PluginOptions, store: AnshinStore): vo
     },
 
     show() {
-      this.display = 'block';
+      this.display = true;
     },
 
     hide() {
-      this.display = 'none';
+      this.display = false;
     }
   });
 
-  Alpine.effect(() => {
-    for (const purpose of purposes) {
-      const state = Alpine.store('anshin')[purpose];
+  if (config.reactive) {
+    Alpine.effect(() => {
+      for (const purpose of purposes) {
+        const state = Alpine.store('anshin')[purpose];
 
-      if (state !== null && state !== store.state.consent.get()[purpose]) {
-        store.state.consent.set({
-          ...store.state.consent.get(),
-          [purpose]: !!state,
-        });
+        if (state !== null && state !== store.state.consent.get()[purpose]) {
+          store.state.consent.set({
+            ...store.state.consent.get(),
+            [purpose]: !!state,
+          });
+        }
       }
-    }
-  })
+    });
+  }
 }
-
 
 function resolveOptions(options: Partial<PluginOptions>): PluginOptions {
   return {
-    display: 'block',
+    reactive: false,
     ...options,
   };
 }

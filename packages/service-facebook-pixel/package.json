@@ -41,6 +41,6 @@
   },
   "dependencies": {
     "@anshin/helpers": "^0.2.5",
-    "@babel/runtime": "^7.11.2"
+    "@babel/runtime": "^7.15.4"
   }
 }

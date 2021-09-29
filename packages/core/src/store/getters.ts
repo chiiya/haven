@@ -21,18 +21,11 @@ const getters: AnshinGettersModule = (state) => {
     },
 
     /**
-     * Check whether cookies for all purposes have been set, regardless of whether they have been
+     * Check whether consent for all purposes has been set, regardless of whether they have been
      * accepted or not.
      */
     HAS_ALL_COOKIES_SET: () => {
-      const purposes: Purpose[] = ['functional', ...module.GET_PURPOSES()];
-      for (const purpose of purposes) {
-        if (!Cookies.exists(`${state.options.prefix}-${purpose}`)) {
-          return false;
-        }
-      }
-
-      return true;
+      return ! Object.values(state.consent.get()).some((status) => status === null)
     },
 
     /**
