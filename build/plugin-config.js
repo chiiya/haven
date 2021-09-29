@@ -28,7 +28,7 @@ const rollupConfig = (name, options = { file: 'index', umd: true }) => {
         }),
       ],
       preserveModules: true,
-      external: /@anshin|(@babel\/runtime)/,
+      external: /@anshin|(@babel\/runtime)|alpinejs/,
     },
     ...(options.umd ? [
       {
