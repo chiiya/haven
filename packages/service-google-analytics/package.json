@@ -1,6 +1,6 @@
 {
   "name": "@anshin/service-google-analytics",
-  "version": "0.2.7",
+  "version": "0.2.9",
   "description": "Google Analytics injectable service for Anshin",
   "keywords": [
     "anshin",
@@ -36,10 +36,10 @@
     "test": "echo \"Error: no tests specified\" && exit 0"
   },
   "devDependencies": {
-    "@anshin/types": "^0.2.7"
+    "@anshin/types": "^0.2.9"
   },
   "dependencies": {
-    "@anshin/helpers": "^0.2.7",
+    "@anshin/helpers": "^0.2.9",
     "@babel/runtime": "^7.15.4"
   }
 }
