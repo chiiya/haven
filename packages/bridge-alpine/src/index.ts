@@ -28,14 +28,14 @@ export function createAlpineStore(config: PluginOptions, store: AnshinStore): vo
     ...properties,
     purposes: purposes,
     display: false,
-    ...config.state || {},
+    ...(config.state || {}),
 
     init() {
       store.state.consent.subscribe((consent) => {
         for (const [purpose, state] of Object.entries(consent)) {
           this[purpose] = state;
         }
-        this.display = store.getters.HAS_ALL_COOKIES_SET();
+        this.display = !store.getters.HAS_ALL_COOKIES_SET();
       });
     },
 
