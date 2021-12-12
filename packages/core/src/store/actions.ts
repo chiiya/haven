@@ -9,13 +9,10 @@ import {
 import Cookies from '../cookies';
 import EventBus from '../events';
 
-type AnshinActionsModule = (state: AnshinState, getters: AnshinGetters) => AnshinActions;
-
-const module: AnshinActionsModule = (state: AnshinState, getters: AnshinGetters) => {
-  const actions = {
+const module = (state: AnshinState, getters: AnshinGetters): AnshinActions => {
+  const actions: AnshinActions = {
     /**
      * Set state options.
-     * @param options
      */
     SET_OPTIONS: (options: AnshinOptions) => {
       state.options = options;
@@ -145,7 +142,7 @@ const module: AnshinActionsModule = (state: AnshinState, getters: AnshinGetters)
 function injectService(service: AnshinService): boolean {
   const injector = service.inject;
 
-  if (injector !== undefined && !(injector === true || injector === false)) {
+  if (injector !== undefined && injector !== false) {
     injector(service.options || {});
     return true;
   }

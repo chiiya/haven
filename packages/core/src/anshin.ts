@@ -1,4 +1,4 @@
-import { AnshinOptions, AnshinStore, EventBusSubscription } from '@anshin/types';
+import { AnshinOptions, AnshinPlugin, AnshinStore, EventBusSubscription } from '@anshin/types';
 import { state, getters, commit } from './store';
 import EventBus from './events';
 import { resolveConfig } from './config';
@@ -8,14 +8,7 @@ export default class Anshin {
 
   private constructor(options: Partial<AnshinOptions>) {
     commit('SET_OPTIONS', resolveConfig(options, { ...state.options }));
-    for (const plugin of options.plugins || []) {
-      if (plugin.register) {
-        plugin.register({
-          store: { state, getters, commit },
-          events: EventBus,
-        });
-      }
-    }
+    this.registerPlugins(options.plugins || []);
     this.registerDefaultListeners();
     commit('SET_INITIAL_CONSENT_VALUES');
   }
@@ -36,10 +29,32 @@ export default class Anshin {
   }
 
   /**
+   * Register any plugins.
+   */
+  protected registerPlugins(plugins: AnshinPlugin[]): void {
+    // First, register config changes for all plugins
+    for (const plugin of plugins) {
+      if (plugin.config) {
+        const options = { ...state.options };
+        commit('SET_OPTIONS', resolveConfig(plugin.config(options), options));
+      }
+    }
+    // Now, call the register functions with the final config values
+    for (const plugin of plugins) {
+      if (plugin.register) {
+        plugin.register({
+          store: { state, getters, commit },
+          events: EventBus,
+        });
+      }
+    }
+  }
+
+  /**
    * Proxy event bus subscription method to the event bus singleton so that users can call this method
    * anywhere in their application.
    */
-  public static on(event: string, callback: Function): EventBusSubscription {
+  public static on(event: string, callback: (payload?: string) => void): EventBusSubscription {
     return EventBus.on(event, callback);
   }
 

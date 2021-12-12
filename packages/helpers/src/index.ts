@@ -8,8 +8,6 @@ export function getRandomId(): string {
 /**
  * Check whether a script has been loaded already.
  */
-export function hasLoadedScript(src: string) {
+export function hasLoadedScript(src: string): boolean {
   return document.querySelector(`script[src="${src}"]`) !== null;
 }
-
-export * from './deep-merge';

@@ -1,3 +1,3 @@
 import rollup from '../../build/plugin-config';
 
-export default rollup('GoogleTagManager');
+export default rollup('GoogleTagManagerService');

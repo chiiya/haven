@@ -7,12 +7,15 @@ export function resolveConfig(
   options: Partial<AnshinOptions>,
   defaults: AnshinOptions
 ): AnshinOptions {
-  let config = Object.assign(defaults, options);
+  const config = Object.assign(defaults, options);
   config.domains = normalizeDomains(options.domains || resolveDefaultDomains());
   config.cookieAttributes = Object.assign(
     defaults.cookieAttributes,
     options.cookieAttributes || {}
   );
+  config.cookies = Object.assign(defaults.cookies, options.cookies || {});
+  const services = [...defaults.services, ...(options.services || [])];
+  config.services = [...new Map(services.map(item => [item.name, item])).values()];
 
   return config;
 }

@@ -1,0 +1,44 @@
+{
+  "name": "@anshin/plugin-google-tag-manager",
+  "version": "0.2.9",
+  "description": "Google tag manager integration for anshin",
+  "keywords": [
+    "anshin",
+    "gtm",
+    "google-tag-manager"
+  ],
+  "author": "Elisha Witte <elishawitte@gmail.com>",
+  "homepage": "https://github.com/chiiya/anshin/tree/master/packages/plugin-google-tag-manager#readme",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "dist/index.js",
+  "module": "dist/esm/index.js",
+  "typings": "dist/index.d.ts",
+  "sideEffects": false,
+  "directories": {
+    "dist": "dist",
+    "src": "src"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chiiya/anshin"
+  },
+  "bugs": {
+    "url": "https://github.com/chiiya/anshin/issues"
+  },
+  "scripts": {
+    "build": "npm-run-all build:bundle build:types",
+    "build:bundle": "rollup -c rollup.config.js",
+    "build:types": "tsc --project tsconfig.types.json",
+    "test": "echo \"Error: no tests specified\" && exit 0"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.15.4"
+  }
+}

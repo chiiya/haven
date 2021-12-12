@@ -1,7 +1,7 @@
 import { GoogleTagManager } from './index';
 
 if (typeof window !== 'undefined') {
-  (window as any).GoogleTagManagerService = GoogleTagManager;
+  (window as any).GoogleTagManager = GoogleTagManager;
 }
 
 export { GoogleTagManager };

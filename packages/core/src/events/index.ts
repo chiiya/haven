@@ -2,12 +2,12 @@ import { EventBusSubscription, EventBusSubscriptions, EventBus as IEventBus } fr
 
 class EventBus implements IEventBus {
   private subscriptions: EventBusSubscriptions = {};
-  private counter: number = 0;
+  private counter = 0;
 
   /**
    * Register a new callback
    */
-  on(event: string, callback: Function): EventBusSubscription {
+  on(event: string, callback: (payload?: string) => void): EventBusSubscription {
     const id = (this.counter += 1);
     if (this.subscriptions[event] === undefined) {
       this.subscriptions[event] = {};
@@ -25,7 +25,7 @@ class EventBus implements IEventBus {
   /**
    * Emit a new event
    */
-  emit(event: string, payload?: any): void {
+  emit(event: string, payload?: string): void {
     if (this.subscriptions[event] === undefined) {
       return;
     }

@@ -7,7 +7,7 @@ export default class Cookies {
   /**
    * Create a new cookie or replace an existing one.
    */
-  public static set(key: string, value: any, options?: CookieAttributes) {
+  public static set(key: string, value: string|number|boolean, options?: CookieAttributes): void {
     const attributes = this.resolveOptions(options);
     const cookieAttributes = this.encodeAttributes(attributes);
     document.cookie = `${key}=${value}${cookieAttributes}`;
@@ -53,7 +53,7 @@ export default class Cookies {
   /**
    * Remove an existing cookie.
    */
-  public static remove(key: string | RegExp, options: CookieAttributes = {}) {
+  public static remove(key: string | RegExp, options: CookieAttributes = {}): void {
     const attributes = this.resolveOptions(Object.assign(options, { expires: -1 }));
     if (key instanceof RegExp) {
       return this.removeByRegex(key, attributes);
@@ -78,7 +78,7 @@ export default class Cookies {
   /**
    * Remove a cookie by regular expression.
    */
-  protected static removeByRegex(key: RegExp, attributes: CookieAttributes) {
+  protected static removeByRegex(key: RegExp, attributes: CookieAttributes): void {
     Object.keys(this.getAll()).map((name) => {
       if (key.test(name)) {
         this.set(name, '', attributes);

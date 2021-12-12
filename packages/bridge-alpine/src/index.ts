@@ -2,7 +2,15 @@ import Alpine from 'alpinejs';
 import { AnshinPlugin, AnshinStore, PluginParameters, Purpose } from '@anshin/types';
 
 export interface PluginOptions {
+  /**
+   * Update cookies every time the state changes, as opposed to just when `save()` is
+   * called (e.g. the user clicks on "Save")
+   */
   reactive: boolean;
+
+  /**
+   * Additional global custom state
+   */
   state?: Record<string, unknown>;
 }
 

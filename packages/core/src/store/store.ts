@@ -3,7 +3,7 @@ import { Store } from '@anshin/types';
 export function store<T>(value: T): Store<T> {
   let _val = value;
   let counter = 0;
-  const subs: { [id: string]: Function } = {};
+  const subs: { [id: string]: (val: T) => void } = {};
 
   const subscribe = (callback: (val: T) => void) => {
     const id = (counter += 1);

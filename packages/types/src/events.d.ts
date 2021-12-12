@@ -1,14 +1,14 @@
 interface EventBusSubscriptions {
   [name: string]: {
-    [id: string]: Function;
+    [id: string]: (payload?: string) => void;
   };
 }
 
 export interface EventBusSubscription {
-  unsubscribe: Function;
+  unsubscribe: () => void;
 }
 
 export interface EventBus {
-  on(event: string, callback: Function): EventBusSubscription;
-  emit(event: string, payload?: any): void;
+  on(event: string, callback: (payload?: string) => void): EventBusSubscription;
+  emit(event: string, payload?: string): void;
 }

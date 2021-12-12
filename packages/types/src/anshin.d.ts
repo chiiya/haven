@@ -21,7 +21,7 @@ export interface AnshinService {
   purposes: Purpose[];
   title?: string;
   description?: string;
-  inject?: boolean | Function;
+  inject?: false | ((options?: Record<string, unknown>) => void);
   cookies?: (string | RegExp)[];
   options?: AnshinServiceOptions;
   required?: boolean;
@@ -35,13 +35,13 @@ export interface AnshinThirdPartyService {
 }
 
 export interface AnshinServiceOptions {
-  [option: string]: any;
+  [option: string]: unknown;
 }
 
 export type Purpose = 'functional' | 'analytics' | 'marketing' | 'preferences' | string;
 
 export interface AnshinPlugin {
-  config?: Function;
+  config?: (options?: AnshinOptions) => Partial<AnshinOptions>;
   register?: (parameters: PluginParameters) => void;
 }
 
@@ -97,3 +97,5 @@ export interface ConsentStatus {
 export interface InjectedServices {
   [name: string]: boolean;
 }
+
+export type AtLeast<T, K extends keyof T> = Partial<T> & Pick<T, K>

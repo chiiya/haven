@@ -1,10 +1,8 @@
 import { AnshinGetters, AnshinState, Purpose } from '@anshin/types';
 import Cookies from '../cookies';
 
-type AnshinGettersModule = (state: AnshinState) => AnshinGetters;
-
-const getters: AnshinGettersModule = (state) => {
-  const module = {
+const getters = (state: AnshinState): AnshinGetters => {
+  const module: AnshinGetters = {
     /**
      * Get all purposes used within the application.
      */

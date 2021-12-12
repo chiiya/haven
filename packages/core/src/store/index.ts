@@ -20,13 +20,13 @@ const state: AnshinState = {
 const getters = gettersModule(state);
 const actions = actionsModule(state, getters);
 
-const commit = (action: keyof AnshinActions, data: any = {}) => {
+const commit = (action: keyof AnshinActions, data: any = {}): void => {
   actions[action](data);
   EventBus.emit('state-updated');
 };
 
 state.consent.subscribe(() => {
-  commit('SYNC_CONSENT_STATUS');
+  actions.SYNC_CONSENT_STATUS();
 });
 
-export { state, getters, commit };
+export { state, getters, actions, commit };
