@@ -103,5 +103,5 @@ export function GoogleAnalytics(options: Partial<Options> = {}): AnshinService {
     },
   };
 
-  return Object.freeze(Object.assign(defaults, options));
+  return Object.freeze({ ...defaults, ...options });
 }

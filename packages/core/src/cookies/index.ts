@@ -54,7 +54,7 @@ export default class Cookies {
    * Remove an existing cookie.
    */
   public static remove(key: string | RegExp, options: CookieAttributes = {}): void {
-    const attributes = this.resolveOptions(Object.assign(options, { expires: -1 }));
+    const attributes = this.resolveOptions({ ...options, expires: -1 });
     if (key instanceof RegExp) {
       return this.removeByRegex(key, attributes);
     }
@@ -113,11 +113,9 @@ export default class Cookies {
       options.expires = options.expires.toUTCString();
     }
 
-    return Object.assign(
-      {
-        path: '/',
-      },
-      options
-    );
+    return {
+      path: '/',
+      ...options,
+    };
   }
 }
