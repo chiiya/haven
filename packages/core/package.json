@@ -1,6 +1,6 @@
 {
   "name": "@anshin/core",
-  "version": "0.2.10",
+  "version": "0.2.11",
   "author": "Elisha Witte <elishawitte@gmail.com>",
   "description": "GDPR-ready, modular cookie consent manager with zero dependencies",
   "keywords": [

@@ -1,6 +1,6 @@
 {
   "name": "@anshin/service-google-tag-manager",
-  "version": "0.2.10",
+  "version": "0.2.11",
   "description": "Google Tag Manager injectable service for Anshin",
   "keywords": [
     "anshin",

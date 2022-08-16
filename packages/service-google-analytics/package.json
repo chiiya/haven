@@ -1,6 +1,6 @@
 {
   "name": "@anshin/service-google-analytics",
-  "version": "0.2.10",
+  "version": "0.2.11",
   "description": "Google Analytics injectable service for Anshin",
   "keywords": [
     "anshin",
