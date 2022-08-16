@@ -1,6 +1,6 @@
 {
   "name": "@anshin/plugin-google-tag-manager",
-  "version": "0.2.10",
+  "version": "0.2.12",
   "description": "Google tag manager integration for anshin",
   "keywords": [
     "anshin",
