@@ -6,6 +6,11 @@ export interface GoogleTagManagerOptions extends AnshinServiceOptions {
    * Google Tag Manager ID: `GTM-XXXX`
    */
   id?: string;
+
+  /**
+   * GTM domain from which the script is loaded.
+   */
+  gtmDomain?: string;
 }
 
 type Options = AnshinService & { options: GoogleTagManagerOptions };
@@ -52,8 +57,10 @@ export function GoogleTagManager(options: Partial<Options> = {}): AnshinService 
         return;
       }
 
+      const domain = options?.options?.gtmDomain || 'www.googletagmanager.com';
+
       // Inject the script only once.
-      if (hasLoadedScript(`https://www.googletagmanager.com/gtm.js?id=${options.options.id}`)) {
+      if (hasLoadedScript(`https://${domain}/gtm.js?id=${options.options.id}`)) {
         return;
       }
 

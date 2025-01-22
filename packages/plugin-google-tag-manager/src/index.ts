@@ -32,7 +32,13 @@ export interface PluginOptions {
    * Only necessary in case you use other purposes than the default ones.
    * @see https://support.google.com/tagmanager/answer/10718549#consent-types
    */
-  purposeMappings: Record<Purpose, GTMPurpose>
+  purposeMappings: Record<Purpose, GTMPurpose>;
+
+  /**
+   * Domain from which the GTM script is loaded.
+   * Defaults to `www.googletagmanager.com`.
+   */
+  gtmDomain: string;
 }
 
 export function GoogleTagManager(options: AtLeast<PluginOptions, 'id'>): AnshinPlugin {
@@ -78,6 +84,7 @@ function resolveOptions(options: AtLeast<PluginOptions, 'id'>): PluginOptions {
     consentMode: false,
     adsDataRedaction: true,
     purposeMappings: {},
+    gtmDomain: 'www.googletagmanager.com',
     ...options,
   };
 
@@ -125,7 +132,7 @@ const injectScript = (options: PluginOptions) => {
   });
   const firstScript = document.getElementsByTagName('script')[0];
   const script = document.createElement('script');
-  script.src = `https://www.googletagmanager.com/gtm.js?id=${options.id}`;
+  script.src = `https://${options.gtmDomain}/gtm.js?id=${options.id}`;
   firstScript.parentNode?.insertBefore(script, firstScript);
 };
 
