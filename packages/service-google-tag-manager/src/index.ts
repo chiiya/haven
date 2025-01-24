@@ -26,7 +26,8 @@ const injectScript = (options: GoogleTagManagerOptions) => {
   });
   const firstScript = document.getElementsByTagName('script')[0];
   const script = document.createElement('script');
-  script.src = `https://www.googletagmanager.com/gtm.js?id=${options.id}`;
+  const domain = options.gtmDomain || 'www.googletagmanager.com';
+  script.src = `https://${domain}/gtm.js?id=${options.id}`;
   firstScript.parentNode!.insertBefore(script, firstScript);
 };
 
